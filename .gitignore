@@ -1,5 +1,14 @@
 node_modules/
-out/
-examples/out/
+/out/
 .nolan-video/
 .DS_Store
+
+# Example render outputs are build artifacts — but the bundled demo assets are
+# tracked so the repo ships a ready-to-view example. Ignore the directory's
+# contents, then re-include the committed ones. (Ignore the contents with `/*`
+# rather than the directory itself, or git can't re-include files inside it.)
+examples/out/*
+!examples/out/splitter-hero.gif
+!examples/out/splitter-hero.mp4
+!examples/out/splitter-hero.srt
+!examples/out/splitter-hero.vtt
