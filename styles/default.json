@@ -16,14 +16,40 @@
   },
 
   "caption": {
-    "position": "bottom",
+    "$comment": "Flat scalar fields — one axis at a time, no CSS shorthand to re-parse (shape borrowed from Cap). `preset` picks a whole look; fields here override it. `variants` are partial, semantic looks a `say` beat opts into with `as`. The screenplay names the intent (`as:\"warn\"`); this file owns the colours.",
+    "preset": "docs",
+
+    "position": "bottom-center",
     "height": 54,
-    "bg": "#16181D",
-    "ink": "#F2F3F5",
-    "font": "500 18px/1.35 -apple-system,BlinkMacSystemFont,sans-serif",
     "padding": "12px 22px",
+
+    "font": "-apple-system,BlinkMacSystemFont,sans-serif",
+    "fontWeight": 500,
+    "size": 18,
+    "lineHeight": 1.35,
+    "uppercase": false,
+    "italic": false,
+
+    "color": "#F2F3F5",
+    "backgroundColor": "#16181D",
+    "backgroundOpacity": 100,
+    "outline": false,
+    "outlineColor": "#000000",
+    "fadeDuration": 0.2,
+
     "caret": "▍",
-    "showChip": true
+    "showChip": true,
+
+    "activeWordHighlight": false,
+    "highlightColor": "#FFD400",
+    "highlightStyle": "color",
+    "wordTransitionDuration": 0.25,
+
+    "variants": {
+      "warn":  { "backgroundColor": "#3A2A0B", "color": "#FFC53D" },
+      "aside": { "color": "#9AA0AA", "showChip": false, "italic": true },
+      "code":  { "font": "ui-monospace,Menlo,Consolas,monospace", "size": 16 }
+    }
   },
 
   "cursor": {
@@ -52,6 +78,7 @@
   "encode": {
     "$comment": "One recording pass, many outputs. Add entries to render more.",
     "viewport": { "width": 1000, "height": 700 },
+    "subtitles": ["srt", "vtt"],
     "outputs": [
       {
         "name": "gif",

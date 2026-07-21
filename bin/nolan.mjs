@@ -8,17 +8,20 @@
  *   nolan demo.screenplay.json --style=mine.json
  *   nolan verify demo.screenplay.json           resolve every target, film nothing
  */
-import { render, verify, DEFAULT_STYLE } from "../src/render.mjs";
+import { render, verify, restyle, DEFAULT_STYLE } from "../src/render.mjs";
 
 const USAGE = `nolan — screenplay-driven demo films for web apps
 
-  nolan <screenplay.json> [options]      film it
-  nolan verify <screenplay.json> [opts]  check every target still resolves
+  nolan <screenplay.json> [options]        film it
+  nolan verify <screenplay.json> [opts]    check every target still resolves
+  nolan restyle <segments.json> [opts]     re-caption a saved master (no re-film)
 
 Options
   --cut=<name>     which cut to film (default: the first in "cuts")
   --out=<dir>      output directory   (default: <screenplay dir>/out)
   --style=<path>   style document     (default: ${DEFAULT_STYLE})
+  --overlay=<how>  captions 'burn' (default) or 'post' — post keeps a clean
+                   master + segments so restyling is a re-encode, not a re-film
   --quiet          only print errors
 
 Docs: https://github.com/richardofortune/nolan`;
@@ -38,19 +41,25 @@ async function main(argv) {
     cut: flag("cut"),
     out: flag("out"),
     style: flag("style"),
+    overlay: flag("overlay"),
     quiet: args.includes("--quiet"),
   };
 
-  const verifying = args[0] === "verify";
-  const positional = args.filter((a) => !a.startsWith("--") && a !== "verify");
+  const command = ["verify", "restyle"].includes(args[0]) ? args[0] : null;
+  const positional = args.filter((a) => !a.startsWith("--") && a !== command);
   const file = positional[0];
   if (!file) {
-    console.error("nolan: no screenplay given\n");
+    console.error(`nolan: no ${command === "restyle" ? "segments file" : "screenplay"} given\n`);
     console.log(USAGE);
     return 1;
   }
 
-  if (verifying) {
+  if (command === "restyle") {
+    await restyle(file, opts);
+    return 0;
+  }
+
+  if (command === "verify") {
     const problems = await verify(file, opts);
     if (!problems.length) {
       console.log("✓ every target resolves — this screenplay still describes the app");

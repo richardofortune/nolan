@@ -20,7 +20,8 @@
  *   cut       {url, title, ms, widget?}  curtained navigation (scene change)
  *   card      {lines[], ms}           full-screen title card
  *   actor     {who}                   set the persona chip
- *   say       {text, hold?, lead?}    narrate; duration DERIVED from length
+ *   say       {text, as?, hold?, lead?}  narrate; `as` picks a caption variant;
+ *                                       duration DERIVED from length
  *   hold      {ms}                    explicit pause (pace-scaled)
  *   move      {to}                    glide the cursor
  *   click     {to, settle?}           glide + click
@@ -39,6 +40,7 @@ import { spawn, execSync } from "node:child_process";
 import { mkdirSync, rmSync, readdirSync, readFileSync, existsSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { paintPalette } from "./caption.mjs";
 
 
 /* ----------------------------- interpolation ----------------------------- */
@@ -80,40 +82,92 @@ function interpDeep(node, vars) {
  * Overlays are injected from STYLE, not hardcoded. Changing caption colour or
  * the click-highlight radius is a style edit + re-render, never a code edit.
  */
-export function rigScript(style) {
-  const c = style.caption;
+export function rigScript(style, { captions = true } = {}) {
+  const { paints } = paintPalette(style);
   const cur = style.cursor;
+  // The cursor and click-ripple are motion — they belong to the action and are
+  // always burned in. The caption bar is the thing you restyle, so in `post`
+  // mode it is left out here and composited on afterwards (see composite.mjs);
+  // that turns a restyle into a re-encode instead of a re-film.
   return `(() => {
-  const S = ${JSON.stringify({ caption: c, cursor: cur })};
-  if (!document.getElementById('film-cap')) {
+  const S = ${JSON.stringify({ paints, cursor: cur, captions })};
+  const P0 = S.paints[''];
+  if (S.captions && !document.getElementById('film-cap')) {
     const bar = document.createElement('div');
     bar.id = 'film-cap';
-    bar.style.cssText = 'position:fixed;' + (S.caption.position === 'top' ? 'top:0;' : 'bottom:0;') +
-      'left:0;right:0;z-index:2147483646;background:' + S.caption.bg + ';color:' + S.caption.ink +
-      ';font:' + S.caption.font + ';padding:' + S.caption.padding +
-      ';min-height:' + (S.caption.height - 24) + 'px;display:flex;align-items:center;gap:13px;box-shadow:0 -1px 8px rgba(0,0,0,.3)';
+    bar.style.cssText = P0.bar;
     bar.innerHTML =
       '<span id="film-chip" style="display:none;align-items:center;gap:8px;flex:none;transition:opacity .3s">' +
       '<span id="film-av" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;font:600 12px ui-monospace,Menlo,monospace"></span>' +
       '<span id="film-name" style="font-size:14px;color:#c9cdd4;white-space:nowrap"></span>' +
-      '<span style="color:#3a3e46">|</span></span><span id="film-text" style="flex:1"></span>';
+      '<span style="color:#3a3e46">|</span></span><span id="film-text"></span>';
     document.body.appendChild(bar);
+    document.getElementById('film-text').style.cssText = P0.text;
   }
   window.__actor = (kind, name, bg, ink) => {
-    if (!S.caption.showChip) return;
+    if (!S.captions) return;
     const chip = document.getElementById('film-chip'), av = document.getElementById('film-av');
-    chip.style.display = 'flex';
+    // Remember the cast even if the current look hides the chip — a later
+    // caption in a chip-showing variant must still know who is speaking.
+    window.__castChip = { kind: kind, name: name, bg: bg, ink: ink };
     av.style.background = bg; av.style.color = ink;
     av.style.borderRadius = kind === 'agent' ? '5px' : '50%';
     av.textContent = kind === 'agent' ? '▸' : name[0];
     document.getElementById('film-name').textContent = name;
+    chip.style.display = P0.showChip ? 'flex' : 'none';
     chip.style.opacity = '0';
     requestAnimationFrame(() => { chip.style.opacity = '1'; });
   };
-  window.__cap = (t, speed) => new Promise((done) => {
-    const el = document.getElementById('film-text'); let i = 0;
-    (function tick(){ i++; el.textContent = t.slice(0,i) + (i<t.length ? S.caption.caret : '');
-      if (i<t.length) setTimeout(tick, speed); else done(); })();
+  const esc = (s) => s.replace(/[&<>]/g, (ch) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[ch]));
+  /**
+   * Paint one caption. \`as\` names a variant from the palette; unknown names
+   * fall back to the base look rather than filming nothing.
+   *
+   * Both reveal modes consume the SAME total time (text.length * speed), so
+   * captionMs() stays true whichever look is in play — and stays true when
+   * duration becomes real audio length.
+   */
+  window.__cap = (t, speed, as) => new Promise((done) => {
+    if (!S.captions) return done();
+    const P = S.paints[as || ''] || P0;
+    const bar = document.getElementById('film-cap');
+    const el = document.getElementById('film-text');
+    const chip = document.getElementById('film-chip');
+    bar.style.cssText = P.bar;
+    el.style.cssText = P.text;
+    chip.style.display = (P.showChip && window.__castChip) ? 'flex' : 'none';
+
+    if (!P.activeWordHighlight) {
+      let i = 0;
+      el.textContent = '';
+      (function tick(){ i++; el.textContent = t.slice(0,i) + (i<t.length ? P.caret : '');
+        if (i<t.length) setTimeout(tick, speed); else done(); })();
+      return;
+    }
+
+    // Word-level reveal. We author the caption, so word timings are derived
+    // from length — no speech recognition, unlike every karaoke caption tool.
+    const pill = P.highlightStyle === 'pill';
+    const tr = P.wordTransition;
+    el.innerHTML = t.split(/(\\s+)/).map((w, i) => /^\\s+$/.test(w) || w === '' ? esc(w) :
+      '<span data-w style="opacity:.28;border-radius:.32em;padding:0 .16em;margin:0 -.16em;' +
+      'transition:opacity ' + tr + 's,color ' + tr + 's,background-color ' + tr + 's">' + esc(w) + '</span>').join('');
+    const words = [].slice.call(el.querySelectorAll('[data-w]'));
+    if (!words.length) { done(); return; }
+    const total = t.length * speed;
+    const chars = words.reduce((n, s) => n + s.textContent.length, 0) || 1;
+    let i = 0;
+    (function step(){
+      const prev = words[i-1];
+      if (prev) { prev.style.color = P.color; prev.style.background = 'transparent'; }
+      if (i >= words.length) { done(); return; }
+      const s = words[i];
+      s.style.opacity = '1';
+      if (pill) { s.style.background = P.highlightColor; s.style.color = P.color; }
+      else s.style.color = P.highlightColor;
+      i++;
+      setTimeout(step, Math.max(90, (s.textContent.length / chars) * total));
+    })();
   });
   if (S.cursor.show && !document.getElementById('film-cursor')) {
     const cur = document.createElement('div');
@@ -149,6 +203,13 @@ export class Director {
     this.pace = (cut.pace ?? 1) * (style.pace ?? 1);
     this.vars = { ...(screenplay.vars || {}), ...(cut.vars || {}) };
     this.manifest = []; // timestamped beat log — the seed of post-compositing
+    // Caption segments in the FINAL video's timeline: {id,start,end,text,as,actor}.
+    // Cap's shape. In `post` mode this is all the compositor needs to draw the
+    // captions back on, so restyling never re-drives the app.
+    this.segments = [];
+    this.actor = null; // who is currently speaking — stamped onto each segment
+    // 'burn' captions into the film (default) or leave them for `post` compositing.
+    this.overlay = "burn";
     this.t0 = Date.now();
     // How long to wait for a target before calling it missing. Filming allows
     // for slow app state; `verify` drops this so CI fails in seconds, not
@@ -158,8 +219,16 @@ export class Director {
 
   sleep(ms) { return new Promise((r) => setTimeout(r, Math.round(ms * this.pace))); }
 
+  /** Wall-clock ms into the film — i.e. a timestamp in the recorded video. */
+  now() { return Date.now() - this.t0; }
+
   log(beat, extra = {}) {
-    this.manifest.push({ at: Date.now() - this.t0, do: beat.do, ...extra });
+    this.manifest.push({
+      at: Date.now() - this.t0,
+      do: beat.do,
+      ...(beat.do === "say" ? { text: beat.text, as: beat.as ?? null } : {}),
+      ...extra,
+    });
   }
 
   /** Duration a caption needs. DERIVED — swap to audio length for voiceover. */
@@ -169,7 +238,7 @@ export class Director {
   }
 
   async rig() {
-    await this.page.evaluate(rigScript(this.style)).catch(() => {});
+    await this.page.evaluate(rigScript(this.style, { captions: this.overlay === "burn" })).catch(() => {});
     // App-specific DOM handling (hiding a dev banner, nudging a widget's own
     // controls clear of the caption bar) lives in the SCREENPLAY, never in the
     // engine. Keeping the engine ignorant of any one app is the whole point of
@@ -299,22 +368,46 @@ export class Director {
 
       case "actor": {
         const who = this.sp.cast[b.who];
-        await this.page.evaluate(
-          ([kind, name, bg, ink]) => window.__actor?.(kind, name, bg, ink),
-          [who.kind, who.name, who.bg, who.ink],
-        ).catch(() => {});
+        // Remember the persona whichever mode we're in — a `post`-composited
+        // caption still needs to draw the right chip.
+        this.actor = { kind: who.kind, name: who.name, bg: who.bg, ink: who.ink };
+        if (this.overlay === "burn") {
+          await this.page.evaluate(
+            ([kind, name, bg, ink]) => window.__actor?.(kind, name, bg, ink),
+            [who.kind, who.name, who.bg, who.ink],
+          ).catch(() => {});
+        }
         break;
       }
 
-      case "say":
+      case "say": {
         await this.sleep(b.lead ?? t.leadIn);
-        await this.page.evaluate(
-          ([text, speed]) => window.__cap?.(text, speed),
-          [b.text, t.readingSpeed],
-        ).catch(() => {});
+        const start = this.now();
+        if (this.overlay === "burn") {
+          await this.page.evaluate(
+            ([text, speed, as]) => window.__cap?.(text, speed, as),
+            [b.text, t.readingSpeed, b.as ?? ""],
+          ).catch(() => {});
+        } else {
+          // No bar to type into — just hold the app for the same reveal time the
+          // typewriter would take, so the clean video has an equal gap for the
+          // composited caption to fill. (readingSpeed is unpaced, matching __cap.)
+          await new Promise((r) => setTimeout(r, b.text.length * t.readingSpeed));
+        }
         // DERIVED duration: text length now, audio length under voiceover.
         await this.sleep(b.hold ?? Math.max(t.beatOut, this.captionMs(b.text) - b.text.length * t.readingSpeed));
+        // Record the segment in the video's own timeline — measured, not
+        // recomputed, so it stays exact under any pace or reveal mode.
+        this.segments.push({
+          id: `cap-${this.segments.length}`,
+          start: start / 1000,
+          end: this.now() / 1000,
+          text: b.text,
+          as: b.as ?? null,
+          actor: this.actor,
+        });
         break;
+      }
 
       case "hold":
         await this.sleep(b.ms);
@@ -420,6 +513,31 @@ export class Director {
         }
       }
     }
+    this.finalizeSegments();
+  }
+
+  /**
+   * A burned-in caption stays in the bar through the clicks and typing that
+   * follow it, until the next `say` overwrites it. For post-compositing to look
+   * the same, each segment must linger until the next caption starts — but never
+   * across a beat that clears the screen (a `card` or `cut` covers the bar; a
+   * `goto` swaps the page), or the overlay would paint over it. Both boundaries
+   * are already in the manifest, so this is bookkeeping, not new timing.
+   */
+  finalizeSegments() {
+    const clears = this.manifest
+      .filter((m) => m.do === "card" || m.do === "cut" || m.do === "goto")
+      .map((m) => m.at / 1000);
+    this.segments.forEach((seg, i) => {
+      const next = this.segments[i + 1]?.start ?? Infinity;
+      const clear = clears.find((c) => c > seg.start + 1e-3) ?? Infinity;
+      const limit = Math.min(next, clear);
+      // Linger to the next caption, capped by any screen-clear; never shorter
+      // than the reveal+hold we actually measured (unless a clear cuts in).
+      let end = Number.isFinite(limit) ? Math.max(seg.end, limit) : seg.end;
+      if (clear < end) end = clear;
+      seg.end = Math.max(end, seg.start + 0.05);
+    });
   }
 }
 

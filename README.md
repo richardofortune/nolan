@@ -93,7 +93,7 @@ the look of *every* demo you own is one file and a re-render.
 | `cut` | `url`, `title`, `ms`, `after[]` | curtained scene change |
 | `card` | `lines[]`, `ms` | full-screen title card |
 | `actor` | `who` | set the persona chip |
-| `say` | `text` | narrate — duration **derived** from length |
+| `say` | `text`, `as` | narrate — duration **derived** from length; `as` picks a caption variant |
 | `hold` | `ms` | explicit pause (scales with pace) |
 | `move` / `click` | `to` | glide the cursor, optionally click |
 | `type` | `text`, `delay` | keyboard input |
@@ -110,8 +110,75 @@ which is what keeps a walkthrough usable as documentation.
 **Interpolation:** any string takes `{{var.path|filter}}`
 (`truncate:n`, `upper`, `plural:one:many`).
 
+### Styled captions
+
+A caption's *look* lives in the style file, never in the screenplay — the same
+split as everything else. The style file picks a **preset** (`docs`, `karaoke`,
+`highlight`, `minimal`) for the whole film, and defines **variants**: small,
+named looks a single line can opt into.
+
+```jsonc
+// styles/default.json
+"caption": {
+  "preset": "docs",
+  "backgroundColor": "#16181D", "color": "#F2F3F5", "size": 18,
+  "variants": {
+    "warn":  { "backgroundColor": "#3A2A0B", "color": "#FFC53D" },
+    "aside": { "color": "#9AA0AA", "showChip": false, "italic": true }
+  }
+}
+```
+
+```jsonc
+// screenplay — names the intent, not the paint
+{ "do": "say", "text": "This deletes the trip. No undo.", "as": "warn" }
+```
+
+The screenplay says *this line is a warning*; the style file owns what a warning
+looks like — same reason `{role, name}` targets beat `{sel}`. Change the look of
+every warning in every demo you own by editing one file.
+
+Fields are flat scalars (`size`, `fontWeight`, `backgroundColor`,
+`backgroundOpacity`, …) rather than CSS shorthand, so one axis changes without
+touching the rest. The `karaoke` and `highlight` presets light up a word at a
+time — and because captions are *authored*, the word timing is derived from
+length, with no speech recognition. Old `bg` / `ink` / font-shorthand style
+files keep working; they're migrated on load.
+
 **Cuts:** tag any scene or beat with `cuts: ["full"]`. One screenplay, a tight
 README hero and a long pitch cut, from a single recording pass.
+
+## Restyle without re-filming
+
+Driving the app is the slow part; the captions are the part you fiddle with.
+So `--overlay=post` films the app **clean** and composites the captions on
+afterwards, keeping the clean master and a segment manifest next to the outputs:
+
+```bash
+nolan demo.screenplay.json --overlay=post
+```
+
+Now a new look is a re-encode, not a re-film — no browser, no app, seconds:
+
+```bash
+nolan restyle out/splitter-hero.segments.json --style=styles/dark.json
+```
+
+The segments are Cap-shaped (`{ id, start, end, text, as, actor }`). Burn-in
+stays the default; post-composited captions are drawn in their resting state, so
+the typewriter and karaoke word-highlight remain a burn-mode flourish.
+
+### Subtitle sidecars
+
+Every render also drops `.srt` and `.vtt` next to the film — the caption text is
+authored and its timing is derived, so a subtitle track is just the segment
+manifest in another shape. That makes a demo **searchable** and **screen-readable**
+instead of pixels-only, for free. WebVTT carries the speaker as a `<v Name>`
+voice tag. Choose formats (or opt out) in the style file:
+
+```jsonc
+"encode": { "subtitles": ["srt", "vtt"], "outputs": [ /* … */ ] }
+```
 
 ## Demos that fail CI when they go stale
 
@@ -144,9 +211,6 @@ screenplay you already wrote re-times itself** — no re-authoring.
 Early. It works and it's in real use, but expect rough edges.
 
 **Not done yet:**
-- **Overlays are burned into the recording.** The engine emits a timing manifest
-  but doesn't use it; compositing captions in post would make restyling a
-  re-encode (seconds) rather than a re-film (minutes). Biggest remaining win.
 - **No voiceover.** Timing is designed for it; no TTS wired.
 - **No schema validation** — a malformed screenplay fails at the beat, not at load.
 - **The `js` escape hatch is arbitrary code.** Needed today for ad-hoc DOM
