@@ -1,0 +1,53 @@
+{
+  "title": "Wikipedia — look anything up",
+  "slug": "wikipedia",
+
+  "$comment": "A live-site example: it films the real Wikipedia, so there is no `set` to bring up — the beats just goto public URLs. Because it targets a DOM nolan doesn't own, `nolan verify examples/wikipedia.screenplay.json` doubles as a demonstration of catching drift: if Wikipedia moves an element, verify fails. Targets favour stable ids (#searchInput) and real section anchors (#Uses_in_nature).",
+
+  "cuts": {
+    "full": { "pace": 1 },
+    "hero": { "pace": 0.7 }
+  },
+
+  "cast": {
+    "reader": { "kind": "human", "name": "Sam", "bg": "#0645ad", "ink": "#fff" }
+  },
+
+  "vars": {
+    "portal": "https://www.wikipedia.org/",
+    "query": "Bioluminescence",
+    "article": "https://en.wikipedia.org/wiki/Bioluminescence"
+  },
+
+  "scenes": [
+    {
+      "id": "search",
+      "beats": [
+        { "do": "goto", "url": "{{portal}}", "settle": 500 },
+        { "do": "actor", "who": "reader" },
+        { "do": "say", "text": "Wikipedia has an article on almost anything." },
+        { "do": "move", "to": { "sel": "#searchInput" }, "ms": 700 },
+        { "do": "click", "to": { "sel": "#searchInput" }, "ms": 300 },
+        { "do": "say", "text": "Just type what you're curious about." },
+        { "do": "type", "text": "{{query}}", "delay": 85 },
+        { "do": "hold", "ms": 1500 },
+        { "do": "say", "text": "Wikipedia suggests as you go.", "as": "aside" },
+        { "do": "hold", "ms": 800 }
+      ]
+    },
+    {
+      "id": "article",
+      "beats": [
+        { "do": "cut", "url": "{{article}}", "title": "{{query}}", "ms": 800 },
+        { "do": "actor", "who": "reader" },
+        { "do": "say", "text": "The full article — live, not a screenshot." },
+        { "do": "hold", "ms": 900 },
+        { "do": "say", "text": "Every section is a jump away." },
+        { "do": "scrollTo", "to": { "sel": "#Uses_in_nature" }, "settle": 600 },
+        { "do": "hold", "ms": 700 },
+        { "do": "say", "text": "Bioluminescence — how living things make light.", "as": "aside" },
+        { "do": "hold", "ms": 1800 }
+      ]
+    }
+  ]
+}

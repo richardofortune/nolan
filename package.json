@@ -14,7 +14,9 @@
     "example": "node bin/nolan.mjs examples/splitter.screenplay.json --cut=hero",
     "example:post": "node bin/nolan.mjs examples/splitter.screenplay.json --cut=hero --overlay=post",
     "restyle:example": "node bin/nolan.mjs restyle examples/out/splitter-hero.segments.json",
-    "verify:example": "node bin/nolan.mjs verify examples/splitter.screenplay.json"
+    "verify:example": "node bin/nolan.mjs verify examples/splitter.screenplay.json",
+    "example:wikipedia": "node bin/nolan.mjs examples/wikipedia.screenplay.json --cut=full --overlay=post",
+    "verify:wikipedia": "node bin/nolan.mjs verify examples/wikipedia.screenplay.json"
   },
   "keywords": ["demo", "gif", "screencast", "playwright", "readme", "documentation", "walkthrough", "screenplay"],
   "license": "MIT",
