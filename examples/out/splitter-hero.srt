@@ -1,0 +1,11 @@
+1
+00:00:02,195 --> 00:00:05,299
+Put in what the trip cost.
+
+2
+00:00:05,299 --> 00:00:08,194
+Then work it out.
+
+3
+00:00:08,194 --> 00:00:09,698
+Everyone's square — and Ana's already paid.
