@@ -91,6 +91,12 @@ export async function renderCaptionImages(page, style, segments, dir) {
         bar.style.cssText = paint.bar;
         const el = document.getElementById("film-text");
         el.style.cssText = paint.text;
+        // The caption CSS carries a color transition for live (burn-mode) look
+        // changes. A screenshot is a still, so kill the transition or we'd
+        // capture a frame mid-animation — a variant with a new background would
+        // photograph part-way between the previous caption's colour and its own.
+        bar.style.transition = "none";
+        el.style.transition = "none";
         el.textContent = text; // resting state: full text, no caret
         const chip = document.getElementById("film-chip");
         if (paint.showChip && actor) {
