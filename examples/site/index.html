@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Splitter — settle up after a trip</title>
+<style>
+  :root { --ink:#16181D; --dim:#6b7280; --line:#e5e7eb; --accent:#4f46e5; --ok:#059669; --paper:#fff; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:#f6f7f9; }
+  header { padding:28px 32px 8px; }
+  h1 { margin:0; font-size:26px; letter-spacing:-.02em; }
+  .sub { color:var(--dim); margin:6px 0 0; }
+  main { padding:20px 32px 40px; max-width:760px; }
+  .card { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:20px; margin-bottom:18px; }
+  label { display:block; font-size:13px; color:var(--dim); margin-bottom:6px; }
+  .row { display:flex; gap:14px; }
+  .row > div { flex:1; }
+  input, select { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:9px; font:inherit; background:#fff; }
+  input:focus, select:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  .buttons { display:flex; gap:10px; margin-top:16px; }
+  button { padding:10px 16px; border-radius:9px; border:1px solid transparent; background:var(--accent); color:#fff; font:600 15px inherit; cursor:pointer; }
+  button.secondary { background:#fff; color:var(--ink); border-color:var(--line); }
+  ul { list-style:none; margin:0; padding:0; }
+  li { display:flex; justify-content:space-between; padding:11px 2px; border-bottom:1px solid var(--line); }
+  li:last-child { border-bottom:0; }
+  .who { font-weight:600; }
+  .owes { color:var(--dim); }
+  .settled { color:var(--ok); font-weight:600; }
+  #result { display:none; }
+  #result.show { display:block; }
+  .empty { color:var(--dim); padding:8px 2px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Splitter</h1>
+    <p class="sub">Work out who owes what after a trip. Nothing leaves this page.</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <div class="row">
+        <div>
+          <label for="total">Total spent</label>
+          <input id="total" type="text" placeholder="e.g. 480" value="">
+        </div>
+        <div>
+          <label for="people">Split between</label>
+          <select id="people">
+            <option>2 people</option>
+            <option selected>3 people</option>
+            <option>4 people</option>
+            <option>5 people</option>
+          </select>
+        </div>
+        <div>
+          <label for="payer">Paid by</label>
+          <select id="payer">
+            <option selected>Ana</option>
+            <option>Bo</option>
+            <option>Cass</option>
+          </select>
+        </div>
+      </div>
+      <div class="buttons">
+        <button id="settle">Work it out</button>
+        <button id="clear" class="secondary" type="button">Clear</button>
+      </div>
+    </div>
+
+    <div class="card" id="result">
+      <ul id="lines"></ul>
+    </div>
+
+    <div class="card" id="placeholder">
+      <div class="empty">Enter a total and press <strong>Work it out</strong>.</div>
+    </div>
+  </main>
+
+<script>
+  const NAMES = ["Ana", "Bo", "Cass", "Dev", "Eli"];
+  document.getElementById("settle").addEventListener("click", () => {
+    const total = parseFloat(document.getElementById("total").value) || 0;
+    const n = parseInt(document.getElementById("people").value, 10) || 2;
+    const payer = document.getElementById("payer").value;
+    const each = total / n;
+    const lines = document.getElementById("lines");
+    lines.innerHTML = "";
+    NAMES.slice(0, n).forEach((name) => {
+      const li = document.createElement("li");
+      const settled = name === payer;
+      li.innerHTML = '<span class="who">' + name + '</span>' +
+        (settled
+          ? '<span class="settled">paid ' + total.toFixed(2) + ' — settled</span>'
+          : '<span class="owes">owes ' + payer + ' ' + each.toFixed(2) + '</span>');
+      lines.appendChild(li);
+    });
+    document.getElementById("result").classList.add("show");
+    document.getElementById("placeholder").style.display = "none";
+  });
+  document.getElementById("clear").addEventListener("click", () => {
+    document.getElementById("total").value = "";
+    document.getElementById("result").classList.remove("show");
+    document.getElementById("placeholder").style.display = "";
+  });
+</script>
+</body>
+</html>

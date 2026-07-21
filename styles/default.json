@@ -1,0 +1,68 @@
+{
+  "$comment": "PRESENTATION. Nothing here says what happens — only how it looks and how fast. Edit this file and every screenplay you own re-renders with the new look. This is the document you iterate on over time.",
+
+  "pace": 1,
+
+  "timing": {
+    "$comment": "Durations are DERIVED, not hardcoded, so the same screenplay works with typed captions or spoken voiceover. readingSpeed is ms per character; a future 'voice' mode replaces this with real audio length and every beat re-times itself.",
+    "mode": "caption",
+    "readingSpeed": 22,
+    "minCaption": 900,
+    "leadIn": 600,
+    "beatOut": 800,
+    "typeDelay": 24,
+    "glideDefault": 650,
+    "settle": 250
+  },
+
+  "caption": {
+    "position": "bottom",
+    "height": 54,
+    "bg": "#16181D",
+    "ink": "#F2F3F5",
+    "font": "500 18px/1.35 -apple-system,BlinkMacSystemFont,sans-serif",
+    "padding": "12px 22px",
+    "caret": "▍",
+    "showChip": true
+  },
+
+  "cursor": {
+    "show": true,
+    "size": 22,
+    "fill": "#16181D",
+    "stroke": "#ffffff",
+    "click": {
+      "$comment": "The click highlight — its own knob, per your note.",
+      "show": true,
+      "colour": "#FFC53D",
+      "from": 10,
+      "to": 46,
+      "ms": 450,
+      "width": 2.5
+    }
+  },
+
+  "transition": {
+    "curtain": "#0f1115",
+    "fadeMs": 320,
+    "titleFont": "600 22px -apple-system,BlinkMacSystemFont,sans-serif",
+    "titleInk": "#e6e8ec"
+  },
+
+  "encode": {
+    "$comment": "One recording pass, many outputs. Add entries to render more.",
+    "viewport": { "width": 1000, "height": 700 },
+    "outputs": [
+      {
+        "name": "gif",
+        "ext": "gif",
+        "args": "-vf \"fps=12,scale=900:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer:bayer_scale=4\" -loop 0"
+      },
+      {
+        "name": "mp4",
+        "ext": "mp4",
+        "args": "-vf \"scale=1000:-2\" -c:v libx264 -pix_fmt yuv420p -crf 23 -movflags +faststart"
+      }
+    ]
+  }
+}

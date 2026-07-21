@@ -1,0 +1,22 @@
+{
+  "name": "@richfort/nolan",
+  "version": "0.1.0",
+  "description": "Screenplay-driven demo films for web apps — direct your real app, get a GIF or MP4 that regenerates on every release.",
+  "type": "module",
+  "bin": { "nolan": "bin/nolan.mjs" },
+  "main": "src/render.mjs",
+  "exports": {
+    ".": "./src/render.mjs",
+    "./director": "./src/director.mjs"
+  },
+  "files": ["bin", "src", "styles", "LICENSE", "README.md"],
+  "scripts": {
+    "example": "node bin/nolan.mjs examples/splitter.screenplay.json --cut=hero",
+    "verify:example": "node bin/nolan.mjs verify examples/splitter.screenplay.json"
+  },
+  "keywords": ["demo", "gif", "screencast", "playwright", "readme", "documentation", "walkthrough", "screenplay"],
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "peerDependencies": { "playwright": ">=1.40" },
+  "dependencies": {}
+}

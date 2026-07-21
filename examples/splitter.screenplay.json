@@ -1,0 +1,61 @@
+{
+  "title": "Splitter — settle up after a trip",
+  "slug": "splitter",
+
+  "$comment": "Self-contained example. Everything it needs is in examples/site, so `nolan examples/splitter.screenplay.json` works on a fresh clone with no other setup.",
+
+  "cuts": {
+    "full": { "pace": 1 },
+    "hero": { "pace": 0.65 }
+  },
+
+  "cast": {
+    "user": { "kind": "human", "name": "Ana", "bg": "#4f46e5", "ink": "#fff", "role": "just got back from a trip" }
+  },
+
+  "vars": {
+    "app": "http://localhost:8099/index.html",
+    "total": "480"
+  },
+
+  "set": {
+    "servers": [
+      { "cmd": "python3", "args": ["-m", "http.server", "8099"], "cwd": "site" }
+    ],
+    "waitFor": ["http://localhost:8099/index.html"]
+  },
+
+  "scenes": [
+    {
+      "id": "open",
+      "beats": [
+        { "do": "goto", "url": "{{app}}" },
+        { "do": "card", "ms": 2000, "lines": [
+          { "text": "Who owes what, after the trip.", "font": "600 26px -apple-system,sans-serif" },
+          { "text": "No accounts. Nothing leaves the page.", "dim": true, "font": "400 16px -apple-system,sans-serif" }
+        ]}
+      ]
+    },
+    {
+      "id": "walkthrough",
+      "beats": [
+        { "do": "actor", "who": "user" },
+        { "do": "say", "text": "Put in what the trip cost." },
+        { "do": "click", "to": { "sel": "#total" }, "ms": 700 },
+        { "do": "type", "text": "{{total}}", "delay": 90 },
+        { "do": "hold", "ms": 500 },
+
+        { "do": "say", "text": "Say how many of you there were, and who paid.", "cuts": ["full"] },
+        { "do": "move", "to": { "sel": "#people" }, "ms": 600, "cuts": ["full"] },
+        { "do": "hold", "ms": 500, "cuts": ["full"] },
+
+        { "do": "say", "text": "Then work it out." },
+        { "do": "click", "to": { "role": "button", "name": "Work it out" }, "ms": 800, "settle": 500 },
+        { "do": "hold", "ms": 900 },
+
+        { "do": "say", "text": "Everyone's square — and Ana's already paid." },
+        { "do": "hold", "ms": 2000 }
+      ]
+    }
+  ]
+}
