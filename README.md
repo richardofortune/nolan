@@ -1,16 +1,18 @@
 # nolan
 
-**Direct your app. Get a film.**
+**Let your agents show, not just tell.**
 
 ![nolan, demonstrating itself](examples/out/showcase-full.gif)
 
-*The GIF above is itself a nolan demo — one screenplay, filmed against a real
-app, narrating its own features. Regenerate it with `npm run example:showcase`.*
+*The GIF above is a nolan walkthrough — generated from a spec, filmed against a
+real app, narrating its own features. Rebuild it with `npm run example:showcase`.*
 
-Demo GIFs rot. You record one by hand, ship it, change the UI, and now your
-README shows software that no longer exists. nolan makes the demo a **build
-step**: a screenplay you version, re-run on every release, and re-style whenever
-you like — filmed against your real app, in a real browser.
+Nolan turns a short spec into a narrated walkthrough of your real app — a feature
+tour, a bespoke answer to a support question, a look at something an agent just
+built and wants to show you. What it *shows* is generated fresh for each person
+and moment. How it *looks and speaks* — your colours, your captions, and (soon)
+your voice — lives in a separate document your agents reuse and refine. So the
+content stays personal while the delivery stays unmistakably yours.
 
 ```bash
 nolan demo.screenplay.json --cut=hero
@@ -51,17 +53,20 @@ configure.
 
 ## Three documents, three owners
 
-This split is the whole design.
+The split is the whole point. What you *show* is generated per person and moment;
+how it *looks and speaks* is your brand — held apart so it becomes an asset every
+walkthrough inherits.
 
-| | Holds | Edited by |
+| | Holds | Who owns it |
 |---|---|---|
-| **Screenplay** `*.screenplay.json` | WHAT happens — beats, cast, the set | **an agent can generate this** |
-| **Style** `styles/default.json` | HOW it looks and how fast — overlays, pace, transitions, click highlight, output formats | you, iterating over time |
-| **Engine** `src/` | drives the browser, encodes | nobody |
+| **Screenplay** `*.screenplay.json` | WHAT to show — beats, cast, the set | **an agent writes it**, per feature or per recipient |
+| **Style + voice** `styles/*.json` | HOW it looks and speaks — captions, presenter, pace, brand colours, output formats *(voice / TTS next)* | your **voice-of-business**, refined over time |
+| **Engine** `src/` | drives the browser, films, narrates | nobody |
 
-Because the screenplay is data rather than code, a coding agent can write and
-edit demos for you without writing scripts. Because style is separate, changing
-the look of *every* demo you own is one file and a re-render.
+Because the screenplay is data rather than code, an agent can author a fresh
+walkthrough for each person or moment without writing scripts. Because the
+voice-of-business lives in one place, every walkthrough any agent makes inherits
+it — improve it once, improve them all.
 
 ## A screenplay
 
@@ -239,7 +244,11 @@ screenplay you already wrote re-times itself** — no re-authoring.
 Early. It works and it's in real use, but expect rough edges.
 
 **Not done yet:**
-- **No voiceover.** Timing is designed for it; no TTS wired.
+- **Narration is text, not yet voice.** This is the "voice" half of the
+  voice-of-business, and the biggest thing ahead. Timing already derives from
+  caption length (see below), so when TTS lands — narrating in your brand's
+  voice, personalised to the recipient — duration becomes real audio length and
+  every walkthrough you already have re-times itself, no re-authoring.
 - **No schema validation** — a malformed screenplay fails at the beat, not at load.
 - **The `js` escape hatch is arbitrary code.** Needed today for ad-hoc DOM
   tweaks; treat agent-generated `js` beats with the same scrutiny as any
