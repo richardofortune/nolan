@@ -236,6 +236,31 @@ The app moved under the screenplay. Update the beats, or the demo will lie.
 Takes a second or two. Put it in CI and your walkthroughs can't quietly start
 lying to users.
 
+## Point it at your own app
+
+nolan drives a real browser, so it can film anything that renders — but its
+sweet spot is **your own product**. Against your app you can whitelist the
+automation, log in through `set.initScript`, and skip the captchas that guard
+third-party sites. That's where "a walkthrough that regenerates every release"
+pays off most: your features, your help centre, your onboarding — filmed against
+the real UI, and failing CI the moment it drifts.
+
+You *can* point it at public sites — the examples do (Wikipedia, the Wayback
+Machine, Google Calendar, Airbnb). For sites that turn away an unfamiliar
+browser, give the screenplay a real identity in `set`:
+
+```jsonc
+"set": {
+  "userAgent": "Mozilla/5.0 … Chrome/122 …",
+  "locale": "en-NZ",
+  "initScript": "localStorage.setItem('token', '…')"   // e.g. a test login
+}
+```
+
+But heavy bot protection — reCAPTCHA, Cloudflare challenges — will block filming,
+and that's by design: nolan won't circumvent it. One more reason the best target
+is the app you control.
+
 ## Timing is derived, on purpose
 
 `say` computes its own duration from the caption length. It is never hardcoded,
@@ -244,18 +269,27 @@ screenplay you already wrote re-times itself** — no re-authoring.
 
 ## Status
 
-Early. It works and it's in real use, but expect rough edges.
+Early, but it already does a lot: styled captions (variants, presets, karaoke
+that animates even in post), post-composited restyling, subtitle sidecars, a
+presenter bubble, and a `verify` that fails CI when a demo drifts. It works and
+it's in real use — expect rough edges.
 
-**Not done yet:**
-- **Narration is text, not yet voice.** This is the "voice" half of the
-  voice-of-business, and the biggest thing ahead. Timing already derives from
-  caption length (see below), so when TTS lands — narrating in your brand's
-  voice, personalised to the recipient — duration becomes real audio length and
-  every walkthrough you already have re-times itself, no re-authoring.
+**Where it's headed, roughly in order:**
+- **Voice.** The "voice" half of the voice-of-business, and the biggest thing
+  ahead. Timing already derives from caption length, so when TTS lands —
+  narrating in your brand's voice, personalised to the recipient — duration
+  becomes real audio length and every walkthrough you already have re-times
+  itself, no re-authoring.
+- **Authoring + delivery.** An agent that turns a trigger — a feature spec, a
+  support ticket, a user record — into a screenplay, renders it, and drops the
+  walkthrough where people already are: Slack, email, an embed. The `{{who}}`
+  variable is the seed of the personal-at-scale version.
+
+**Rough edges:**
 - **No schema validation** — a malformed screenplay fails at the beat, not at load.
-- **The `js` escape hatch is arbitrary code.** Needed today for ad-hoc DOM
-  tweaks; treat agent-generated `js` beats with the same scrutiny as any
-  generated code, and don't accept screenplays from people you don't trust.
+- **The `js` escape hatch is arbitrary code.** Treat agent-generated `js` beats
+  with the same scrutiny as any generated code; don't accept screenplays from
+  people you don't trust.
 
 ## Prior art
 
