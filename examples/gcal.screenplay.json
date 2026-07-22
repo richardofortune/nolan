@@ -10,7 +10,7 @@
   },
 
   "cast": {
-    "guide": { "kind": "human", "name": "Mia", "bg": "#1A73E8", "ink": "#fff", "cam": "./assets/face-female.png" }
+    "guide": { "kind": "human", "name": "Mia", "bg": "#1A73E8", "ink": "#fff", "cam": "./assets/people/woman-1.jpg" }
   },
 
   "vars": {
