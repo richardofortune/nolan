@@ -221,7 +221,7 @@ export function rigScript(style, { captions = true } = {}) {
   if (S.cursor.show && !document.getElementById('film-cursor')) {
     const cur = document.createElement('div');
     cur.id = 'film-cursor';
-    cur.style.cssText = 'position:fixed;left:0;top:0;width:'+S.cursor.size+'px;height:'+S.cursor.size+'px;z-index:2147483647;pointer-events:none;transform:translate(-2px,-2px)';
+    cur.style.cssText = 'position:fixed;left:-100px;top:-100px;width:'+S.cursor.size+'px;height:'+S.cursor.size+'px;z-index:2147483647;pointer-events:none;transform:translate(-2px,-2px)';
     setHTML(cur, '<svg viewBox="0 0 24 24" width="'+S.cursor.size+'" height="'+S.cursor.size+'"><path d="M5 3l14 9-6.5 1L9 19z" fill="'+S.cursor.fill+'" stroke="'+S.cursor.stroke+'" stroke-width="1.4"/></svg>');
     document.body.appendChild(cur);
     document.addEventListener('mousemove', (e) => {
@@ -299,6 +299,7 @@ export class Director {
     // captions back on, so restyling never re-drives the app.
     this.segments = [];
     this.actor = null; // who is currently speaking — stamped onto each segment
+    this.actorCam = null; // resolved cam data URI, kept off `actor` so segments stay small
     // 'burn' captions into the film (default) or leave them for `post` compositing.
     this.overlay = "burn";
     this.t0 = Date.now();
@@ -336,6 +337,24 @@ export class Director {
     // the split — otherwise every new app grows another branch in here.
     for (const script of this.sp.set?.onLoad ?? []) {
       await this.page.evaluate(script).catch(() => {});
+    }
+    // Navigation wipes the page's copy of the actor, so re-assert it on every
+    // (re-)rig — otherwise the presenter (and chip) blink out at each scene
+    // change until the next `actor` beat. Runs while the cut's curtain still
+    // covers the page, so the bubble is already there when it lifts.
+    await this.applyActor();
+  }
+
+  /** Draw the current actor's presenter bubble (both modes) and chip (burn). */
+  async applyActor() {
+    if (!this.actor) return;
+    const a = this.actor;
+    await this.page.evaluate((p) => window.__presenter?.(p), { ...a, cam: this.actorCam }).catch(() => {});
+    if (this.overlay === "burn") {
+      await this.page.evaluate(
+        ([kind, name, bg, ink]) => window.__actor?.(kind, name, bg, ink),
+        [a.kind, a.name, a.bg, a.ink],
+      ).catch(() => {});
     }
   }
 
@@ -461,22 +480,11 @@ export class Director {
       case "actor": {
         const who = this.sp.cast[b.who];
         // Remember the persona whichever mode we're in — a `post`-composited
-        // caption still needs to draw the right chip.
+        // caption still needs to draw the right chip. `cam` (a data URI) is kept
+        // on the Director, never inside `actor`, which rides on every segment.
         this.actor = { kind: who.kind, name: who.name, bg: who.bg, ink: who.ink };
-        // The presenter bubble is burned in like the cursor, so set it in both
-        // modes. `cam` (a data URI) is passed only here — never into this.actor,
-        // which rides on every caption segment and must stay small.
-        const cam = who.camData ?? (/^(data:|https?:)/.test(who.cam ?? "") ? who.cam : null);
-        await this.page.evaluate(
-          (p) => window.__presenter?.(p),
-          { ...this.actor, cam },
-        ).catch(() => {});
-        if (this.overlay === "burn") {
-          await this.page.evaluate(
-            ([kind, name, bg, ink]) => window.__actor?.(kind, name, bg, ink),
-            [who.kind, who.name, who.bg, who.ink],
-          ).catch(() => {});
-        }
+        this.actorCam = who.camData ?? (/^(data:|https?:)/.test(who.cam ?? "") ? who.cam : null);
+        await this.applyActor();
         break;
       }
 
