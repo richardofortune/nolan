@@ -1,0 +1,49 @@
+{
+  "title": "Google Calendar — browse a public calendar",
+  "slug": "gcal",
+
+  "$comment": "The full Google Calendar app needs a login, which can't (and shouldn't) be automated. This films Google Calendar's public EMBED view — the same widget sites embed — using the public US Holidays calendar, so it runs with no sign-in. Month navigation is in-page (AJAX), so no `cut` is needed between clicks. Pair with --style=examples/gcal.style.json to see the note/tip caption variants.",
+
+  "cuts": {
+    "full": { "pace": 1 },
+    "hero": { "pace": 0.7 }
+  },
+
+  "cast": {
+    "guide": { "kind": "human", "name": "Mia", "bg": "#1A73E8", "ink": "#fff" }
+  },
+
+  "vars": {
+    "embed": "https://calendar.google.com/calendar/embed?src=en.usa%23holiday%40group.v.calendar.google.com&ctz=America%2FNew_York&mode=MONTH"
+  },
+
+  "scenes": [
+    {
+      "id": "browse",
+      "beats": [
+        { "do": "goto", "url": "{{embed}}", "settle": 1200 },
+        { "do": "actor", "who": "guide" },
+        { "do": "say", "text": "Google Calendar, right in the browser." },
+        { "do": "say", "text": "This one shows US public holidays — no sign-in needed.", "as": "note" },
+        { "do": "hold", "ms": 700 },
+
+        { "do": "say", "text": "Step forward a month." },
+        { "do": "move", "to": { "role": "button", "name": "Next month" }, "ms": 650 },
+        { "do": "click", "to": { "role": "button", "name": "Next month" }, "settle": 700 },
+        { "do": "hold", "ms": 700 },
+
+        { "do": "say", "text": "…and another." },
+        { "do": "click", "to": { "role": "button", "name": "Next month" }, "settle": 700 },
+        { "do": "hold", "ms": 800 },
+
+        { "do": "say", "text": "Tip: jump back to now with one click.", "as": "tip" },
+        { "do": "move", "to": { "role": "button", "name": "Today" }, "ms": 650 },
+        { "do": "click", "to": { "role": "button", "name": "Today" }, "settle": 700 },
+        { "do": "hold", "ms": 800 },
+
+        { "do": "say", "text": "Every US holiday, ready to browse.", "as": "note" },
+        { "do": "hold", "ms": 1600 }
+      ]
+    }
+  ]
+}

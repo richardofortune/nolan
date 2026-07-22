@@ -1,0 +1,55 @@
+{
+  "$comment": "A style built to show off caption variants. The base bar is Google-grey; `note` is Google-blue for context callouts and `tip` is Google-green for how-to hints. Same screenplay, three looks — the screenplay only names the intent (as: note/tip), this file owns the paint.",
+
+  "pace": 1,
+
+  "timing": {
+    "mode": "caption", "readingSpeed": 24, "minCaption": 1000,
+    "leadIn": 600, "beatOut": 800, "typeDelay": 24, "glideDefault": 650, "settle": 250
+  },
+
+  "caption": {
+    "position": "bottom-center",
+    "height": 58,
+    "padding": "13px 24px",
+    "font": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif",
+    "fontWeight": 500,
+    "size": 18,
+    "lineHeight": 1.35,
+    "color": "#E8EAED",
+    "backgroundColor": "#202124",
+    "backgroundOpacity": 100,
+    "caret": "▍",
+    "showChip": true,
+
+    "variants": {
+      "note": { "backgroundColor": "#1A73E8", "color": "#FFFFFF" },
+      "tip":  { "backgroundColor": "#188038", "color": "#FFFFFF", "fontWeight": 600 }
+    }
+  },
+
+  "cursor": {
+    "show": true, "size": 22, "fill": "#202124", "stroke": "#ffffff",
+    "click": { "show": true, "colour": "#1A73E8", "from": 10, "to": 46, "ms": 450, "width": 2.5 }
+  },
+
+  "transition": {
+    "curtain": "#202124", "fadeMs": 320,
+    "titleFont": "600 22px -apple-system,Roboto,sans-serif", "titleInk": "#E8EAED"
+  },
+
+  "encode": {
+    "viewport": { "width": 1000, "height": 700 },
+    "subtitles": ["srt", "vtt"],
+    "outputs": [
+      {
+        "name": "gif", "ext": "gif",
+        "args": "-vf \"fps=12,scale=900:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer:bayer_scale=4\" -loop 0"
+      },
+      {
+        "name": "mp4", "ext": "mp4",
+        "args": "-vf \"scale=1000:-2\" -c:v libx264 -pix_fmt yuv420p -crf 23 -movflags +faststart"
+      }
+    ]
+  }
+}

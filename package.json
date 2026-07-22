@@ -18,7 +18,9 @@
     "example:wikipedia": "node bin/nolan.mjs examples/wikipedia.screenplay.json --cut=full --overlay=post",
     "verify:wikipedia": "node bin/nolan.mjs verify examples/wikipedia.screenplay.json",
     "example:wayback": "node bin/nolan.mjs examples/wayback.screenplay.json --cut=full --overlay=post --out=examples/out",
-    "verify:wayback": "node bin/nolan.mjs verify examples/wayback.screenplay.json"
+    "verify:wayback": "node bin/nolan.mjs verify examples/wayback.screenplay.json",
+    "example:gcal": "node bin/nolan.mjs examples/gcal.screenplay.json --cut=full --style=examples/gcal.style.json --overlay=post --out=examples/out",
+    "verify:gcal": "node bin/nolan.mjs verify examples/gcal.screenplay.json --style=examples/gcal.style.json"
   },
   "keywords": ["demo", "gif", "screencast", "playwright", "readme", "documentation", "walkthrough", "screenplay"],
   "license": "MIT",
