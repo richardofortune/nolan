@@ -164,9 +164,11 @@ Now a new look is a re-encode, not a re-film — no browser, no app, seconds:
 nolan restyle out/splitter-hero.segments.json --style=styles/dark.json
 ```
 
-The segments are Cap-shaped (`{ id, start, end, text, as, actor }`). Burn-in
-stays the default; post-composited captions are drawn in their resting state, so
-the typewriter and karaoke word-highlight remain a burn-mode flourish.
+The segments are Cap-shaped (`{ id, start, end, text, as, actor }`). Word-level
+animation survives compositing: a karaoke or pill-highlight caption is rendered
+as a short frame sequence — one still per word-state — and each is overlaid on
+its sub-window, so the words light up in post just as they do burned in. (The
+per-character typewriter reveal is the one thing still drawn resting in post.)
 
 ### Subtitle sidecars
 
