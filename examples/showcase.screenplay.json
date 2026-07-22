@@ -1,0 +1,53 @@
+{
+  "title": "nolan — a demo that describes itself",
+  "slug": "showcase",
+
+  "$comment": "The self-describing demo. It drives the bundled toy app (examples/site) while the captions narrate nolan's own features and cycle through every caption look. Film in post mode with --style=examples/showcase.style.json so the karaoke and pill highlights animate. This is the flagship 'what can it do' clip.",
+
+  "cuts": { "full": { "pace": 1 }, "hero": { "pace": 0.72 } },
+
+  "cast": {
+    "host": { "kind": "human", "name": "Alex", "bg": "#4f46e5", "ink": "#fff", "cam": "./assets/people/man-1.jpg" }
+  },
+
+  "vars": { "app": "http://localhost:8099/index.html", "total": "480" },
+
+  "set": {
+    "servers": [{ "cmd": "python3", "args": ["-m", "http.server", "8099"], "cwd": "site" }],
+    "waitFor": ["http://localhost:8099/index.html"]
+  },
+
+  "scenes": [
+    {
+      "id": "showcase",
+      "beats": [
+        { "do": "goto", "url": "{{app}}", "settle": 900 },
+        { "do": "card", "ms": 2200, "lines": [
+          { "text": "nolan", "font": "700 40px -apple-system,Roboto,sans-serif" },
+          { "text": "one screenplay — every style", "dim": true, "font": "400 19px -apple-system,sans-serif" }
+        ]},
+
+        { "do": "actor", "who": "host" },
+        { "do": "say", "text": "Everything I'm narrating is a caption, composited after filming." },
+        { "do": "say", "text": "…so a restyle is a re-encode, never a re-shoot.", "as": "aside" },
+
+        { "do": "say", "text": "The beats drive a real app — watch." },
+        { "do": "move",  "to": { "sel": "#total" }, "ms": 650 },
+        { "do": "click", "to": { "sel": "#total" }, "ms": 250 },
+        { "do": "type",  "text": "{{total}}" },
+        { "do": "say", "text": "Real cursor, real typing, real clicks." },
+        { "do": "click", "to": { "role": "button", "name": "Work it out" }, "ms": 700, "settle": 500 },
+        { "do": "hold", "ms": 800 },
+
+        { "do": "say", "text": "Captions carry meaning. This one is a warning.", "as": "warn" },
+        { "do": "say", "text": "Karaoke lights each word as it lands — even in post.", "as": "karaoke" },
+        { "do": "say", "text": "Or a bold pill on the active word.", "as": "pill" },
+        { "do": "say", "text": "Or minimal, barely there.", "as": "minimal" },
+        { "do": "say", "text": "And nolan verify fails your build when a demo drifts.", "as": "code" },
+
+        { "do": "say", "text": "One screenplay. Every style. The demo describes itself." },
+        { "do": "hold", "ms": 1600 }
+      ]
+    }
+  ]
+}
