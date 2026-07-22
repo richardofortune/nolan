@@ -20,9 +20,9 @@
       "beats": [
         { "do": "goto", "url": "{{embed}}", "settle": 1100 },
         { "do": "actor", "who": "host" },
-        { "do": "say", "text": "Watch each word light up as it is spoken." },
+        { "do": "say", "text": "Watch each word light up as you read." },
         { "do": "hold", "ms": 500 },
-        { "do": "say", "text": "The timing comes from the caption length, not from audio." },
+        { "do": "say", "text": "The timing comes straight from the text." },
         { "do": "hold", "ms": 700 }
       ]
     }

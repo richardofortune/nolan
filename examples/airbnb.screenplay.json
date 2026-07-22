@@ -28,10 +28,10 @@
       "beats": [
         { "do": "goto", "url": "{{wgtn}}", "settle": 2200 },
         { "do": "actor", "who": "host" },
-        { "do": "say", "text": "Right, Molly — let's find you somewhere in Wellington with actual character." },
+        { "do": "say", "text": "Right Molly, let's find you somewhere in Wellington with a bit of character." },
         { "do": "move", "to": { "sel": "[data-testid=card-container]" }, "ms": 750 },
         { "do": "say", "text": "Airbnb's finest, ranked by vibes and view." },
-        { "do": "say", "text": "Fair warning — half of Wellington is glued to a hillside.", "as": "aside" },
+        { "do": "say", "text": "Fair warning: half of Wellington's glued to a hillside.", "as": "aside" },
         { "do": "hold", "ms": 700 }
       ]
     },
@@ -42,7 +42,7 @@
         { "do": "actor", "who": "host" },
         { "do": "say", "text": "Or swap the hills for sand, up the Kāpiti Coast." },
         { "do": "move", "to": { "sel": "[data-testid=card-container]" }, "ms": 750 },
-        { "do": "say", "text": "Beach cottages, beach pods, and a studio with a suspicious 4.97 rating.", "as": "warn" },
+        { "do": "say", "text": "There's even a beach studio rated a suspicious 4.97.", "as": "warn" },
         { "do": "hold", "ms": 600 },
         { "do": "say", "text": "Book the one with the spa, Molly. You've earned it.", "as": "pill" },
         { "do": "hold", "ms": 1600 }

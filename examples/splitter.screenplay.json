@@ -53,7 +53,7 @@
         { "do": "click", "to": { "role": "button", "name": "Work it out" }, "ms": 800, "settle": 500 },
         { "do": "hold", "ms": 900 },
 
-        { "do": "say", "text": "Everyone's square — and Ana's already paid.", "as": "aside" },
+        { "do": "say", "text": "Everyone's square, and Ana's already paid.", "as": "aside" },
         { "do": "hold", "ms": 2000 }
       ]
     }

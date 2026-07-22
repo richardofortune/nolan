@@ -27,28 +27,28 @@
       "beats": [
         { "do": "goto", "url": "{{setup}}", "settle": 700 },
         { "do": "actor", "who": "guide" },
-        { "do": "say", "text": "nolan is a screenplay, a style, and one command. Here's all of it." },
+        { "do": "say", "text": "nolan is two files and a command. Here's all of it." },
 
         { "do": "move",  "to": { "sel": "#term-input" }, "ms": 600 },
         { "do": "click", "to": { "sel": "#term-input" }, "ms": 250 },
         { "do": "type",  "text": "git clone https://github.com/richardofortune/nolan && cd nolan && npm install" },
         { "do": "call",  "fn": "submit", "args": ["Cloning… installing dependencies… Playwright + Chromium ready ✓"], "settle": 300 },
-        { "do": "say", "text": "Cloned, with a real browser to film in.", "as": "aside" },
+        { "do": "say", "text": "Cloned, plus a browser to film in.", "as": "aside" },
 
         { "do": "click", "to": { "sel": "#term-input" }, "ms": 200 },
         { "do": "type",  "text": "cat demo.screenplay.json" },
         { "do": "call",  "fn": "submit", "args": ["{\n  \"title\": \"Splitter\",\n  \"scenes\": [{ \"beats\": [\n    { \"do\": \"say\",   \"text\": \"Put in what the trip cost.\" },\n    { \"do\": \"click\", \"to\": { \"sel\": \"#total\" } },\n    { \"do\": \"type\",  \"text\": \"480\" }\n  ]}]\n}"], "settle": 300 },
-        { "do": "say", "text": "The screenplay is WHAT happens — an agent can write it." },
+        { "do": "say", "text": "This is the screenplay. Just what happens, so an agent can write it." },
 
         { "do": "click", "to": { "sel": "#term-input" }, "ms": 200 },
         { "do": "type",  "text": "cat styles/default.json" },
         { "do": "call",  "fn": "submit", "args": ["\"timing\":  { \"readingSpeed\": 22, \"leadIn\": 600, \"beatOut\": 800 },\n\"caption\": { \"backgroundColor\": \"#16181D\", \"color\": \"#F2F3F5\", \"size\": 18 }"], "settle": 300 },
-        { "do": "say", "text": "The style is HOW it looks — and how fast.", "as": "aside" },
+        { "do": "say", "text": "The style sets the look and the pace.", "as": "aside" },
 
         { "do": "click", "to": { "sel": "#term-input" }, "ms": 200 },
         { "do": "type",  "text": "nolan demo.screenplay.json --cut=hero" },
         { "do": "call",  "fn": "submit", "args": ["· filming \"Splitter — settle up after a trip\" — cut: hero (pace 0.65)\n· encoding gif → out/splitter-hero.gif\n· encoding mp4 → out/splitter-hero.mp4\n✓ 12 beats · 9.6s"], "settle": 500 },
-        { "do": "say", "text": "One command, and nolan narrates the build — beats, pace, seconds." }
+        { "do": "say", "text": "Run it, and nolan tells you what it did." }
       ]
     },
     {
@@ -56,13 +56,13 @@
       "beats": [
         { "do": "cut", "url": "{{app}}", "title": "your real app", "ms": 900 },
         { "do": "actor", "who": "guide" },
-        { "do": "say", "text": "That \"filming\" line? This is it — driving your real app." },
+        { "do": "say", "text": "That \"filming\" line? Here it is, on your real app." },
         { "do": "move",  "to": { "sel": "#total" }, "ms": 650 },
         { "do": "click", "to": { "sel": "#total" }, "ms": 250 },
         { "do": "type",  "text": "480" },
         { "do": "click", "to": { "role": "button", "name": "Work it out" }, "ms": 700, "settle": 500 },
         { "do": "hold", "ms": 800 },
-        { "do": "say", "text": "Move the UI and it fails CI — nolan verify catches the drift.", "as": "warn" }
+        { "do": "say", "text": "Change the app, and nolan verify catches it in CI.", "as": "warn" }
       ]
     },
     {
@@ -70,8 +70,8 @@
       "beats": [
         { "do": "cut", "url": "{{done}}", "title": "your finished GIF", "ms": 900 },
         { "do": "actor", "who": "guide" },
-        { "do": "say", "text": "Out comes a GIF — the same beats, the same seconds, every release." },
-        { "do": "say", "text": "Show, don't tell. This demo just set nolan up to make itself.", "as": "aside" },
+        { "do": "say", "text": "You get a GIF. The same one, every release." },
+        { "do": "say", "text": "That's the whole thing. This demo set nolan up to make itself.", "as": "aside" },
         { "do": "hold", "ms": 1800 }
       ]
     }

@@ -40,12 +40,12 @@
       "beats": [
         { "do": "cut", "url": "{{article}}", "title": "{{query}}", "ms": 800 },
         { "do": "actor", "who": "reader" },
-        { "do": "say", "text": "The full article — live, not a screenshot." },
+        { "do": "say", "text": "Here's the full article, live." },
         { "do": "hold", "ms": 900 },
         { "do": "say", "text": "Every section is a jump away." },
         { "do": "scrollTo", "to": { "sel": "#Uses_in_nature" }, "settle": 600 },
         { "do": "hold", "ms": 700 },
-        { "do": "say", "text": "Bioluminescence — how living things make light.", "as": "aside" },
+        { "do": "say", "text": "Bioluminescence. How living things make light.", "as": "aside" },
         { "do": "hold", "ms": 1800 }
       ]
     }

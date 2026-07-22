@@ -24,7 +24,7 @@
         { "do": "goto", "url": "{{embed}}", "settle": 1200 },
         { "do": "actor", "who": "guide" },
         { "do": "say", "text": "Google Calendar, right in the browser." },
-        { "do": "say", "text": "This one shows US public holidays — no sign-in needed.", "as": "note" },
+        { "do": "say", "text": "This one's US public holidays. No sign-in needed.", "as": "note" },
         { "do": "hold", "ms": 700 },
 
         { "do": "say", "text": "Step forward a month." },
@@ -36,7 +36,7 @@
         { "do": "click", "to": { "role": "button", "name": "Next month" }, "settle": 700 },
         { "do": "hold", "ms": 800 },
 
-        { "do": "say", "text": "Tip: jump back to now with one click.", "as": "tip" },
+        { "do": "say", "text": "Jump back to today in one click.", "as": "tip" },
         { "do": "move", "to": { "role": "button", "name": "Today" }, "ms": 650 },
         { "do": "click", "to": { "role": "button", "name": "Today" }, "settle": 700 },
         { "do": "hold", "ms": 800 },

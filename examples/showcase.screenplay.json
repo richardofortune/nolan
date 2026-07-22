@@ -28,24 +28,24 @@
         ]},
 
         { "do": "actor", "who": "host" },
-        { "do": "say", "text": "Hey {{who}} — here's a quick look, made just for you." },
+        { "do": "say", "text": "Hey {{who}}, here's a quick look. Made just for you." },
         { "do": "say", "text": "An agent wrote this walkthrough from a short spec.", "as": "aside" },
 
-        { "do": "say", "text": "It shows you the real app — watch." },
+        { "do": "say", "text": "It's your real app. Watch." },
         { "do": "move",  "to": { "sel": "#total" }, "ms": 650 },
         { "do": "click", "to": { "sel": "#total" }, "ms": 250 },
         { "do": "type",  "text": "{{total}}" },
-        { "do": "say", "text": "Real cursor, real typing, real clicks." },
+        { "do": "say", "text": "A real cursor, really typing." },
         { "do": "click", "to": { "role": "button", "name": "Work it out" }, "ms": 700, "settle": 500 },
         { "do": "hold", "ms": 800 },
 
-        { "do": "say", "text": "If the app moves and this breaks, the build fails — not your users.", "as": "warn" },
+        { "do": "say", "text": "If the app changes and this breaks, your build fails first.", "as": "warn" },
         { "do": "say", "text": "Soon it speaks in your brand's voice, word for word.", "as": "karaoke" },
         { "do": "say", "text": "Made personal for whoever is watching.", "as": "pill" },
-        { "do": "say", "text": "Styled to disappear, or to stand out — your call.", "as": "minimal" },
-        { "do": "say", "text": "One spec per moment. One voice across them all.", "as": "code" },
+        { "do": "say", "text": "Styled to fade back, or to stand out. Your call.", "as": "minimal" },
+        { "do": "say", "text": "A new spec for each person. Your voice, every time.", "as": "code" },
 
-        { "do": "say", "text": "Show, don't tell — in your voice. This walkthrough made itself." },
+        { "do": "say", "text": "That's it. Your voice, and it made itself." },
         { "do": "hold", "ms": 1600 }
       ]
     }

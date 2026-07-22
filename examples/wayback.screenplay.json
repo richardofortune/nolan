@@ -28,10 +28,10 @@
         { "do": "say", "text": "The Wayback Machine keeps snapshots of the web." },
         { "do": "move", "to": { "sel": "input.rbt-input-main" }, "ms": 700 },
         { "do": "click", "to": { "sel": "input.rbt-input-main" }, "ms": 300 },
-        { "do": "say", "text": "Step one: type in any site." },
+        { "do": "say", "text": "Type in any site." },
         { "do": "type", "text": "{{site}}", "delay": 95 },
         { "do": "hold", "ms": 1600 },
-        { "do": "say", "text": "Step two: browse its history.", "as": "aside" },
+        { "do": "say", "text": "Then browse its history.", "as": "aside" },
         { "do": "hold", "ms": 700 }
       ]
     },
@@ -43,7 +43,7 @@
         { "do": "hold", "ms": 3500, "$comment": "the capture histogram loads from an API — let it fill in before the payoff caption, since cut only settles briefly" },
         { "do": "say", "text": "Every capture, going back to 1996." },
         { "do": "hold", "ms": 1000 },
-        { "do": "say", "text": "Step three: pick a date and time-travel.", "as": "aside" },
+        { "do": "say", "text": "Pick a date, and time-travel.", "as": "aside" },
         { "do": "hold", "ms": 2000 }
       ]
     }
