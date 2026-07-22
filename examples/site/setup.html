@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>nolan — setup</title>
+<style>
+  html,body{margin:0;height:100%}
+  body{background:radial-gradient(120% 120% at 30% 0%,#1b2330,#0b0e14);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    display:flex;align-items:center;justify-content:center}
+  .win{width:840px;height:470px;background:#0d1117;border:1px solid #30363d;border-radius:12px;
+    box-shadow:0 30px 80px rgba(0,0,0,.55);overflow:hidden;display:flex;flex-direction:column}
+  .bar{height:38px;background:#161b22;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid #30363d}
+  .dot{width:12px;height:12px;border-radius:50%}
+  .r{background:#ff5f56}.y{background:#ffbd2e}.g{background:#27c93f}
+  .title{margin-left:12px;color:#8b949e;font-size:13px}
+  .body{padding:16px 20px;font-size:15px;line-height:1.7;overflow:auto;flex:1;color:#c9d1d9}
+  .prompt{color:#39d353;margin-right:10px}
+  .cmd{color:#e6edf3}
+  .out{color:#8b949e;white-space:pre-wrap;margin:2px 0 10px}
+  #line{display:flex;align-items:center}
+  #term-input{background:transparent;border:0;color:#e6edf3;font:inherit;flex:1;outline:none;caret-color:#39d353}
+</style>
+</head>
+<body>
+  <div class="win">
+    <div class="bar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span class="title">zsh — ~/code</span>
+    </div>
+    <div class="body" id="body">
+      <div id="history"></div>
+      <div id="line"><span class="prompt">$</span><input id="term-input" autocomplete="off" spellcheck="false"></div>
+    </div>
+  </div>
+  <script>
+    // nolan `type`s into #term-input, then `call submit(output)` commits the line.
+    window.submit = function (output) {
+      var h = document.getElementById('history');
+      var inp = document.getElementById('term-input');
+      var row = document.createElement('div');
+      var p = document.createElement('span'); p.className = 'prompt'; p.textContent = '$';
+      var c = document.createElement('span'); c.className = 'cmd'; c.textContent = ' ' + inp.value;
+      row.appendChild(p); row.appendChild(c); h.appendChild(row);
+      if (output) { var o = document.createElement('div'); o.className = 'out'; o.textContent = output; h.appendChild(o); }
+      inp.value = '';
+      document.getElementById('body').scrollTop = 1e9;
+      inp.focus();
+    };
+  </script>
+</body>
+</html>

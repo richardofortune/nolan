@@ -241,6 +241,15 @@ The app moved under the screenplay. Update the beats, or the demo will lie.
 Takes a second or two. Put it in CI and your walkthroughs can't quietly start
 lying to users.
 
+That's the right default when you **own** the app — a moved target is your bug to
+fix. For a walkthrough of a site you *don't* own, a hard failure you can't action
+is the wrong call, so `--on-drift` picks the response (same detector, different
+who's-responsible):
+
+- `fail` *(default)* — exit non-zero. The CI gate.
+- `warn` — report the drift, exit 0. A heads-up, not a blocker.
+- `refresh` — re-render if the demo still resolves; only warn if a target truly broke.
+
 ## Point it at your own app
 
 nolan drives a real browser, so it can film anything that renders — but its

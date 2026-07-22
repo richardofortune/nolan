@@ -22,6 +22,10 @@ Options
   --style=<path>   style document     (default: ${DEFAULT_STYLE})
   --overlay=<how>  captions 'burn' (default) or 'post' — post keeps a clean
                    master + segments so restyling is a re-encode, not a re-film
+  --on-drift=<p>   verify only: what to do when a target no longer resolves —
+                   'fail' (default, exit non-zero — the CI gate),
+                   'warn'  (report it, exit 0 — a heads-up you don't own), or
+                   'refresh' (report it, and re-render if the demo still resolves)
   --quiet          only print errors
 
 Docs: https://github.com/richardofortune/nolan`;
@@ -60,15 +64,42 @@ async function main(argv) {
   }
 
   if (command === "verify") {
+    // Same drift detector, different response — because who owns the failure
+    // differs. `fail` gates a build you control; `warn`/`refresh` suit
+    // walkthroughs of sites you don't, where a red X you can't action is wrong.
+    const policy = (flag("on-drift") ?? "fail").toLowerCase();
+    if (!["fail", "warn", "refresh"].includes(policy)) {
+      console.error(`nolan: --on-drift must be fail | warn | refresh (got "${policy}")`);
+      return 1;
+    }
     const problems = await verify(file, opts);
+
     if (!problems.length) {
       console.log("✓ every target resolves — this screenplay still describes the app");
+      if (policy === "refresh") {
+        console.log("· no drift — refreshing the walkthrough…");
+        await render(file, opts);
+      }
       return 0;
     }
-    console.error(`✗ ${problems.length} target(s) no longer resolve:\n`);
+
+    // Drift found. Report it either way; the exit code and tone are the policy.
+    const mark = policy === "fail" ? "✗" : "⚠";
+    console.error(`${mark} ${problems.length} target(s) no longer resolve:\n`);
     for (const p of problems) console.error(`  [${p.scene}] ${p.beat}: ${p.error}`);
-    console.error("\nThe app moved under the screenplay. Update the beats, or the demo will lie.");
-    return 1;
+
+    if (policy === "fail") {
+      console.error("\nThe app moved under the screenplay. Update the beats, or the demo will lie.");
+      return 1;
+    }
+    console.error(
+      "\nThe target moved. " +
+        (policy === "refresh"
+          ? "Can't refresh a broken walkthrough — update the beats to re-enable it."
+          : "This walkthrough may be stale until the beats are updated.") +
+        " (--on-drift=" + policy + ", not failing)",
+    );
+    return 0;
   }
 
   await render(file, opts);

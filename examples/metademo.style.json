@@ -1,0 +1,61 @@
+{
+  "$comment": "Style for the meta-demo (nolan setting up and using nolan). Same look as the showcase, but the presenter circle is ~20% smaller (124 → 99), and the purple `pill` variant is deliberately left out — this demo doesn't use it.",
+
+  "pace": 1,
+
+  "timing": {
+    "mode": "caption", "readingSpeed": 34, "minCaption": 1500,
+    "leadIn": 500, "beatOut": 700, "typeDelay": 45, "glideDefault": 650, "settle": 250
+  },
+
+  "caption": {
+    "position": "bottom-center",
+    "height": 62,
+    "padding": "14px 24px",
+    "font": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif",
+    "fontWeight": 500,
+    "size": 19,
+    "lineHeight": 1.35,
+    "color": "#E8EAED",
+    "backgroundColor": "#16181D",
+    "backgroundOpacity": 96,
+    "caret": "▍",
+    "showChip": true,
+
+    "variants": {
+      "aside":    { "color": "#9AA0AA", "italic": true, "showChip": false },
+      "warn":     { "backgroundColor": "#3A2A0B", "color": "#FFC53D" },
+      "code":     { "font": "ui-monospace,Menlo,Consolas,monospace", "size": 17 },
+      "karaoke":  { "backgroundOpacity": 55, "activeWordHighlight": true, "highlightStyle": "color", "highlightColor": "#FFD400" },
+      "minimal":  { "backgroundOpacity": 0, "outline": true, "showChip": false, "color": "#FFFFFF" }
+    }
+  },
+
+  "presenter": {
+    "show": true,
+    "corner": "bottom-right",
+    "size": 99,
+    "shape": "circle",
+    "ring": true,
+    "ringColor": "#ffffff",
+    "ringWidth": 3,
+    "shadow": true,
+    "label": true
+  },
+
+  "cursor": {
+    "show": true, "size": 22, "fill": "#16181D", "stroke": "#ffffff",
+    "click": { "show": true, "colour": "#FFC53D", "from": 10, "to": 46, "ms": 450, "width": 2.5 }
+  },
+
+  "transition": { "curtain": "#0f1115", "fadeMs": 340, "titleFont": "700 30px -apple-system,Roboto,sans-serif", "titleInk": "#E8EAED" },
+
+  "encode": {
+    "viewport": { "width": 1000, "height": 700 },
+    "subtitles": ["srt", "vtt"],
+    "outputs": [
+      { "name": "gif", "ext": "gif", "args": "-vf \"fps=13,scale=920:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=160[p];[b][p]paletteuse=dither=bayer:bayer_scale=4\" -loop 0" },
+      { "name": "mp4", "ext": "mp4", "args": "-vf \"scale=1000:-2\" -c:v libx264 -pix_fmt yuv420p -crf 23 -movflags +faststart" }
+    ]
+  }
+}

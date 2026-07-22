@@ -1,0 +1,76 @@
+{
+  "title": "nolan sets up nolan",
+  "slug": "metademo",
+
+  "$comment": "The meta-demo: nolan filming the experience of setting up and using nolan, end to end — setup terminal → first run → it films your real app → the final GIF. nolan only films web pages, so 'setup' is a mock terminal (examples/site/setup.html) that nolan types into and `call submit` commits; the 'real app' scene is the actual toy app (index.html); the result scene (done.html) shows a real nolan GIF. Deliberately avoids the purple `pill` caption style. Film with --style=examples/metademo.style.json (presenter is ~20% smaller here).",
+
+  "cuts": { "full": { "pace": 1 }, "hero": { "pace": 0.72 } },
+
+  "cast": {
+    "guide": { "kind": "human", "name": "Nova", "bg": "#4f46e5", "ink": "#fff", "cam": "./assets/people/woman-2.jpg" }
+  },
+
+  "vars": {
+    "setup": "http://localhost:8099/setup.html",
+    "app": "http://localhost:8099/index.html",
+    "done": "http://localhost:8099/done.html"
+  },
+
+  "set": {
+    "servers": [{ "cmd": "python3", "args": ["-m", "http.server", "8099"], "cwd": "site" }],
+    "waitFor": ["http://localhost:8099/setup.html"]
+  },
+
+  "scenes": [
+    {
+      "id": "setup",
+      "beats": [
+        { "do": "goto", "url": "{{setup}}", "settle": 700 },
+        { "do": "actor", "who": "guide" },
+        { "do": "say", "text": "Setting up nolan takes about a minute. Here's the whole thing." },
+
+        { "do": "move",  "to": { "sel": "#term-input" }, "ms": 600 },
+        { "do": "click", "to": { "sel": "#term-input" }, "ms": 250 },
+        { "do": "type",  "text": "git clone https://github.com/you/nolan && cd nolan" },
+        { "do": "call",  "fn": "submit", "args": ["Cloning into 'nolan'… done."], "settle": 300 },
+        { "do": "say", "text": "Grab it, and step in.", "as": "aside" },
+
+        { "do": "click", "to": { "sel": "#term-input" }, "ms": 200 },
+        { "do": "type",  "text": "npm i playwright && npx playwright install chromium" },
+        { "do": "call",  "fn": "submit", "args": ["+ playwright\nChromium 122 downloaded ✓"], "settle": 300 },
+        { "do": "say", "text": "Add the browser it films with." },
+
+        { "do": "click", "to": { "sel": "#term-input" }, "ms": 200 },
+        { "do": "type",  "text": "npm start" },
+        { "do": "call",  "fn": "submit", "args": ["nolan — let your agents show, not just tell\n  1) Film the toy app        4) Google Calendar\n  2) The showcase            5) Karaoke captions\n  3) Wikipedia               q) quit"], "settle": 400 },
+        { "do": "say", "text": "Run it, and you get a menu." },
+        { "do": "say", "text": "Captions, a presenter, cuts and subtitles come built in.", "as": "karaoke" }
+      ]
+    },
+    {
+      "id": "film",
+      "beats": [
+        { "do": "cut", "url": "{{app}}", "title": "1) it films your real app", "ms": 900 },
+        { "do": "actor", "who": "guide" },
+        { "do": "say", "text": "Pick a demo, and nolan drives your actual app." },
+        { "do": "move",  "to": { "sel": "#total" }, "ms": 650 },
+        { "do": "click", "to": { "sel": "#total" }, "ms": 250 },
+        { "do": "type",  "text": "480" },
+        { "do": "click", "to": { "role": "button", "name": "Work it out" }, "ms": 700, "settle": 500 },
+        { "do": "hold", "ms": 800 },
+        { "do": "say", "text": "Change the UI, and the demo breaks in CI — not in front of users.", "as": "warn" },
+        { "do": "say", "text": "nolan verify catches drift — gate your build, or just get a heads-up.", "as": "code" }
+      ]
+    },
+    {
+      "id": "result",
+      "beats": [
+        { "do": "cut", "url": "{{done}}", "title": "…and out comes a GIF", "ms": 900 },
+        { "do": "actor", "who": "guide" },
+        { "do": "say", "text": "Out comes a GIF — and it never goes stale." },
+        { "do": "say", "text": "Show, don't tell. This demo just set nolan up to make itself.", "as": "aside" },
+        { "do": "hold", "ms": 1800 }
+      ]
+    }
+  ]
+}
