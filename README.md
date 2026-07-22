@@ -25,18 +25,21 @@ nolan demo.screenplay.json --cut=hero
 ✓ 12 beats · 9.6s
 ```
 
-## Why not just record your screen?
+## Why not just record it by hand?
 
-Because you'll have to do it again. And again. Every release.
+Two reasons. A recording rots the moment the UI moves, so you re-shoot it every
+release. And a person can only record so many — you can't hand-film a bespoke
+walkthrough for every user, every support question, every POC an agent ships. A
+spec an agent writes scales to all of them.
 
-| | screen recorder | nolan |
+| | hand-recorded | nolan |
 |---|---|---|
-| Re-shoot after a UI change | record it by hand, again | `nolan demo.json` |
-| Restyle the captions | re-record everything | edit one style file |
-| A shorter cut for the README | edit the video | `--cut=hero` |
-| Demo drifts out of date | you find out from a user | **CI fails** |
+| Re-shoot after a UI change | record it again | re-run the spec |
+| Rebrand every walkthrough at once | re-record each one | edit one style file |
+| A bespoke version per person | not happening | an agent writes a new spec |
+| It quietly drifts out of date | a user tells you | **CI fails** |
 
-That last row is the one that matters if you use this for help docs.
+The last two rows are the point: personal at scale, and never stale.
 
 ## Try it
 
