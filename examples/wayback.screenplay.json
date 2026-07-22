@@ -1,0 +1,51 @@
+{
+  "title": "Wayback Machine — see how a site looked in the past",
+  "slug": "wayback",
+
+  "$comment": "Built from the official help page https://help.archive.org/help/using-the-wayback-machine/ , which documents the flow: (1) enter a URL, (2) browse its history, (3) pick a date from the calendar. This screenplay performs those documented steps against the LIVE system, so `nolan verify` answers 'do the help doc's steps still match the product?'. The scene change uses the help page's own documented `*/url` shortcut to reach the calendar.",
+
+  "cuts": {
+    "full": { "pace": 1 },
+    "hero": { "pace": 0.7 }
+  },
+
+  "cast": {
+    "archivist": { "kind": "human", "name": "Lee", "bg": "#000000", "ink": "#fff" }
+  },
+
+  "vars": {
+    "home": "https://web.archive.org/",
+    "site": "nasa.gov",
+    "calendar": "https://web.archive.org/web/*/nasa.gov"
+  },
+
+  "scenes": [
+    {
+      "id": "lookup",
+      "beats": [
+        { "do": "goto", "url": "{{home}}", "settle": 900 },
+        { "do": "actor", "who": "archivist" },
+        { "do": "say", "text": "The Wayback Machine keeps snapshots of the web." },
+        { "do": "move", "to": { "sel": "input.rbt-input-main" }, "ms": 700 },
+        { "do": "click", "to": { "sel": "input.rbt-input-main" }, "ms": 300 },
+        { "do": "say", "text": "Step one: type in any site." },
+        { "do": "type", "text": "{{site}}", "delay": 95 },
+        { "do": "hold", "ms": 1600 },
+        { "do": "say", "text": "Step two: browse its history.", "as": "aside" },
+        { "do": "hold", "ms": 700 }
+      ]
+    },
+    {
+      "id": "history",
+      "beats": [
+        { "do": "cut", "url": "{{calendar}}", "title": "{{site}}", "ms": 900 },
+        { "do": "actor", "who": "archivist" },
+        { "do": "hold", "ms": 3500, "$comment": "the capture histogram loads from an API — let it fill in before the payoff caption, since cut only settles briefly" },
+        { "do": "say", "text": "Every capture, going back to 1996." },
+        { "do": "hold", "ms": 1000 },
+        { "do": "say", "text": "Step three: pick a date and time-travel.", "as": "aside" },
+        { "do": "hold", "ms": 2000 }
+      ]
+    }
+  ]
+}

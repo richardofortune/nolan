@@ -16,7 +16,9 @@
     "restyle:example": "node bin/nolan.mjs restyle examples/out/splitter-hero.segments.json",
     "verify:example": "node bin/nolan.mjs verify examples/splitter.screenplay.json",
     "example:wikipedia": "node bin/nolan.mjs examples/wikipedia.screenplay.json --cut=full --overlay=post",
-    "verify:wikipedia": "node bin/nolan.mjs verify examples/wikipedia.screenplay.json"
+    "verify:wikipedia": "node bin/nolan.mjs verify examples/wikipedia.screenplay.json",
+    "example:wayback": "node bin/nolan.mjs examples/wayback.screenplay.json --cut=full --overlay=post --out=examples/out",
+    "verify:wayback": "node bin/nolan.mjs verify examples/wayback.screenplay.json"
   },
   "keywords": ["demo", "gif", "screencast", "playwright", "readme", "documentation", "walkthrough", "screenplay"],
   "license": "MIT",
