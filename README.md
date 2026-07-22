@@ -2,6 +2,11 @@
 
 **Direct your app. Get a film.**
 
+![nolan, demonstrating itself](examples/out/showcase-full.gif)
+
+*The GIF above is itself a nolan demo — one screenplay, filmed against a real
+app, narrating its own features. Regenerate it with `npm run example:showcase`.*
+
 Demo GIFs rot. You record one by hand, ship it, change the UI, and now your
 README shows software that no longer exists. nolan makes the demo a **build
 step**: a screenplay you version, re-run on every release, and re-style whenever

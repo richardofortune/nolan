@@ -12,3 +12,4 @@ examples/out/*
 !examples/out/splitter-hero.mp4
 !examples/out/splitter-hero.srt
 !examples/out/splitter-hero.vtt
+!examples/out/showcase-full.gif
