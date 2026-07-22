@@ -1,8 +1,8 @@
 {
-  "title": "Finding a Wellington studio or bach",
+  "title": "A fun Wellington place-hunt",
   "slug": "airbnb",
 
-  "$comment": "A help walkthrough of searching Airbnb for a small place in the greater Wellington region, addressed to Molly. Stays on Airbnb's search-results pages (which render reliably) and never opens an individual listing — room pages are slow and bot-gated, and clicking a card opens a new tab the recorder can't follow. Scene change uses `cut` to the Kāpiti results so it re-rigs cleanly. Film with --style=examples/showcase.style.json (presenter + variants); expect that Airbnb's bot protection MAY interrupt a live film — verify first.",
+  "$comment": "A deliberately FUN help walkthrough: hunting Airbnb for somewhere interesting to stay in the greater Wellington region, addressed to Molly. Captions are written to be order-independent (Airbnb reshuffles results between loads), so the jokes land whatever card is on top — never naming a specific listing that might move. Stays on results pages (room pages are bot-gated / open new tabs); scene change via `cut`. Needs set.userAgent — Airbnb turns the default headless browser away. Film with --style=examples/showcase.style.json.",
 
   "cuts": { "full": { "pace": 1 }, "hero": { "pace": 0.72 } },
 
@@ -28,23 +28,23 @@
       "beats": [
         { "do": "goto", "url": "{{wgtn}}", "settle": 2200 },
         { "do": "actor", "who": "host" },
-        { "do": "say", "text": "Hi {{who}} — let's find you a place in Wellington." },
+        { "do": "say", "text": "Right, Molly — let's find you somewhere in Wellington with actual character." },
         { "do": "move", "to": { "sel": "[data-testid=card-container]" }, "ms": 750 },
-        { "do": "say", "text": "Airbnb has dozens around the harbour and the bays." },
-        { "do": "say", "text": "But you wanted something small — a studio or a bach.", "as": "aside" },
+        { "do": "say", "text": "Airbnb's finest, ranked by vibes and view." },
+        { "do": "say", "text": "Fair warning — half of Wellington is glued to a hillside.", "as": "aside" },
         { "do": "hold", "ms": 700 }
       ]
     },
     {
       "id": "kapiti",
       "beats": [
-        { "do": "cut", "url": "{{kapiti}}", "title": "Kāpiti Coast — studios & baches", "ms": 900 },
+        { "do": "cut", "url": "{{kapiti}}", "title": "Prefer sand? → Kāpiti Coast", "ms": 900 },
         { "do": "actor", "who": "host" },
-        { "do": "say", "text": "Head up the Kāpiti Coast and the little places shine." },
+        { "do": "say", "text": "Or swap the hills for sand, up the Kāpiti Coast." },
         { "do": "move", "to": { "sel": "[data-testid=card-container]" }, "ms": 750 },
-        { "do": "say", "text": "Coast Studio here is rated 4.97 over 238 stays." },
-        { "do": "hold", "ms": 700 },
-        { "do": "say", "text": "Pick your dates, {{who}}, and it's yours.", "as": "aside" },
+        { "do": "say", "text": "Beach cottages, beach pods, and a studio with a suspicious 4.97 rating.", "as": "warn" },
+        { "do": "hold", "ms": 600 },
+        { "do": "say", "text": "Book the one with the spa, Molly. You've earned it.", "as": "pill" },
         { "do": "hold", "ms": 1600 }
       ]
     }
