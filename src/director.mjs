@@ -415,41 +415,40 @@ export class Director {
         break;
 
       case "cut": {
-        await this.page.evaluate(
-          ([col, title, font, ink, fade]) => {
-            const c = document.createElement("div");
+        const T = this.style.transition;
+        // One curtain primitive for the whole cut: create if missing, then
+        // transition to `toOp`; remove after fading out. Keeping ONE element
+        // across create → cover → reveal is what makes the transition seamless.
+        const curtain = ([col, title, font, ink, fade, fromOp, toOp]) => {
+          let c = document.getElementById("film-curtain");
+          if (!c) {
+            c = document.createElement("div");
             c.id = "film-curtain";
-            c.style.cssText = `position:fixed;inset:0;z-index:2147483647;background:${col};display:flex;align-items:center;justify-content:center;color:${ink};font:${font};opacity:0;transition:opacity ${fade}ms`;
+            c.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:" + col +
+              ";display:flex;align-items:center;justify-content:center;color:" + ink +
+              ";font:" + font + ";transition:opacity " + fade + "ms;opacity:" + fromOp;
             c.textContent = title || "";
             document.body.appendChild(c);
-            requestAnimationFrame(() => (c.style.opacity = "1"));
-          },
-          [this.style.transition.curtain, b.title, this.style.transition.titleFont,
-            this.style.transition.titleInk, this.style.transition.fadeMs],
-        ).catch(() => {});
-        await this.sleep(this.style.transition.fadeMs + 60);
+          }
+          requestAnimationFrame(() => (c.style.opacity = String(toOp)));
+          if (toOp === 0) setTimeout(() => c.remove(), fade + 40);
+        };
+        const args = (from, to) => [T.curtain, b.title, T.titleFont, T.titleInk, T.fadeMs, from, to];
+
+        // Raise the curtain over the current page and hold on the title.
+        await this.page.evaluate(curtain, args(0, 1)).catch(() => {});
+        await this.sleep(T.fadeMs + 60);
         await this.sleep(b.ms ?? 900);
+        // Navigate, then RE-COVER the bare new page immediately so it never
+        // flashes, rig it (cursor + presenter) while hidden, and only then fade
+        // to reveal a fully-dressed page — no bare frame, no presenter pop-in.
         await this.page.goto(b.url, { waitUntil: "domcontentloaded" });
-        await this.sleep(300);
+        await this.page.evaluate(curtain, args(1, 1)).catch(() => {});
+        await this.sleep(b.settle ?? 300);
         await this.rig();
         if (b.after) for (const inner of b.after) await this.run(inner);
-        await this.page.evaluate(
-          ([col, title, font, ink, fade]) => {
-            let c = document.getElementById("film-curtain");
-            if (!c) {
-              c = document.createElement("div");
-              c.id = "film-curtain";
-              c.style.cssText = `position:fixed;inset:0;z-index:2147483647;background:${col};display:flex;align-items:center;justify-content:center;color:${ink};font:${font};opacity:1;transition:opacity ${fade}ms`;
-              c.textContent = title || "";
-              document.body.appendChild(c);
-            }
-            requestAnimationFrame(() => (c.style.opacity = "0"));
-            setTimeout(() => c.remove(), fade + 40);
-          },
-          [this.style.transition.curtain, b.title, this.style.transition.titleFont,
-            this.style.transition.titleInk, this.style.transition.fadeMs],
-        ).catch(() => {});
-        await this.sleep(this.style.transition.fadeMs);
+        await this.page.evaluate(curtain, args(1, 0)).catch(() => {});
+        await this.sleep(T.fadeMs);
         break;
       }
 
