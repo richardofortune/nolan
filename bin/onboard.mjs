@@ -10,9 +10,10 @@ import { spawn } from "node:child_process";
 import { createInterface } from "node:readline/promises";
 import { createRequire } from "node:module";
 import { execSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { stdin, stdout } from "node:process";
+import { platform, stdin, stdout } from "node:process";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..");
@@ -40,19 +41,19 @@ try { createRequire(import.meta.url).resolve("playwright"); hasPlaywright = true
 const ITEMS = [
   { group: "See it work — no internet needed", items: [
     { k: "1", label: "Film the toy app — the classic hero GIF",
-      args: ["examples/splitter.screenplay.json", "--cut=hero"] },
+      args: ["examples/splitter.screenplay.json", "--cut=hero"], opens: "examples/out/splitter-hero.gif" },
     { k: "2", label: "The self-describing showcase — every feature, narrated",
-      args: ["examples/showcase.screenplay.json", "--cut=full", "--style=examples/showcase.style.json", "--overlay=post", "--out=examples/out"] },
+      args: ["examples/showcase.screenplay.json", "--cut=full", "--style=examples/showcase.style.json", "--overlay=post", "--out=examples/out"], opens: "examples/out/showcase-full.gif" },
   ]},
   { group: "Live public sites — needs internet", items: [
     { k: "3", label: "Wikipedia — search and read", net: true,
-      args: ["examples/wikipedia.screenplay.json", "--cut=full", "--overlay=post", "--out=examples/out"] },
+      args: ["examples/wikipedia.screenplay.json", "--cut=full", "--overlay=post", "--out=examples/out"], opens: "examples/out/wikipedia-full.gif" },
     { k: "4", label: "Google Calendar — styled captions + a presenter", net: true,
-      args: ["examples/gcal.screenplay.json", "--cut=full", "--style=examples/gcal.style.json", "--overlay=post", "--out=examples/out"] },
+      args: ["examples/gcal.screenplay.json", "--cut=full", "--style=examples/gcal.style.json", "--overlay=post", "--out=examples/out"], opens: "examples/out/gcal-full.gif" },
     { k: "5", label: "Karaoke captions — words light up", net: true,
-      args: ["examples/karaoke.screenplay.json", "--cut=full", "--style=examples/karaoke.style.json", "--out=examples/out"] },
+      args: ["examples/karaoke.screenplay.json", "--cut=full", "--style=examples/karaoke.style.json", "--out=examples/out"], opens: "examples/out/karaoke-full.gif" },
     { k: "6", label: "Airbnb — a fun place-hunt " + C.dim("(may hit bot checks)"), net: true,
-      args: ["examples/airbnb.screenplay.json", "--cut=full", "--style=examples/showcase.style.json", "--overlay=post", "--out=examples/out"] },
+      args: ["examples/airbnb.screenplay.json", "--cut=full", "--style=examples/showcase.style.json", "--overlay=post", "--out=examples/out"], opens: "examples/out/airbnb-full.gif" },
   ]},
   { group: "Concepts", items: [
     { k: "7", label: "verify — catch a stale demo (films nothing, ~2s)", light: true,
@@ -61,7 +62,7 @@ const ITEMS = [
       steps: [
         ["examples/splitter.screenplay.json", "--cut=hero", "--overlay=post", "--out=examples/out"],
         ["restyle", "examples/out/splitter-hero.segments.json", "--style=examples/karaoke.style.json", "--out=examples/out"],
-      ] },
+      ], opens: "examples/out/splitter-hero.gif" },
     { k: "9", label: "How it works — the three documents", about: true },
   ]},
 ];
@@ -85,6 +86,20 @@ function run(args) {
     const p = spawn("node", [NOLAN, ...args], { cwd: ROOT, stdio: "inherit" });
     p.on("close", (code) => done(code ?? 0));
   });
+}
+
+/** Open a rendered file in the OS default viewer — best-effort, never fatal. */
+function openFile(rel) {
+  const file = resolve(ROOT, rel);
+  if (!existsSync(file)) return;
+  const [cmd, args] =
+    platform === "darwin" ? ["open", [file]]
+    : platform === "win32" ? ["cmd", ["/c", "start", "", file]]
+    : ["xdg-open", [file]];
+  try {
+    spawn(cmd, args, { stdio: "ignore", detached: true }).unref();
+    console.log(C.dim(`  opening ${rel} …`));
+  } catch { /* no GUI / no opener — the path is printed above anyway */ }
 }
 
 function banner() {
@@ -136,9 +151,12 @@ async function main() {
       const runs = it.steps ?? [it.args];
       let code = 0;
       for (const args of runs) { code = await run(args); if (code !== 0) break; }
-      console.log(code === 0
-        ? C.green("\n  ✓ done — outputs are in examples/out/\n")
-        : C.yellow("\n  the run exited early (a live site may have blocked it — try again)\n"));
+      if (code === 0) {
+        console.log(C.green("\n  ✓ done — outputs are in examples/out/\n"));
+        if (it.opens) openFile(it.opens);
+      } else {
+        console.log(C.yellow("\n  the run exited early (a live site may have blocked it — try again)\n"));
+      }
     }
   } finally {
     rl.close();
