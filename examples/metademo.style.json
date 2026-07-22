@@ -48,7 +48,7 @@
     "click": { "show": true, "colour": "#FFC53D", "from": 10, "to": 46, "ms": 450, "width": 2.5 }
   },
 
-  "transition": { "curtain": "#0f1115", "fadeMs": 340, "titleFont": "700 30px -apple-system,Roboto,sans-serif", "titleInk": "#E8EAED" },
+  "transition": { "$comment": "Mid-slate curtain (not near-black) so the wipe reads against both the dark terminal/done scenes and the light app scene.", "curtain": "#334155", "fadeMs": 340, "titleFont": "700 30px -apple-system,Roboto,sans-serif", "titleInk": "#F8FAFC" },
 
   "encode": {
     "viewport": { "width": 1000, "height": 700 },
