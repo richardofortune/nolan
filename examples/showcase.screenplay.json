@@ -1,8 +1,8 @@
 {
-  "title": "nolan — a demo that describes itself",
+  "title": "nolan — a walkthrough that describes itself",
   "slug": "showcase",
 
-  "$comment": "The self-describing demo. It drives the bundled toy app (examples/site) while the captions narrate nolan's own features and cycle through every caption look. Film in post mode with --style=examples/showcase.style.json so the karaoke and pill highlights animate. This is the flagship 'what can it do' clip.",
+  "$comment": "The self-describing hero. It drives the bundled toy app while the narration tells nolan's actual story — agents showing (not telling), generated per recipient, delivered in the voice of the business — and cycles through every caption look as it goes. The opening greeting uses a {{who}} variable to make the 'personal to whoever's watching' point literal. Film in post with --style=examples/showcase.style.json so karaoke and pill highlights animate.",
 
   "cuts": { "full": { "pace": 1 }, "hero": { "pace": 0.72 } },
 
@@ -10,7 +10,7 @@
     "host": { "kind": "human", "name": "Alex", "bg": "#4f46e5", "ink": "#fff", "cam": "./assets/people/man-1.jpg" }
   },
 
-  "vars": { "app": "http://localhost:8099/index.html", "total": "480" },
+  "vars": { "app": "http://localhost:8099/index.html", "total": "480", "who": "Sam" },
 
   "set": {
     "servers": [{ "cmd": "python3", "args": ["-m", "http.server", "8099"], "cwd": "site" }],
@@ -24,14 +24,14 @@
         { "do": "goto", "url": "{{app}}", "settle": 900 },
         { "do": "card", "ms": 2200, "lines": [
           { "text": "nolan", "font": "700 40px -apple-system,Roboto,sans-serif" },
-          { "text": "one screenplay — every style", "dim": true, "font": "400 19px -apple-system,sans-serif" }
+          { "text": "show, don't tell", "dim": true, "font": "400 19px -apple-system,sans-serif" }
         ]},
 
         { "do": "actor", "who": "host" },
-        { "do": "say", "text": "Everything I'm narrating is a caption, composited after filming." },
-        { "do": "say", "text": "…so a restyle is a re-encode, never a re-shoot.", "as": "aside" },
+        { "do": "say", "text": "Hey {{who}} — here's a quick look, made just for you." },
+        { "do": "say", "text": "An agent wrote this walkthrough from a short spec.", "as": "aside" },
 
-        { "do": "say", "text": "The beats drive a real app — watch." },
+        { "do": "say", "text": "It shows you the real app — watch." },
         { "do": "move",  "to": { "sel": "#total" }, "ms": 650 },
         { "do": "click", "to": { "sel": "#total" }, "ms": 250 },
         { "do": "type",  "text": "{{total}}" },
@@ -39,13 +39,13 @@
         { "do": "click", "to": { "role": "button", "name": "Work it out" }, "ms": 700, "settle": 500 },
         { "do": "hold", "ms": 800 },
 
-        { "do": "say", "text": "Captions carry meaning. This one is a warning.", "as": "warn" },
-        { "do": "say", "text": "Karaoke lights each word as it lands — even in post.", "as": "karaoke" },
-        { "do": "say", "text": "Or a bold pill on the active word.", "as": "pill" },
-        { "do": "say", "text": "Or minimal, barely there.", "as": "minimal" },
-        { "do": "say", "text": "And nolan verify fails your build when a demo drifts.", "as": "code" },
+        { "do": "say", "text": "If the app moves and this breaks, the build fails — not your users.", "as": "warn" },
+        { "do": "say", "text": "Soon it speaks in your brand's voice, word for word.", "as": "karaoke" },
+        { "do": "say", "text": "Made personal for whoever is watching.", "as": "pill" },
+        { "do": "say", "text": "Styled to disappear, or to stand out — your call.", "as": "minimal" },
+        { "do": "say", "text": "One spec per moment. One voice across them all.", "as": "code" },
 
-        { "do": "say", "text": "One screenplay. Every style. The demo describes itself." },
+        { "do": "say", "text": "Show, don't tell — in your voice. This walkthrough made itself." },
         { "do": "hold", "ms": 1600 }
       ]
     }
