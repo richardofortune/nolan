@@ -11,6 +11,8 @@
   },
   "files": ["bin", "src", "styles", "LICENSE", "README.md"],
   "scripts": {
+    "start": "node bin/onboard.mjs",
+    "onboard": "node bin/onboard.mjs",
     "example": "node bin/nolan.mjs examples/splitter.screenplay.json --cut=hero",
     "example:post": "node bin/nolan.mjs examples/splitter.screenplay.json --cut=hero --overlay=post",
     "restyle:example": "node bin/nolan.mjs restyle examples/out/splitter-hero.segments.json",

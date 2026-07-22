@@ -48,11 +48,16 @@ Requires Node ≥ 18, `ffmpeg`, and Playwright's Chromium.
 ```bash
 git clone https://github.com/richardofortune/nolan && cd nolan
 npm install playwright && npx playwright install chromium
-npm run example
+npm start
 ```
 
-That films the bundled toy app in `examples/site` — no other setup, nothing to
-configure.
+`npm start` opens an interactive menu — pick a demo (the toy app, the
+self-describing showcase, a live-site walkthrough, karaoke captions, `verify`,
+restyle…) and nolan films it. It checks `ffmpeg` and Playwright are present and
+tells you what to install if not.
+
+Prefer to skip the menu? `npm run example` films the bundled toy app in
+`examples/site` directly — no other setup, nothing to configure.
 
 ## Three documents, three owners
 
