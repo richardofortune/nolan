@@ -38,9 +38,42 @@
 import { chromium } from "playwright";
 import { spawn, execSync } from "node:child_process";
 import { mkdirSync, rmSync, readdirSync, readFileSync, existsSync } from "node:fs";
-import { resolve, dirname, join } from "node:path";
+import { resolve, dirname, join, extname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { paintPalette } from "./caption.mjs";
+import { paintPalette, resolveCaptionStyle } from "./caption.mjs";
+
+/**
+ * The presenter bubble — a webcam-style overlay of the current actor in a
+ * corner, the way a screen-share tool shows the person talking. Off by default;
+ * a style opts in via `presenter.show`. Like the cursor it is burned into the
+ * recording (it belongs to the frame, not the page), so it works in both modes.
+ * The person shown is whichever actor the screenplay last set.
+ */
+export const PRESENTER_DEFAULTS = {
+  show: false,
+  corner: "bottom-right", // top-left | top-right | bottom-left | bottom-right
+  size: 150,              // px — the bubble's diameter
+  shape: "circle",        // circle | rounded | square
+  margin: 22,
+  ring: true,
+  ringColor: "#ffffff",
+  ringWidth: 3,
+  shadow: true,
+  label: true,            // show the actor's name under the bubble
+};
+
+/** Read an actor's `cam` image into a data URI so it survives any filmed origin's CSP. */
+export function resolveCam(cast = {}, baseDir = ".") {
+  for (const persona of Object.values(cast)) {
+    const cam = persona?.cam;
+    if (!cam || /^(data:|https?:)/.test(cam)) continue; // already inline or remote
+    const abs = resolve(baseDir, cam);
+    if (!existsSync(abs)) continue;
+    const ext = extname(abs).slice(1).toLowerCase();
+    const mime = ext === "jpg" ? "jpeg" : ext === "svg" ? "svg+xml" : ext;
+    persona.camData = `data:image/${mime};base64,${readFileSync(abs).toString("base64")}`;
+  }
+}
 
 
 /* ----------------------------- interpolation ----------------------------- */
@@ -85,22 +118,38 @@ function interpDeep(node, vars) {
 export function rigScript(style, { captions = true } = {}) {
   const { paints } = paintPalette(style);
   const cur = style.cursor;
+  const presenter = { ...PRESENTER_DEFAULTS, ...(style.presenter || {}) };
+  // Lift a bottom-corner bubble clear of the caption bar (which sits at the
+  // bottom in both modes — burned in, or composited on later).
+  const capBase = resolveCaptionStyle(style).base;
+  const capBottom = capBase.position === "bottom-center" ? capBase.height : 0;
   // The cursor and click-ripple are motion — they belong to the action and are
   // always burned in. The caption bar is the thing you restyle, so in `post`
   // mode it is left out here and composited on afterwards (see composite.mjs);
   // that turns a restyle into a re-encode instead of a re-film.
   return `(() => {
-  const S = ${JSON.stringify({ paints, cursor: cur, captions })};
+  const S = ${JSON.stringify({ paints, cursor: cur, captions, presenter, capBottom })};
   const P0 = S.paints[''];
+  // Trusted-Types-safe innerHTML. Sites like Google enforce
+  // require-trusted-types-for 'script', which throws on a raw innerHTML= — so
+  // route every assignment through a policy (created once, reused across
+  // re-rigs), falling back to plain innerHTML where Trusted Types is absent.
+  if (!window.__setHTML) {
+    let pol = null;
+    try { if (window.trustedTypes && window.trustedTypes.createPolicy)
+      pol = window.trustedTypes.createPolicy('nolan-rig', { createHTML: (s) => s }); } catch (e) {}
+    window.__setHTML = (el, s) => { el.innerHTML = pol ? pol.createHTML(s) : s; };
+  }
+  const setHTML = window.__setHTML;
   if (S.captions && !document.getElementById('film-cap')) {
     const bar = document.createElement('div');
     bar.id = 'film-cap';
     bar.style.cssText = P0.bar;
-    bar.innerHTML =
+    setHTML(bar,
       '<span id="film-chip" style="display:none;align-items:center;gap:8px;flex:none;transition:opacity .3s">' +
       '<span id="film-av" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;font:600 12px ui-monospace,Menlo,monospace"></span>' +
       '<span id="film-name" style="font-size:14px;color:#c9cdd4;white-space:nowrap"></span>' +
-      '<span style="color:#3a3e46">|</span></span><span id="film-text"></span>';
+      '<span style="color:#3a3e46">|</span></span><span id="film-text"></span>');
     document.body.appendChild(bar);
     document.getElementById('film-text').style.cssText = P0.text;
   }
@@ -149,9 +198,9 @@ export function rigScript(style, { captions = true } = {}) {
     // from length — no speech recognition, unlike every karaoke caption tool.
     const pill = P.highlightStyle === 'pill';
     const tr = P.wordTransition;
-    el.innerHTML = t.split(/(\\s+)/).map((w, i) => /^\\s+$/.test(w) || w === '' ? esc(w) :
+    setHTML(el, t.split(/(\\s+)/).map((w, i) => /^\\s+$/.test(w) || w === '' ? esc(w) :
       '<span data-w style="opacity:.28;border-radius:.32em;padding:0 .16em;margin:0 -.16em;' +
-      'transition:opacity ' + tr + 's,color ' + tr + 's,background-color ' + tr + 's">' + esc(w) + '</span>').join('');
+      'transition:opacity ' + tr + 's,color ' + tr + 's,background-color ' + tr + 's">' + esc(w) + '</span>').join(''));
     const words = [].slice.call(el.querySelectorAll('[data-w]'));
     if (!words.length) { done(); return; }
     const total = t.length * speed;
@@ -173,7 +222,7 @@ export function rigScript(style, { captions = true } = {}) {
     const cur = document.createElement('div');
     cur.id = 'film-cursor';
     cur.style.cssText = 'position:fixed;left:0;top:0;width:'+S.cursor.size+'px;height:'+S.cursor.size+'px;z-index:2147483647;pointer-events:none;transform:translate(-2px,-2px)';
-    cur.innerHTML = '<svg viewBox="0 0 24 24" width="'+S.cursor.size+'" height="'+S.cursor.size+'"><path d="M5 3l14 9-6.5 1L9 19z" fill="'+S.cursor.fill+'" stroke="'+S.cursor.stroke+'" stroke-width="1.4"/></svg>';
+    setHTML(cur, '<svg viewBox="0 0 24 24" width="'+S.cursor.size+'" height="'+S.cursor.size+'"><path d="M5 3l14 9-6.5 1L9 19z" fill="'+S.cursor.fill+'" stroke="'+S.cursor.stroke+'" stroke-width="1.4"/></svg>');
     document.body.appendChild(cur);
     document.addEventListener('mousemove', (e) => {
       cur.style.left = e.clientX+'px'; cur.style.top = e.clientY+'px'; }, true);
@@ -188,6 +237,48 @@ export function rigScript(style, { captions = true } = {}) {
         r.style.left=(e.clientX-K.to/2)+'px'; r.style.top=(e.clientY-K.to/2)+'px'; r.style.opacity='0'; });
       setTimeout(() => r.remove(), K.ms + 60);
     }, true);
+  }
+  // Presenter bubble — the "person in the corner". Built lazily on the first
+  // actor so an empty ring never flashes; re-applied on re-rig (goto/cut) from
+  // the remembered actor, so it persists across scene changes.
+  if (S.presenter.show) {
+    const R = S.presenter, radius = R.shape === 'circle' ? '50%' : R.shape === 'rounded' ? '18px' : '0';
+    window.__presenter = (p) => {
+      window.__curActor = p;
+      let wrap = document.getElementById('film-presenter');
+      if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.id = 'film-presenter';
+        const vert = R.corner.indexOf('bottom') === 0
+          ? 'bottom:' + (R.margin + S.capBottom) + 'px' : 'top:' + R.margin + 'px';
+        const horiz = R.corner.indexOf('right') >= 0 ? 'right:' + R.margin + 'px' : 'left:' + R.margin + 'px';
+        wrap.style.cssText = 'position:fixed;z-index:2147483646;pointer-events:none;' + vert + ';' + horiz +
+          ';display:flex;flex-direction:column;align-items:center;gap:7px';
+        setHTML(wrap,
+          '<div id="film-cam" style="width:' + R.size + 'px;height:' + R.size + 'px;border-radius:' + radius +
+          ';overflow:hidden;display:flex;align-items:center;justify-content:center;' +
+          'font:600 ' + Math.round(R.size * 0.4) + 'px/1 -apple-system,BlinkMacSystemFont,sans-serif;' +
+          (R.ring ? 'border:' + R.ringWidth + 'px solid ' + R.ringColor + ';' : '') +
+          (R.shadow ? 'box-shadow:0 6px 22px rgba(0,0,0,.35);' : '') + '"></div>' +
+          '<div id="film-cam-label" style="font:600 13px -apple-system,sans-serif;color:#fff;' +
+          'background:rgba(20,22,27,.72);padding:3px 10px;border-radius:11px;white-space:nowrap;' +
+          'box-shadow:0 2px 8px rgba(0,0,0,.3)"></div>');
+        document.body.appendChild(wrap);
+      }
+      const cam = document.getElementById('film-cam'), label = document.getElementById('film-cam-label');
+      if (p && p.cam) {
+        setHTML(cam, '<img src="' + p.cam + '" style="width:100%;height:100%;object-fit:cover" alt="">');
+      } else if (p) {
+        cam.textContent = '';
+        cam.style.background = 'linear-gradient(155deg, rgba(255,255,255,.16), rgba(0,0,0,.16)), ' + (p.bg || '#4b5563');
+        cam.style.color = p.ink || '#fff';
+        cam.textContent = (p.name || '?').slice(0, 1).toUpperCase();
+      }
+      const named = R.label && p && p.name;
+      label.textContent = named ? p.name : '';
+      label.style.display = named ? 'block' : 'none';
+    };
+    if (window.__curActor) window.__presenter(window.__curActor);
   }
 })();`;
 }
@@ -349,8 +440,9 @@ export class Director {
             const c = document.createElement("div");
             c.id = "film-card";
             c.style.cssText = `position:fixed;inset:0;z-index:2147483647;background:${col};color:${ink};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:0;transition:opacity ${fade}ms;text-align:center;padding:0 60px`;
-            c.innerHTML = lines.map((l) =>
+            const cardHtml = lines.map((l) =>
               `<div style="font:${l.font || "500 20px -apple-system,sans-serif"};color:${l.ink || ink};opacity:${l.dim ? 0.72 : 1}">${l.text}</div>`).join("");
+            if (window.__setHTML) window.__setHTML(c, cardHtml); else c.innerHTML = cardHtml;
             document.body.appendChild(c);
             requestAnimationFrame(() => (c.style.opacity = "1"));
           },
@@ -371,6 +463,14 @@ export class Director {
         // Remember the persona whichever mode we're in — a `post`-composited
         // caption still needs to draw the right chip.
         this.actor = { kind: who.kind, name: who.name, bg: who.bg, ink: who.ink };
+        // The presenter bubble is burned in like the cursor, so set it in both
+        // modes. `cam` (a data URI) is passed only here — never into this.actor,
+        // which rides on every caption segment and must stay small.
+        const cam = who.camData ?? (/^(data:|https?:)/.test(who.cam ?? "") ? who.cam : null);
+        await this.page.evaluate(
+          (p) => window.__presenter?.(p),
+          { ...this.actor, cam },
+        ).catch(() => {});
         if (this.overlay === "burn") {
           await this.page.evaluate(
             ([kind, name, bg, ink]) => window.__actor?.(kind, name, bg, ink),

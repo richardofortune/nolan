@@ -28,6 +28,19 @@
     }
   },
 
+  "presenter": {
+    "$comment": "The 'person in the corner', screen-share style. Shows the current actor; here Mia (a generated avatar, since her cast entry has no `cam` photo). Add \"cam\": \"./mia.jpg\" to a cast persona for a real headshot.",
+    "show": true,
+    "corner": "bottom-right",
+    "size": 132,
+    "shape": "circle",
+    "ring": true,
+    "ringColor": "#ffffff",
+    "ringWidth": 3,
+    "shadow": true,
+    "label": true
+  },
+
   "cursor": {
     "show": true, "size": 22, "fill": "#202124", "stroke": "#ffffff",
     "click": { "show": true, "colour": "#1A73E8", "from": 10, "to": 46, "ms": 450, "width": 2.5 }

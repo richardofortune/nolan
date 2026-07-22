@@ -10,7 +10,7 @@ import { mkdirSync, rmSync, readdirSync, readFileSync, writeFileSync, copyFileSy
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
-import { Director, bringUpSet } from "./director.mjs";
+import { Director, bringUpSet, resolveCam } from "./director.mjs";
 import { resolveCaptionStyle } from "./caption.mjs";
 import { paintCaptionsOnto } from "./composite.mjs";
 import { SUBTITLE_FORMATS } from "./subtitles.mjs";
@@ -134,6 +134,10 @@ export async function render(screenplayPath, { cut, style, out, quiet, overlay =
   const outDir = resolve(out ?? join(baseDir, "out"));
   const cutName = cut ?? Object.keys(sp.cuts)[0];
   if (!sp.cuts?.[cutName]) throw new Error(`no such cut: ${cutName}`);
+
+  // Fold any presenter `cam` images into data URIs (paths are relative to the
+  // screenplay), so the bubble renders on any filmed origin.
+  resolveCam(sp.cast, baseDir);
 
   const say = (...a) => !quiet && console.log(...a);
   const videoDir = mkdtempSync(join(tmpdir(), "nolan-"));

@@ -180,6 +180,27 @@ voice tag. Choose formats (or opt out) in the style file:
 "encode": { "subtitles": ["srt", "vtt"], "outputs": [ /* … */ ] }
 ```
 
+### A presenter in the corner
+
+Turn on a screen-share-style webcam bubble showing whoever's currently speaking —
+off by default, opt in from the style:
+
+```jsonc
+// style
+"presenter": { "show": true, "corner": "bottom-right", "size": 140, "shape": "circle" }
+```
+
+The person is the current **actor**. Give a cast member a `cam` for a real
+headshot; without one they get a coloured avatar of their initial:
+
+```jsonc
+"cast": { "host": { "kind": "human", "name": "Mia", "bg": "#1A73E8", "cam": "./mia.jpg" } }
+```
+
+It's burned in like the cursor, so it works in both burn and post modes, and it
+lifts clear of the caption bar automatically. (The rig is Trusted-Types-safe, so
+the bubble — and every overlay — renders even on strict sites like Google.)
+
 ## Demos that fail CI when they go stale
 
 ```bash

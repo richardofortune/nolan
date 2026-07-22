@@ -52,6 +52,20 @@
     }
   },
 
+  "presenter": {
+    "$comment": "The 'person in the corner', like a screen-share webcam bubble. Off by default. When on, it shows the current actor — their `cam` photo if the cast entry has one, otherwise a coloured avatar of their initial. Burned in like the cursor, so it works in burn and post modes.",
+    "show": false,
+    "corner": "bottom-right",
+    "size": 140,
+    "shape": "circle",
+    "margin": 22,
+    "ring": true,
+    "ringColor": "#ffffff",
+    "ringWidth": 3,
+    "shadow": true,
+    "label": true
+  },
+
   "cursor": {
     "show": true,
     "size": 22,
