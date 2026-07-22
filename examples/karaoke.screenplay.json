@@ -1,0 +1,30 @@
+{
+  "title": "Karaoke captions",
+  "slug": "karaoke",
+
+  "$comment": "Shows Cap-style word-by-word highlighting. Film in BURN mode (default — no --overlay=post) with --style=examples/karaoke.style.json. Filmed over the public Google Calendar embed just to have a real page underneath.",
+
+  "cuts": { "full": { "pace": 1 } },
+
+  "cast": {
+    "host": { "kind": "human", "name": "Kai", "bg": "#FFD400", "ink": "#16181D" }
+  },
+
+  "vars": {
+    "embed": "https://calendar.google.com/calendar/embed?src=en.usa%23holiday%40group.v.calendar.google.com&ctz=America%2FNew_York&mode=MONTH"
+  },
+
+  "scenes": [
+    {
+      "id": "sing",
+      "beats": [
+        { "do": "goto", "url": "{{embed}}", "settle": 1100 },
+        { "do": "actor", "who": "host" },
+        { "do": "say", "text": "Watch each word light up as it is spoken." },
+        { "do": "hold", "ms": 500 },
+        { "do": "say", "text": "The timing comes from the caption length, not from audio." },
+        { "do": "hold", "ms": 700 }
+      ]
+    }
+  ]
+}

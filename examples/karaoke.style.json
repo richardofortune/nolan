@@ -1,0 +1,45 @@
+{
+  "$comment": "Cap-style karaoke captions: words light up one at a time. This is a BURN-mode effect — film WITHOUT --overlay=post, since post compositing draws captions in their resting (fully revealed) state. Word timing is derived from length (no speech recognition), because the captions are authored.",
+
+  "pace": 1,
+
+  "timing": {
+    "mode": "caption", "readingSpeed": 46, "minCaption": 1400,
+    "leadIn": 500, "beatOut": 700, "typeDelay": 24, "glideDefault": 650, "settle": 250
+  },
+
+  "caption": {
+    "position": "bottom-center",
+    "height": 66,
+    "padding": "15px 26px",
+    "font": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif",
+    "fontWeight": 700,
+    "size": 22,
+    "lineHeight": 1.3,
+    "color": "#F2F3F5",
+    "backgroundColor": "#16181D",
+    "backgroundOpacity": 92,
+    "showChip": true,
+
+    "activeWordHighlight": true,
+    "highlightStyle": "color",
+    "highlightColor": "#FFD400",
+    "wordTransitionDuration": 0.14
+  },
+
+  "cursor": {
+    "show": true, "size": 22, "fill": "#16181D", "stroke": "#ffffff",
+    "click": { "show": true, "colour": "#FFD400", "from": 10, "to": 46, "ms": 450, "width": 2.5 }
+  },
+
+  "transition": { "curtain": "#16181D", "fadeMs": 320, "titleFont": "600 22px -apple-system,sans-serif", "titleInk": "#F2F3F5" },
+
+  "encode": {
+    "viewport": { "width": 1000, "height": 700 },
+    "subtitles": ["vtt"],
+    "outputs": [
+      { "name": "gif", "ext": "gif", "args": "-vf \"fps=14,scale=900:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer:bayer_scale=4\" -loop 0" },
+      { "name": "mp4", "ext": "mp4", "args": "-vf \"scale=1000:-2\" -c:v libx264 -pix_fmt yuv420p -crf 23 -movflags +faststart" }
+    ]
+  }
+}
