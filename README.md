@@ -76,6 +76,10 @@ walkthrough for each person or moment without writing scripts. Because the
 voice-of-business lives in one place, every walkthrough any agent makes inherits
 it — improve it once, improve them all.
 
+Writing one that *lands* — tone, text, tempo, transitions — is a craft, and it's
+the value. [`docs/craft.md`](docs/craft.md) is the guide every screenplay (and
+every agent writing one) should follow.
+
 ## A screenplay
 
 ```json
