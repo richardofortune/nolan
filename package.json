@@ -22,7 +22,8 @@
     "example:gcal": "node bin/nolan.mjs examples/gcal.screenplay.json --cut=full --style=examples/gcal.style.json --overlay=post --out=examples/out",
     "verify:gcal": "node bin/nolan.mjs verify examples/gcal.screenplay.json --style=examples/gcal.style.json",
     "example:karaoke": "node bin/nolan.mjs examples/karaoke.screenplay.json --cut=full --style=examples/karaoke.style.json --out=examples/out",
-    "example:showcase": "node bin/nolan.mjs examples/showcase.screenplay.json --cut=full --style=examples/showcase.style.json --overlay=post --out=examples/out"
+    "example:showcase": "node bin/nolan.mjs examples/showcase.screenplay.json --cut=full --style=examples/showcase.style.json --overlay=post --out=examples/out",
+    "example:airbnb": "node bin/nolan.mjs examples/airbnb.screenplay.json --cut=full --style=examples/showcase.style.json --overlay=post --out=examples/out"
   },
   "keywords": ["demo", "gif", "screencast", "playwright", "readme", "documentation", "walkthrough", "screenplay"],
   "license": "MIT",

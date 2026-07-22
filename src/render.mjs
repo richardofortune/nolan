@@ -21,6 +21,17 @@ export const DEFAULT_STYLE = resolve(HERE, "../styles/default.json");
 const readJson = (p) => JSON.parse(readFileSync(resolve(p), "utf8"));
 
 /**
+ * Browser context options from the screenplay's `set`. A real `userAgent` and
+ * `locale` are what let nolan film sites that turn the default headless browser
+ * away (Airbnb and friends) — declare them in `set` and every page inherits them.
+ */
+const contextOpts = (sp, st) => ({
+  viewport: st.encode.viewport,
+  ...(sp.set?.userAgent ? { userAgent: sp.set.userAgent } : {}),
+  ...(sp.set?.locale ? { locale: sp.set.locale } : {}),
+});
+
+/**
  * Resolve every target in a screenplay WITHOUT filming or encoding.
  *
  * This is what CI wants: it answers "does this walkthrough still describe the
@@ -54,7 +65,8 @@ export async function verify(screenplayPath, { cut, style } = {}) {
   const tearDown = await bringUpSet(sp, baseDir);
   try {
     const browser = await chromium.launch();
-    const page = await browser.newPage({ viewport: st.encode.viewport });
+    const context = await browser.newContext(contextOpts(sp, st));
+    const page = await context.newPage();
     if (sp.set?.initScript) await page.addInitScript(sp.set.initScript);
     const d = new Director(page, sp, st, { name: cutName, ...sp.cuts[cutName] });
     d.targetTimeout = 2500; // CI wants a fast, complete answer — not one slow failure
@@ -148,7 +160,7 @@ export async function render(screenplayPath, { cut, style, out, quiet, overlay =
   try {
     const browser = await chromium.launch();
     const context = await browser.newContext({
-      viewport: st.encode.viewport,
+      ...contextOpts(sp, st),
       recordVideo: { dir: videoDir, size: st.encode.viewport },
     });
     const page = await context.newPage();
