@@ -13,6 +13,11 @@ judgment.
 **The voice in one line:** a confident colleague showing you something they built
 — not a salesperson, not a whitepaper, not an AI.
 
+**Companion doc:** [`style-events.md`](./style-events.md) is the corpus of
+on-screen devices — the cursor, click pulse, presenter bubble, and the how-to
+progress rail — with the *why/when* behind each. Craft is the words; style
+events are the visible chrome that makes an action legible. Reach for both.
+
 ---
 
 ## 1. Tone
