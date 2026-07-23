@@ -1,0 +1,80 @@
+{
+  "title": "Finding your SuperGold card, for Nan",
+  "slug": "supergold",
+
+  "$comment": "A warm, plain-language how-to for a non-technical person: how to find a NZ public service, starting where a granny actually starts — Google. Follows the how-to shape (docs/style-events.md): state the plan up front, show the OPTIONAL step tracker (the top rail), and check steps off as you go. We film Google's homepage (200) and TYPE the query, but do not submit — a scripted Google search trips its 'unusual traffic' CAPTCHA, which we don't fight — then cut to govt.nz (also 200), which is genuinely where that search leads. From there it stays on the govt.nz homepage, whose 'Tax, benefits and finance' tile literally lists SuperGold, so the payoff is honest on one clean page. Film with --style=examples/metademo.style.json.",
+
+  "cuts": { "full": { "pace": 1 }, "hero": { "pace": 0.75 } },
+
+  "steps": ["Search Google", "Go to govt.nz", "Find your topic", "Open your card"],
+
+  "cast": {
+    "helper": { "kind": "human", "name": "Aroha", "bg": "#0E7490", "ink": "#fff", "cam": "./assets/people/woman-3.jpg" }
+  },
+
+  "vars": {
+    "who": "Nan",
+    "google": "https://www.google.com/",
+    "govt": "https://www.govt.nz/",
+    "gbox": "textarea[name=\"q\"]",
+    "tile": "a[href*=\"tax-benefits-and-finance\"]"
+  },
+
+  "set": {
+    "$comment": "A real browser identity, en-NZ.",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    "locale": "en-NZ"
+  },
+
+  "scenes": [
+    {
+      "id": "plan",
+      "beats": [
+        { "do": "goto", "url": "{{google}}", "settle": 1300 },
+        { "do": "actor", "who": "helper" },
+        { "do": "say", "text": "Hi {{who}}. Four small steps to your SuperGold card." },
+        { "do": "hold", "ms": 600 }
+      ]
+    },
+    {
+      "id": "search",
+      "beats": [
+        { "do": "step", "n": 1 },
+        { "do": "move", "to": { "sel": "{{gbox}}" }, "ms": 700 },
+        { "do": "click", "to": { "sel": "{{gbox}}" }, "ms": 250 },
+        { "do": "say", "text": "Start where you always do. Type it into Google." },
+        { "do": "type", "text": "supergold card", "delay": 95 },
+        { "do": "hold", "ms": 700 }
+      ]
+    },
+    {
+      "id": "site",
+      "beats": [
+        { "do": "cut", "url": "{{govt}}", "title": "govt.nz", "ms": 900, "settle": 1300 },
+        { "do": "step", "n": 2 },
+        { "do": "say", "text": "That takes you to the government's own site. Govt.nz." },
+        { "do": "hold", "ms": 600 }
+      ]
+    },
+    {
+      "id": "topic",
+      "beats": [
+        { "do": "step", "n": 3 },
+        { "do": "say", "text": "Now find your topic. It's all sorted, like a library." },
+        { "do": "scrollTo", "to": { "sel": "{{tile}}" }, "ms": 900 },
+        { "do": "move", "to": { "sel": "{{tile}}" }, "ms": 800 },
+        { "do": "say", "text": "Money and benefits live here. See, it lists SuperGold." },
+        { "do": "hold", "ms": 700 }
+      ]
+    },
+    {
+      "id": "card",
+      "beats": [
+        { "do": "step", "n": 4 },
+        { "do": "say", "text": "Then open your card. Click that door, and it walks you through.", "as": "aside" },
+        { "do": "step", "n": 5 },
+        { "do": "hold", "ms": 2200 }
+      ]
+    }
+  ]
+}
