@@ -24,8 +24,9 @@ and no server required.
   editor — tune warn / aside / code or add your own, one override at a time),
   Cursor & click press, Presenter bubble, **Cast** (pick a face, edit
   name/colours, upload a new face, copy the screenplay cast block), Steps tracker,
-  **Timing & tempo** (with a live "this line holds ~X.Xs" readout), and
-  **Transitions** (with a "play the cut" preview).
+  **Timing & tempo** (with a live "this line holds ~X.Xs" readout),
+  **Transitions** (with a "play the cut" preview), and **Output & encode**
+  (viewport + SRT/VTT subtitle toggles).
 - **Transport** — switch caption variants (base / warn / aside / code), scrub the
   step position, and **Test press** to fire the click pulse (or click the frame).
 - **`style.json`, live** — the JSON drawer mirrors your edits, so it drops
@@ -35,13 +36,19 @@ and no server required.
   nolan demo.screenplay.json --style=my-style.json
   ```
 
-- **New from template…** — start from a refined, versioned style — **Docs**,
-  **Support how-to**, **Explain to Nan**, or **Feature tour** — then tune. These
-  live in `styles/templates/` and are usable directly too:
+- **New from template…** — a gallery popover (colour swatch + label +
+  description) starts from a refined, versioned style — **Docs**, **Support
+  how-to**, **Explain to Nan**, or **Feature tour** — then tune. These live in
+  `styles/templates/` and are usable directly too:
   `nolan demo.json --style=styles/templates/feature-tour.json`.
 - **Open film…** loads a real `*.screenplay.json` — the preview switches to its
   actual captions (cycle them with the ◄ ► line control), step labels, cast, and
-  starting URL. **sample** returns to the built-in demo.
+  starting URL. When the cast use image paths, **Load faces…** (in the Cast
+  section) resolves them from a picked assets folder. **sample** returns to the
+  built-in demo.
+- **Open render…** loads a post-mode master video + its `segments.json` into a
+  **timeline scrubber** — play or scrub, and the live caption segment highlights
+  (click a segment to seek).
 - **Open style… / Save** — open a style file to tune, then **Save** writes your
   changes back to it (⌘/Ctrl-S). Uses the File System Access API where available,
   and falls back to **Download** / **Copy** (and an upload dialog) elsewhere — so

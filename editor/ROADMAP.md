@@ -58,13 +58,13 @@ Phase 3 upload) would show real faces for loaded films too.
 - **Drift guard** ✅ done — `npm run desk:check` (`editor/check-fidelity.mjs`)
   asserts the desk's ported `CAPTION_DEFAULTS` + presets equal the engine's;
   proven to fail on a deliberate mismatch.
-- **2d · Encode section** — *deferred, low priority.* Viewport / ffmpeg outputs /
-  subtitles are rarely hand-tuned and the `outputs` array is awkward in a form;
-  edit in the style file for now.
+- **2d · Encode section** ✅ done — an **Output & encode** card: viewport
+  width/height and SRT/VTT subtitle toggles (array add/remove). The ffmpeg
+  `outputs` are shown read-only (edit their args in the style file).
 
-**Exit reached (bar 2d):** the desk emits and edits every *commonly tuned* field
-a nolan style holds — caption + variants, cursor/click, presenter, steps, timing,
-transitions. **Phase 2 essentially complete.**
+**Exit reached:** the desk emits and edits every field a nolan style holds —
+caption + variants, cursor/click, presenter, steps, timing, transitions, encode.
+**Phase 2 complete.**
 
 ## Phase 3 — Cast management ✅
 
@@ -74,9 +74,13 @@ transitions. **Phase 2 essentially complete.**
   240px on a `<canvas>` and inlines as a `data:` URI (a valid screenplay `cam`).
   **Copy cast JSON** exports a ready-to-paste screenplay `cast` block.
 
-**Exit reached:** build a real film's cast in the desk and export it for the
-screenplay. Still open: auto-resolving a loaded film's `cam` *paths* (needs a
-directory pick).
+- **3c · Resolve a film's cam paths** ✅ done — when a loaded film's cast use
+  `cam` *paths*, **Load faces…** picks the assets directory (File System Access
+  `showDirectoryPicker`), finds each face by basename, and inlines it as a
+  `data:` URI so loaded films show real faces too.
+
+**Exit reached:** build (or load) a real film's cast in the desk and export it for
+the screenplay.
 
 ## Phase 4 — Template library (the product half) ✅
 
@@ -85,18 +89,21 @@ directory pick).
   **Feature tour**. Each is a complete, `--style=`-usable file (resolves clean,
   renders end to end), inlined into the desk by `npm run desk:embed` and guarded
   by `desk:check`.
-- **4b · "New from template"** ✅ done — a header picker starts a fresh style from
-  any template (meta stripped), ready to tune and Save.
+- **4b · "New from template"** ✅ done — a **gallery popover** (colour swatch +
+  label + description per template) starts a fresh style from any template (meta
+  stripped), ready to tune and Save.
 
 **Exit reached:** a non-expert picks a context and gets a good-looking film
 immediately; the library is the thing worth charging for. Next: grow the library
 and add per-template hero thumbnails.
 
-## Phase 5 — Frame scrubbing (optional, later)
+## Phase 5 — Frame scrubbing ✅ (first cut)
 
-- **5 · Timeline over `segments.json` + `master.webm`** `L`, heavier — scrub the
-  *actual filmed frames* and retime beats. Needs the video pipeline, unlike the
-  live-preview desk. Park unless a real need appears.
+- **5 · Timeline over `segments.json` + `master.webm`** ✅ first cut — **Open
+  render…** loads a post-mode master video + its `segments.json` into a
+  dismissible **timeline scrubber**: play/scrub the `<video>`, and the active
+  caption segment highlights (click a segment to seek). Inspection only for now;
+  retiming/writing beats back is the next step.
 
 ---
 
