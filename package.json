@@ -31,6 +31,7 @@
     "example:supergold": "node bin/nolan.mjs examples/supergold.screenplay.json --cut=full --style=examples/metademo.style.json --overlay=post --out=examples/out",
     "verify:supergold": "node bin/nolan.mjs verify examples/supergold.screenplay.json --style=examples/metademo.style.json --on-drift=warn",
     "desk": "open editor/style-desk.html || xdg-open editor/style-desk.html || start editor/style-desk.html",
+    "desk:embed": "node editor/embed-templates.mjs",
     "desk:check": "node editor/check-fidelity.mjs"
   },
   "keywords": ["demo", "gif", "screencast", "playwright", "readme", "documentation", "walkthrough", "screenplay"],

@@ -11,12 +11,13 @@
  *   node editor/check-fidelity.mjs      # exit 0 = in sync, 1 = drifted
  */
 import { CAPTION_DEFAULTS, CAPTION_PRESETS } from "../src/caption.mjs";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const html = readFileSync(join(here, "style-desk.html"), "utf8");
+const tdir = join(here, "..", "styles", "templates");
 
 /** Pull a top-level `const NAME = { … };` object literal out of the desk source. */
 function grab(name) {
@@ -44,9 +45,27 @@ for (const k of new Set([...Object.keys(CAPTION_PRESETS), ...Object.keys(deskPre
     problems.push(`PRESETS.${k}: engine=${JSON.stringify(engine)} desk=${JSON.stringify(deskPresets[k])}`);
 }
 
+// The embedded template library must match styles/templates/*.json.
+let deskTemplates;
+try { deskTemplates = grab("TEMPLATES"); } catch (e) { deskTemplates = null; }
+const templateFiles = readdirSync(tdir).filter((f) => f.endsWith(".json"));
+if (!deskTemplates || !Object.keys(deskTemplates).length) {
+  problems.push("TEMPLATES not embedded in style-desk.html — run `npm run desk:embed`");
+} else {
+  for (const f of templateFiles) {
+    const key = f.replace(/\.json$/, "");
+    const fileObj = JSON.parse(readFileSync(join(tdir, f), "utf8"));
+    if (!eq(deskTemplates[key], fileObj))
+      problems.push(`TEMPLATES.${key}: embedded copy differs from styles/templates/${f} — run \`npm run desk:embed\``);
+  }
+  for (const key of Object.keys(deskTemplates))
+    if (!templateFiles.includes(key + ".json"))
+      problems.push(`TEMPLATES.${key}: embedded but has no styles/templates/${key}.json`);
+}
+
 if (problems.length) {
   console.error("✗ style desk has drifted from the engine:\n  " + problems.join("\n  "));
   console.error('\nUpdate the "ported" constants in editor/style-desk.html to match src/caption.mjs.');
   process.exit(1);
 }
-console.log(`✓ style desk matches the engine — CAPTION_DEFAULTS + ${Object.keys(deskPresets).length} presets`);
+console.log(`✓ style desk matches the engine — CAPTION_DEFAULTS + ${Object.keys(deskPresets).length} presets + ${Object.keys(deskTemplates).length} templates`);

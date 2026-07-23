@@ -35,6 +35,10 @@ and no server required.
   nolan demo.screenplay.json --style=my-style.json
   ```
 
+- **New from template…** — start from a refined, versioned style — **Docs**,
+  **Support how-to**, **Explain to Nan**, or **Feature tour** — then tune. These
+  live in `styles/templates/` and are usable directly too:
+  `nolan demo.json --style=styles/templates/feature-tour.json`.
 - **Open film…** loads a real `*.screenplay.json` — the preview switches to its
   actual captions (cycle them with the ◄ ► line control), step labels, cast, and
   starting URL. **sample** returns to the built-in demo.
@@ -51,8 +55,12 @@ The preview isn't a lookalike — the paint logic is **ported from the engine**
 `style-desk.html` (search for the "ported" comments) so the desk stays true.
 
 Run `npm run desk:check` to assert the desk's ported caption constants
-(`CAPTION_DEFAULTS` + presets) still equal the engine's — it fails loudly if they
-drift. Good to wire into CI.
+(`CAPTION_DEFAULTS` + presets) **and** its embedded template library still equal
+the sources — it fails loudly if they drift. Good to wire into CI.
+
+The templates are inlined from `styles/templates/*.json` (the canonical files):
+after editing a template, run `npm run desk:embed` to refresh the embed, and
+`desk:check` verifies the two are in sync.
 
 ## Notes / limits (first cut)
 

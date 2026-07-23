@@ -78,17 +78,19 @@ transitions. **Phase 2 essentially complete.**
 screenplay. Still open: auto-resolving a loaded film's `cam` *paths* (needs a
 directory pick).
 
-## Phase 4 — Template library (the product half)
+## Phase 4 — Template library (the product half) ✅
 
-The sellable idea: refined starting points per context.
+- **4a · Ship context presets** ✅ done — four refined styles in
+  `styles/templates/`: **Docs**, **Support how-to**, **Explain to Nan**,
+  **Feature tour**. Each is a complete, `--style=`-usable file (resolves clean,
+  renders end to end), inlined into the desk by `npm run desk:embed` and guarded
+  by `desk:check`.
+- **4b · "New from template"** ✅ done — a header picker starts a fresh style from
+  any template (meta stripped), ready to tune and Save.
 
-- **4a · Ship context presets** `M` — one-click starting styles: **docs**,
-  **support how-to**, **explain-to-nan**, **feature tour**. Stored as versioned
-  files in `styles/templates/`, listed in the desk.
-- **4b · "New from template"** `S` — start a fresh style from a preset, then tune.
-
-**Exit:** a non-expert picks a context and gets a good-looking film immediately;
-the library is the thing worth charging for.
+**Exit reached:** a non-expert picks a context and gets a good-looking film
+immediately; the library is the thing worth charging for. Next: grow the library
+and add per-template hero thumbnails.
 
 ## Phase 5 — Frame scrubbing (optional, later)
 

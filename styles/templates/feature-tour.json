@@ -1,0 +1,40 @@
+{
+  "meta": { "label": "Feature tour", "description": "Slick product sizzle. Bold caps, word-by-word pill highlight, brand violet — no bar, no chrome in the way." },
+
+  "pace": 1,
+  "timing": { "mode": "caption", "readingSpeed": 20, "minCaption": 850, "leadIn": 500, "beatOut": 700, "typeDelay": 20, "glideDefault": 600, "settle": 230 },
+
+  "caption": {
+    "preset": "highlight",
+    "position": "bottom-center", "height": 58, "padding": "12px 22px",
+    "font": "-apple-system,BlinkMacSystemFont,sans-serif", "fontWeight": 700, "size": 20, "lineHeight": 1.3,
+    "uppercase": true, "italic": false,
+    "color": "#FFFFFF", "backgroundColor": "#16181D", "backgroundOpacity": 0,
+    "outline": true, "outlineColor": "#0B0B12", "fadeDuration": 0.12,
+    "caret": "▍", "showChip": false,
+    "activeWordHighlight": true, "highlightColor": "#7C3AED", "highlightStyle": "pill", "wordTransitionDuration": 0.2,
+    "variants": {
+      "warn":  { "highlightColor": "#F43F5E" },
+      "aside": { "activeWordHighlight": false, "uppercase": false, "italic": true, "color": "#C4B5FD", "outline": true },
+      "code":  { "activeWordHighlight": false, "uppercase": false, "font": "ui-monospace,Menlo,Consolas,monospace", "size": 16 }
+    }
+  },
+
+  "presenter": { "show": false, "corner": "bottom-right", "size": 140, "shape": "circle", "margin": 22, "ring": true, "ringColor": "#ffffff", "ringWidth": 3, "shadow": true, "label": true },
+
+  "cursor": { "show": true, "size": 22, "fill": "#0B0B12", "stroke": "#ffffff",
+    "click": { "show": true, "colour": "#7C3AED", "from": 14, "to": 64, "ms": 500, "width": 3, "dot": true, "dotTo": 34, "rings": 2 } },
+
+  "steps": { "show": false, "corner": "top", "margin": 16, "bg": "rgba(11,11,18,.85)", "ink": "#E9E7FF", "active": "#7C3AED", "done": "#22C55E" },
+
+  "transition": { "curtain": "#0B0B12", "fadeMs": 300, "titleFont": "700 24px -apple-system,BlinkMacSystemFont,sans-serif", "titleInk": "#E9E7FF" },
+
+  "encode": {
+    "viewport": { "width": 1000, "height": 700 },
+    "subtitles": ["srt", "vtt"],
+    "outputs": [
+      { "name": "gif", "ext": "gif", "args": "-vf \"fps=12,scale=900:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer:bayer_scale=4\" -loop 0" },
+      { "name": "mp4", "ext": "mp4", "args": "-vf \"scale=1000:-2\" -c:v libx264 -pix_fmt yuv420p -crf 23 -movflags +faststart" }
+    ]
+  }
+}

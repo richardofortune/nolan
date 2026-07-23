@@ -1,0 +1,40 @@
+{
+  "meta": { "label": "Explain to Nan", "description": "Warm and extra legible. Big captions, a friendly face, a patient pace — for a non-technical viewer." },
+
+  "pace": 1,
+  "timing": { "mode": "caption", "readingSpeed": 30, "minCaption": 1100, "leadIn": 700, "beatOut": 900, "typeDelay": 32, "glideDefault": 750, "settle": 300 },
+
+  "caption": {
+    "preset": "docs",
+    "position": "bottom-center", "height": 60, "padding": "14px 24px",
+    "font": "-apple-system,BlinkMacSystemFont,sans-serif", "fontWeight": 600, "size": 21, "lineHeight": 1.4,
+    "uppercase": false, "italic": false,
+    "color": "#FFF7ED", "backgroundColor": "#241505", "backgroundOpacity": 100,
+    "outline": false, "outlineColor": "#000000", "fadeDuration": 0.22,
+    "caret": "▍", "showChip": true,
+    "activeWordHighlight": false, "highlightColor": "#F59E0B", "highlightStyle": "color", "wordTransitionDuration": 0.25,
+    "variants": {
+      "warn":  { "backgroundColor": "#3A2A0B", "color": "#FFC53D" },
+      "aside": { "color": "#D6C3AC", "showChip": false, "italic": true },
+      "code":  { "font": "ui-monospace,Menlo,Consolas,monospace", "size": 18 }
+    }
+  },
+
+  "presenter": { "show": true, "corner": "bottom-right", "size": 144, "shape": "circle", "margin": 24, "ring": true, "ringColor": "#FDE68A", "ringWidth": 3, "shadow": true, "label": true },
+
+  "cursor": { "show": true, "size": 24, "fill": "#241505", "stroke": "#ffffff",
+    "click": { "show": true, "colour": "#F59E0B", "from": 16, "to": 66, "ms": 560, "width": 3, "dot": true, "dotTo": 38, "rings": 2 } },
+
+  "steps": { "show": true, "corner": "top", "margin": 16, "bg": "rgba(36,21,5,.9)", "ink": "#F0DEC4", "active": "#F59E0B", "done": "#22C55E" },
+
+  "transition": { "curtain": "#241505", "fadeMs": 360, "titleFont": "700 24px -apple-system,BlinkMacSystemFont,sans-serif", "titleInk": "#FFF7ED" },
+
+  "encode": {
+    "viewport": { "width": 1000, "height": 700 },
+    "subtitles": ["srt", "vtt"],
+    "outputs": [
+      { "name": "gif", "ext": "gif", "args": "-vf \"fps=12,scale=900:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer:bayer_scale=4\" -loop 0" },
+      { "name": "mp4", "ext": "mp4", "args": "-vf \"scale=1000:-2\" -c:v libx264 -pix_fmt yuv420p -crf 23 -movflags +faststart" }
+    ]
+  }
+}
