@@ -9,11 +9,13 @@
  *   nolan verify demo.screenplay.json           resolve every target, film nothing
  */
 import { render, verify, restyle, DEFAULT_STYLE } from "../src/render.mjs";
+import { lint } from "../src/lint.mjs";
 
 const USAGE = `nolan — screenplay-driven demo films for web apps
 
   nolan <screenplay.json> [options]        film it
   nolan verify <screenplay.json> [opts]    check every target still resolves
+  nolan lint <screenplay.json> [--strict]  check the writing craft (no browser)
   nolan restyle <segments.json> [opts]     re-caption a saved master (no re-film)
 
 Options
@@ -49,7 +51,7 @@ async function main(argv) {
     quiet: args.includes("--quiet"),
   };
 
-  const command = ["verify", "restyle"].includes(args[0]) ? args[0] : null;
+  const command = ["verify", "restyle", "lint"].includes(args[0]) ? args[0] : null;
   const positional = args.filter((a) => !a.startsWith("--") && a !== command);
   const file = positional[0];
   if (!file) {
@@ -61,6 +63,25 @@ async function main(argv) {
   if (command === "restyle") {
     await restyle(file, opts);
     return 0;
+  }
+
+  if (command === "lint") {
+    // Enforce the craft floor (docs/craft.md). Errors fail; warnings report but
+    // pass unless --strict. `verify` checks the app; `lint` checks the writing.
+    const strict = args.includes("--strict");
+    const findings = lint(file);
+    if (!findings.length) {
+      console.log("✓ clean — reads like a person wrote it");
+      return 0;
+    }
+    for (const f of findings) {
+      console.error(`  ${f.sev === "error" ? "✗" : "⚠"} [${f.scene}] ${f.rule}: ${f.msg}`);
+      if (f.text) console.error(`      ${JSON.stringify(f.text.length > 70 ? f.text.slice(0, 67) + "…" : f.text)}`);
+    }
+    const errors = findings.filter((f) => f.sev === "error").length;
+    const warns = findings.length - errors;
+    console.error(`\n${errors} error(s), ${warns} warning(s). The rules live in docs/craft.md.`);
+    return errors || (strict && warns) ? 1 : 0;
   }
 
   if (command === "verify") {

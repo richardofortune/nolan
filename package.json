@@ -17,6 +17,7 @@
     "example:post": "node bin/nolan.mjs examples/splitter.screenplay.json --cut=hero --overlay=post",
     "restyle:example": "node bin/nolan.mjs restyle examples/out/splitter-hero.segments.json",
     "verify:example": "node bin/nolan.mjs verify examples/splitter.screenplay.json",
+    "lint:demos": "for f in examples/*.screenplay.json; do echo \"— $f\"; node bin/nolan.mjs lint \"$f\"; done",
     "example:wikipedia": "node bin/nolan.mjs examples/wikipedia.screenplay.json --cut=full --overlay=post",
     "verify:wikipedia": "node bin/nolan.mjs verify examples/wikipedia.screenplay.json",
     "example:wayback": "node bin/nolan.mjs examples/wayback.screenplay.json --cut=full --overlay=post --out=examples/out",

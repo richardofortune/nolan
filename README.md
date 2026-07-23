@@ -254,6 +254,22 @@ who's-responsible):
 - `warn` — report the drift, exit 0. A heads-up, not a blocker.
 - `refresh` — re-render if the demo still resolves; only warn if a target truly broke.
 
+## Lint the writing
+
+`verify` checks that the demo still matches the app. `lint` checks that it's any
+good:
+
+```bash
+nolan lint demo.screenplay.json
+```
+
+It reads the screenplay (no browser) and flags the mechanical tells that make a
+walkthrough read as AI-written or feel unpolished — em-dashes, forced triads,
+clichés, over-long captions, no breathing room, choppy transitions — against the
+craft rules in [`docs/craft.md`](docs/craft.md). Errors fail; warnings report;
+`--strict` fails on warnings too. The *taste* (warmth, specificity, whether the
+arc builds) stays with the author; lint just holds the floor, consistently.
+
 ## Point it at your own app
 
 nolan drives a real browser, so it can film anything that renders — but its
