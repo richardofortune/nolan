@@ -22,9 +22,10 @@ and no server required.
   bar, presenter, step rail, cursor, and click pulse react as you tune them.
 - **Instrument rail** — grouped like the style file: Caption (with a **variants**
   editor — tune warn / aside / code or add your own, one override at a time),
-  Cursor & click press, Presenter bubble, Steps tracker, **Timing & tempo** (with
-  a live "this line holds ~X.Xs" readout), and **Transitions** (with a "play the
-  cut" preview).
+  Cursor & click press, Presenter bubble, **Cast** (pick a face, edit
+  name/colours, upload a new face, copy the screenplay cast block), Steps tracker,
+  **Timing & tempo** (with a live "this line holds ~X.Xs" readout), and
+  **Transitions** (with a "play the cut" preview).
 - **Transport** — switch caption variants (base / warn / aside / code), scrub the
   step position, and **Test press** to fire the click pulse (or click the frame).
 - **`style.json`, live** — the JSON drawer mirrors your edits, so it drops
@@ -61,8 +62,8 @@ drift. Good to wire into CI.
 - The **Encode** block (viewport, ffmpeg outputs, subtitles) isn't exposed in the
   UI — it's rarely hand-tuned; edit it in the style file. (Deferred: Phase 2d.)
 - A **loaded film's cast** shows coloured initials, because its `cam` is an asset
-  *path* the desk can't read on its own yet (the bundled sample faces still show
-  photos). Resolving film cam paths is a later pass (Phase 3 / directory access).
+  *path* the desk can't read on its own. You can upload faces in the **Cast**
+  section; auto-resolving a film's cam paths (a directory pick) is still to come.
 
 ## Source of truth
 

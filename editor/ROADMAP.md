@@ -66,14 +66,17 @@ Phase 3 upload) would show real faces for loaded films too.
 a nolan style holds — caption + variants, cursor/click, presenter, steps, timing,
 transitions. **Phase 2 essentially complete.**
 
-## Phase 3 — Cast management
+## Phase 3 — Cast management ✅
 
-- **3a · Edit cast** `S` — name, avatar bg/ink per member.
-- **3b · Add a face** `M` — upload an image, downscale on a `<canvas>`, embed as a
-  `data:` URI (same shape as `resolveCam`). Bundled AI faces stay as defaults.
+- **3a · Edit cast** ✅ done — a **Cast** section: pick a face, edit name / chip
+  colour / ink per member (live in the preview and chip).
+- **3b · Add a face** ✅ done — upload an image; it cover-crops and downscales to
+  240px on a `<canvas>` and inlines as a `data:` URI (a valid screenplay `cam`).
+  **Copy cast JSON** exports a ready-to-paste screenplay `cast` block.
 
-**Exit:** build a real film's cast in the desk, export cast entries for the
-screenplay.
+**Exit reached:** build a real film's cast in the desk and export it for the
+screenplay. Still open: auto-resolving a loaded film's `cam` *paths* (needs a
+directory pick).
 
 ## Phase 4 — Template library (the product half)
 

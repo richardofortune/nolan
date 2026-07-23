@@ -543,10 +543,71 @@ function facePicker(){
       "border:2px solid "+(SAMPLE.actor && SAMPLE.actor.key===c.key?"var(--accent)":"var(--border-2)");
     btn.innerHTML=avatarInner(c,30);
     btn.onclick=()=>{ SAMPLE.actor=c; renderCaption(); renderPresenter();
-      wrap.querySelectorAll("button").forEach((x,i)=>x.style.borderColor = cast[i].key===c.key?"var(--accent)":"var(--border-2)"); };
+      wrap.querySelectorAll("button").forEach((x,i)=>x.style.borderColor = cast[i].key===c.key?"var(--accent)":"var(--border-2)");
+      if(castBody) fillCast(); };
     wrap.append(btn);
   });
   return wrap;
+}
+let castBody=null;
+/* (re)draw the cast editor: pick a face, edit name/colours, add an uploaded face,
+   or copy the screenplay `cast` block. Cast lives in the screenplay, not the
+   style — this edits the PREVIEW cast and exports it for you. */
+function fillCast(){
+  const host=castBody; if(!host) return;
+  host.innerHTML="";
+  const cast=activeCast();
+  if(!SAMPLE.actor || !cast.includes(SAMPLE.actor)) SAMPLE.actor=cast[0];
+  host.append(row("Face", facePicker()));
+  const a=SAMPLE.actor;
+  if(a){
+    const nm=document.createElement("input"); nm.type="text"; nm.value=a.name||""; nm.style.width="100%";
+    nm.oninput=()=>{ a.name=nm.value; renderCaption(); renderPresenter(); };
+    host.append(rowStack("Name", [nm]));
+    const bg=document.createElement("input"); bg.type="color"; bg.value=toHex(a.bg||"#4b5563");
+    bg.oninput=()=>{ a.bg=bg.value; renderCaption(); renderPresenter(); };
+    host.append(row("Chip colour", bg));
+    const ink=document.createElement("input"); ink.type="color"; ink.value=toHex(a.ink||"#ffffff");
+    ink.oninput=()=>{ a.ink=ink.value; renderCaption(); renderPresenter(); };
+    host.append(row("Chip ink", ink));
+  }
+  const bar=document.createElement("div"); bar.style.cssText="display:flex;gap:6px;flex-wrap:wrap;margin-top:2px";
+  const add=document.createElement("button"); add.className="tbtn"; add.textContent="Add face…"; add.onclick=addFace; bar.append(add);
+  const cp=document.createElement("button"); cp.className="tbtn"; cp.textContent="Copy cast JSON"; cp.onclick=copyCast; bar.append(cp);
+  host.append(bar);
+  const note=document.createElement("p"); note.className="note"; note.textContent="Cast lives in the screenplay, not the style. Uploaded faces downscale to 240px and inline as data: URIs — “Copy cast JSON” gives a ready-to-paste cast block.";
+  host.append(note);
+}
+/* add a cast member from a name + a (data-URI) face — the testable core of addFace */
+function addCastMember(name, cam){
+  name=(name||"New").trim()||"New";
+  let key=name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  const cast=activeCast(); if(!key || cast.some(c=>c.key===key)) key="cast-"+(cast.length+1);
+  const member={ key, name, bg:"#334155", ink:"#fff", cam:cam||null };
+  cast.push(member); SAMPLE.actor=member; fillCast(); renderCaption(); renderPresenter();
+  return member;
+}
+/* upload → cover-crop → downscale on a canvas → data URI → add */
+function addFace(){
+  const i=document.createElement("input"); i.type="file"; i.accept="image/*";
+  i.onchange=()=>{ const f=i.files[0]; if(!f) return;
+    const r=new FileReader();
+    r.onload=()=>{ const img=new Image(); img.onload=()=>{
+      const size=240, cv=document.createElement("canvas"); cv.width=size; cv.height=size;
+      const g=cv.getContext("2d"), s=Math.min(img.width,img.height);
+      g.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,size,size);
+      const cam=cv.toDataURL("image/jpeg",0.82);
+      const name=prompt("Name for this cast member:","New"); if(name==null) return;
+      addCastMember(name, cam); toast("Added "+(name.trim()||"New"));
+    }; img.src=r.result; };
+    r.readAsDataURL(f);
+  };
+  i.click();
+}
+function copyCast(){
+  const obj={}; activeCast().forEach(c=>{ obj[c.key]={ kind:"human", name:c.name, bg:c.bg, ink:c.ink, ...(c.cam?{cam:c.cam}:{}) }; });
+  const text=JSON.stringify({ cast:obj }, null, 2);
+  navigator.clipboard.writeText(text).then(()=>toast("Copied cast JSON")).catch(()=>toast("Copy blocked — see console"));
 }
 function card(title, on, build){
   const d=document.createElement("details"); d.className="card"; if(title==="Caption") d.open=true;
@@ -674,7 +735,6 @@ function buildRail(){
   /* ---- Presenter ---- */
   card("Presenter bubble", "presenter.show", b=>{
     b.append(row("Show presenter", toggle("presenter.show")));
-    b.append(row("Face", facePicker()));
     b.append(row("Corner", choice("presenter.corner",["bottom-right","bottom-left","top-right","top-left"])));
     b.append(rowStack("Size", range("presenter.size",90,220,1,"px")));
     b.append(row("Shape", choice("presenter.shape",["circle","rounded","square"])));
@@ -682,9 +742,11 @@ function buildRail(){
     b.append(row("Ring colour", color("presenter.ringColor")));
     b.append(rowStack("Ring width", range("presenter.ringWidth",0,8,0.5,"px")));
     b.append(row("Name label", toggle("presenter.label")));
-    const note=document.createElement("p"); note.className="note"; note.textContent="These faces are AI-generated, inlined as data URIs — the same way nolan folds a cast member cam photo into the page.";
+    const note=document.createElement("p"); note.className="note"; note.textContent="The webcam-style bubble of whoever's speaking. Pick and edit the cast in the next section.";
     b.append(note);
   });
+  /* ---- Cast ---- */
+  card("Cast", null, b=>{ castBody=b; fillCast(); });
   /* ---- Steps ---- */
   card("Steps tracker", "steps.show", b=>{
     b.append(row("Show tracker", toggle("steps.show")));
