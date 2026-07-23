@@ -23,6 +23,7 @@
  *   say       {text, as?, hold?, lead?}  narrate; `as` picks a caption variant;
  *                                       duration DERIVED from length
  *   hold      {ms}                    explicit pause (pace-scaled)
+ *   step      {n}                     advance the how-to progress rail to step n
  *   move      {to}                    glide the cursor
  *   click     {to, settle?}           glide + click
  *   type      {text, delay?}          keyboard input
@@ -60,6 +61,23 @@ export const PRESENTER_DEFAULTS = {
   ringWidth: 3,
   shadow: true,
   label: true,            // show the actor's name under the bubble
+};
+
+/**
+ * Progress rail — the "here's what we'll do / here's where we are" chrome for a
+ * how-to. Off by default; a style opts in with `steps.show`, and the screenplay
+ * supplies the labels (top-level `steps: [...]`) plus `step` beats to advance.
+ * Like the cursor and presenter it is motion/chrome, so it is burned in both
+ * modes and persists across scene changes (see docs/style-events.md).
+ */
+export const STEP_DEFAULTS = {
+  show: false,
+  corner: "top",          // top (centre) | top-left | top-right
+  margin: 16,
+  bg: "rgba(15,23,42,.82)",
+  ink: "#E5E7EB",         // upcoming step
+  active: "#FFC53D",      // current step
+  done: "#22C55E",        // completed step
 };
 
 /** Read an actor's `cam` image into a data URI so it survives any filmed origin's CSP. */
@@ -115,10 +133,11 @@ function interpDeep(node, vars) {
  * Overlays are injected from STYLE, not hardcoded. Changing caption colour or
  * the click-highlight radius is a style edit + re-render, never a code edit.
  */
-export function rigScript(style, { captions = true } = {}) {
+export function rigScript(style, { captions = true, steps = null } = {}) {
   const { paints } = paintPalette(style);
   const cur = style.cursor;
   const presenter = { ...PRESENTER_DEFAULTS, ...(style.presenter || {}) };
+  const stepStyle = style.steps && style.steps.show ? { ...STEP_DEFAULTS, ...style.steps } : null;
   // Lift a bottom-corner bubble clear of the caption bar (which sits at the
   // bottom in both modes — burned in, or composited on later).
   const capBase = resolveCaptionStyle(style).base;
@@ -128,7 +147,7 @@ export function rigScript(style, { captions = true } = {}) {
   // mode it is left out here and composited on afterwards (see composite.mjs);
   // that turns a restyle into a re-encode instead of a re-film.
   return `(() => {
-  const S = ${JSON.stringify({ paints, cursor: cur, captions, presenter, capBottom })};
+  const S = ${JSON.stringify({ paints, cursor: cur, captions, presenter, capBottom, steps, stepStyle })};
   const P0 = S.paints[''];
   // Trusted-Types-safe innerHTML. Sites like Google enforce
   // require-trusted-types-for 'script', which throws on a raw innerHTML= — so
@@ -228,14 +247,26 @@ export function rigScript(style, { captions = true } = {}) {
       cur.style.left = e.clientX+'px'; cur.style.top = e.clientY+'px'; }, true);
     const K = S.cursor.click;
     if (K.show) document.addEventListener('mousedown', (e) => {
-      const r = document.createElement('div');
-      r.style.cssText = 'position:fixed;z-index:2147483645;pointer-events:none;border:'+K.width+'px solid '+K.colour+
-        ';border-radius:50%;width:'+K.from+'px;height:'+K.from+'px;left:'+(e.clientX-K.from/2)+'px;top:'+(e.clientY-K.from/2)+
-        'px;opacity:.95;transition:all '+(K.ms/1000)+'s ease-out';
-      document.body.appendChild(r);
-      requestAnimationFrame(() => { r.style.width=K.to+'px'; r.style.height=K.to+'px';
-        r.style.left=(e.clientX-K.to/2)+'px'; r.style.top=(e.clientY-K.to/2)+'px'; r.style.opacity='0'; });
-      setTimeout(() => r.remove(), K.ms + 60);
+      const X = e.clientX, Y = e.clientY, T = (K.ms / 1000);
+      // Each pulse is one absolutely-positioned circle that grows from the start
+      // size to the end size while fading, kept centred by recomputing left/top.
+      const pulse = (fill, from, to, o0) => {
+        const d = document.createElement('div');
+        d.style.cssText = 'position:fixed;z-index:2147483645;pointer-events:none;border-radius:50%;' + fill +
+          ';width:' + from + 'px;height:' + from + 'px;left:' + (X - from/2) + 'px;top:' + (Y - from/2) +
+          'px;opacity:' + o0 + ';transition:all ' + T + 's ease-out';
+        document.body.appendChild(d);
+        requestAnimationFrame(() => { d.style.width = to + 'px'; d.style.height = to + 'px';
+          d.style.left = (X - to/2) + 'px'; d.style.top = (Y - to/2) + 'px'; d.style.opacity = '0'; });
+        setTimeout(() => d.remove(), K.ms + 80);
+      };
+      // A filled tap-flash reads as "pressed HERE" far more clearly than a thin
+      // ring alone — the biggest legibility win for non-technical viewers.
+      if (K.dot !== false) pulse('background:' + K.colour, Math.max(10, K.from), K.dotTo || Math.round(K.to * 0.6), 0.5);
+      // The expanding ring.
+      pulse('border:' + K.width + 'px solid ' + K.colour, K.from, K.to, 0.95);
+      // Optional second, slightly delayed ring — a sonar double-pulse.
+      if (K.rings > 1) setTimeout(() => pulse('border:' + Math.max(1, K.width - 1) + 'px solid ' + K.colour, K.from, Math.round(K.to * 0.82), 0.7), K.ms * 0.26);
     }, true);
   }
   // Presenter bubble — the "person in the corner". Built lazily on the first
@@ -280,6 +311,55 @@ export function rigScript(style, { captions = true } = {}) {
     };
     if (window.__curActor) window.__presenter(window.__curActor);
   }
+  // Progress rail — agenda up front, then advance. Built whenever the style
+  // opts in AND the screenplay supplies labels, so a how-to shows "what we'll
+  // do" from frame one and checks steps off as it goes.
+  if (S.stepStyle && S.steps && S.steps.length) {
+    const SS = S.stepStyle;
+    // A centred rail must span the full width (left:0;right:0;justify-content)
+    // rather than left:50% — otherwise it only has half the viewport to lay out
+    // in and wraps a 4th chip onto a second row that overlaps the page.
+    const railCss = 'position:fixed;z-index:2147483646;pointer-events:none;top:' + SS.margin + 'px;box-sizing:border-box;' +
+      (SS.corner === 'top-left' ? 'left:' + SS.margin + 'px;justify-content:flex-start'
+        : SS.corner === 'top-right' ? 'right:' + SS.margin + 'px;justify-content:flex-end'
+        : 'left:0;right:0;justify-content:center') +
+      ';display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:0 ' + SS.margin + 'px;' +
+      'font:600 13px -apple-system,BlinkMacSystemFont,sans-serif';
+    const build = () => {
+      let rail = document.getElementById('film-steps');
+      if (rail) return rail;
+      rail = document.createElement('div');
+      rail.id = 'film-steps';
+      rail.style.cssText = railCss;
+      setHTML(rail, S.steps.map((label, i) =>
+        '<span data-step="' + i + '" style="display:flex;align-items:center;gap:6px;padding:5px 11px 5px 6px;' +
+        'border-radius:14px;background:' + SS.bg + ';color:' + SS.ink + ';opacity:.5;' +
+        'transition:opacity .35s,color .35s;white-space:nowrap">' +
+        '<span data-dot style="width:17px;height:17px;border-radius:50%;border:2px solid currentColor;' +
+        'display:inline-flex;align-items:center;justify-content:center;font:700 10px/1 -apple-system,sans-serif">' +
+        (i + 1) + '</span>' + esc(label) + '</span>').join(''));
+      document.body.appendChild(rail);
+      return rail;
+    };
+    window.__step = (n) => {
+      window.__curStep = n;
+      const rail = build();
+      [].slice.call(rail.querySelectorAll('[data-step]')).forEach((el, i) => {
+        const dot = el.querySelector('[data-dot]');
+        if (i < n - 1) {            // done
+          el.style.opacity = '1'; el.style.color = SS.done;
+          dot.textContent = '✓'; dot.style.borderColor = SS.done;
+        } else if (i === n - 1) {   // active
+          el.style.opacity = '1'; el.style.color = SS.active;
+          dot.textContent = String(i + 1); dot.style.borderColor = SS.active;
+        } else {                    // upcoming
+          el.style.opacity = '.5'; el.style.color = SS.ink;
+          dot.textContent = String(i + 1); dot.style.borderColor = 'currentColor';
+        }
+      });
+    };
+    window.__step(window.__curStep || 0); // 0 = agenda shown, nothing active yet
+  }
 })();`;
 }
 
@@ -300,6 +380,7 @@ export class Director {
     this.segments = [];
     this.actor = null; // who is currently speaking — stamped onto each segment
     this.actorCam = null; // resolved cam data URI, kept off `actor` so segments stay small
+    this.curStep = 0; // progress-rail position (0 = agenda shown, none active yet)
     // 'burn' captions into the film (default) or leave them for `post` compositing.
     this.overlay = "burn";
     this.t0 = Date.now();
@@ -330,7 +411,9 @@ export class Director {
   }
 
   async rig() {
-    await this.page.evaluate(rigScript(this.style, { captions: this.overlay === "burn" })).catch(() => {});
+    await this.page
+      .evaluate(rigScript(this.style, { captions: this.overlay === "burn", steps: this.sp.steps ?? null }))
+      .catch(() => {});
     // App-specific DOM handling (hiding a dev banner, nudging a widget's own
     // controls clear of the caption bar) lives in the SCREENPLAY, never in the
     // engine. Keeping the engine ignorant of any one app is the whole point of
@@ -343,6 +426,13 @@ export class Director {
     // change until the next `actor` beat. Runs while the cut's curtain still
     // covers the page, so the bubble is already there when it lifts.
     await this.applyActor();
+    await this.applyStep();
+  }
+
+  /** Restore the progress rail's position after a (re-)rig wiped the page copy. */
+  async applyStep() {
+    if (!this.curStep) return; // 0 is the agenda state the rig already draws
+    await this.page.evaluate((n) => window.__step?.(n), this.curStep).catch(() => {});
   }
 
   /** Draw the current actor's presenter bubble (both modes) and chip (burn). */
@@ -518,6 +608,14 @@ export class Director {
 
       case "hold":
         await this.sleep(b.ms);
+        break;
+
+      case "step":
+        // Advance the progress rail. n is 1-based; n beyond the last marks the
+        // whole how-to complete (every step checked).
+        this.curStep = b.n;
+        await this.page.evaluate((n) => window.__step?.(n), b.n).catch(() => {});
+        await this.sleep(b.settle ?? 250);
         break;
 
       case "move": {

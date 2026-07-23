@@ -72,14 +72,27 @@
     "fill": "#16181D",
     "stroke": "#ffffff",
     "click": {
-      "$comment": "The click highlight — its own knob, per your note.",
+      "$comment": "The click highlight — a filled tap-flash plus expanding ring(s), so a press is legible even to a non-technical viewer. dot=filled flash, dotTo=its final size, rings=1 or 2 (sonar). See docs/style-events.md.",
       "show": true,
       "colour": "#FFC53D",
-      "from": 10,
-      "to": 46,
-      "ms": 450,
-      "width": 2.5
+      "from": 14,
+      "to": 62,
+      "ms": 520,
+      "width": 3,
+      "dot": true,
+      "dotTo": 34,
+      "rings": 2
     }
+  },
+  "steps": {
+    "$comment": "Progress rail for how-tos. Off unless show:true AND the screenplay supplies a top-level steps[] array; advance with `step` beats. See docs/style-events.md.",
+    "show": false,
+    "corner": "top",
+    "margin": 16,
+    "bg": "rgba(15,23,42,.82)",
+    "ink": "#E5E7EB",
+    "active": "#FFC53D",
+    "done": "#22C55E"
   },
 
   "transition": {

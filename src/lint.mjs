@@ -29,7 +29,7 @@ const HEDGES = ["may", "might", "could potentially", "generally speaking", "perh
 // Three short, comma-separated groups (needs two commas) — the rule-of-three tell.
 const TRIAD = /[\w'-]+(?:\s+[\w'-]+){0,2},\s+[\w'-]+(?:\s+[\w'-]+){0,2},\s+(?:and\s+|&\s+)?[\w'-]+(?:\s+[\w'-]+){0,2}/i;
 // Beats that give the eye a rest — they reset a run of captions.
-const PAUSE_BEATS = new Set(["hold", "click", "type", "move", "scrollTo", "goto", "cut", "card"]);
+const PAUSE_BEATS = new Set(["hold", "click", "type", "move", "scrollTo", "goto", "cut", "card", "step"]);
 
 /** Findings for one caption's text. */
 function lintCaption(text) {
