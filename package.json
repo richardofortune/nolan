@@ -27,7 +27,11 @@
     "example:karaoke": "node bin/nolan.mjs examples/karaoke.screenplay.json --cut=full --style=examples/karaoke.style.json --out=examples/out",
     "example:showcase": "node bin/nolan.mjs examples/showcase.screenplay.json --cut=full --style=examples/showcase.style.json --overlay=post --out=examples/out",
     "example:metademo": "node bin/nolan.mjs examples/metademo.screenplay.json --cut=full --style=examples/metademo.style.json --overlay=post --out=examples/out",
-    "example:airbnb": "node bin/nolan.mjs examples/airbnb.screenplay.json --cut=full --style=examples/showcase.style.json --overlay=post --out=examples/out"
+    "example:airbnb": "node bin/nolan.mjs examples/airbnb.screenplay.json --cut=full --style=examples/showcase.style.json --overlay=post --out=examples/out",
+    "example:supergold": "node bin/nolan.mjs examples/supergold.screenplay.json --cut=full --style=examples/metademo.style.json --overlay=post --out=examples/out",
+    "verify:supergold": "node bin/nolan.mjs verify examples/supergold.screenplay.json --style=examples/metademo.style.json --on-drift=warn",
+    "desk": "open editor/style-desk.html || xdg-open editor/style-desk.html || start editor/style-desk.html",
+    "desk:check": "node editor/check-fidelity.mjs"
   },
   "keywords": ["demo", "gif", "screencast", "playwright", "readme", "documentation", "walkthrough", "screenplay"],
   "license": "MIT",
