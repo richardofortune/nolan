@@ -59,6 +59,24 @@ tells you what to install if not.
 Prefer to skip the menu? `npm run example` films the bundled toy app in
 `examples/site` directly — no other setup, nothing to configure.
 
+## Install it in your own project
+
+```bash
+npm i @richfort/nolan
+npm i playwright && npx playwright install chromium   # peer dependency
+```
+
+Playwright is a **peer dependency**, not a bundled one, so nolan never drags a
+browser into a project that only needs the types or the linter. `ffmpeg` has to be
+on your `PATH` as well. Miss either and you get a runtime error at filming time,
+not an install error — so install both up front.
+
+```js
+import { render, verify, DEFAULT_STYLE } from "@richfort/nolan";
+```
+
+The `nolan` CLI is on `PATH` too once installed, or run it with `npx nolan`.
+
 ## Three documents, three owners
 
 The split is the whole point. What you *show* is generated per person and moment;
