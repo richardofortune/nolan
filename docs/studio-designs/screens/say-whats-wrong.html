@@ -1,98 +1,109 @@
-<!-- @dsCard group="Screens" name="Say what is wrong" subtitle="Plain words in, a sentence back. No thresholds, no rule picker" width="1280" height="880" -->
+<!-- @dsCard group="Screens" name="Say what is wrong" subtitle="Plain words in, a sentence back" width="1200" height="860" -->
 <meta charset="utf-8">
 <title>Say what is wrong</title>
 <style>
   :root{
-    --ink:#101216; --ink-2:#171A20; --ink-3:#1E222A; --line:#272B34; --line-2:#3A414E;
-    --tx:#E8E9EC; --tx-2:#9BA1AC; --tx-3:#6B7280;
-    --paper:#F2F0EA; --paper-tx:#1A1C22; --paper-2:#D9D5CA; --paper-3:#6E6A5F;
-    --indigo:#4F46E5; --pass:#34D399; --warn:#FFC53D;
+    --page:#F4F4F1; --sheet:#FFFFFF;
+    --ink:#1A1D21; --ink-2:#4A5058; --ink-3:#6C737B;
+    --rule:#DFDEDA; --rule-2:#C6C5C0; --bar:#16181D; --indigo:#4F46E5; --held:#9A6414;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.6 var(--sans)}
-  .lbl{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--tx-3)}
-  .scrim{padding:34px 0 60px;display:flex;justify-content:center}
-  .sheet{width:760px}
+  body{margin:0;background:var(--page);color:var(--ink);font:15px/1.65 var(--sans)}
+  .lbl{font:600 11px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
 
-  .ctx{display:flex;gap:16px;align-items:center;padding:0 0 20px;border-bottom:1px solid var(--line);margin-bottom:26px}
-  .ctx img{width:104px;border-radius:8px;border:1px solid var(--line);display:block;background:#F6F7F9}
-  .ctx .m{font-size:13px;color:var(--tx-3)}
-  .ctx .q{font-size:16px;margin:3px 0 0}
-  .ctx .at{font:11.5px var(--mono);color:var(--tx-3)}
+  header{display:flex;align-items:baseline;gap:14px;padding:20px 44px;border-bottom:1px solid var(--rule)}
+  .mark{font-size:16px;font-weight:600;letter-spacing:-.02em}
+  .mark span{color:var(--ink-3);font-weight:400}
+  .crumb{font-size:14px;color:var(--ink-2);margin-left:12px}
+  .crumb a{color:var(--ink-3);text-decoration:none}
+  .crumb b{font-weight:600;color:var(--ink)}
 
-  h1{font-size:27px;font-weight:600;letter-spacing:-.03em;margin:0 0 6px}
-  .p{color:var(--tx-2);margin:0 0 20px;max-width:56ch}
+  main{max-width:720px;margin:0 auto;padding:38px 24px 80px}
 
-  .field{background:var(--ink-2);border:1px solid var(--line-2);border-radius:12px;padding:18px 20px}
-  .field .you{font-size:19px;line-height:1.6}
-  .field .caret{display:inline-block;width:2px;height:20px;background:var(--tx);vertical-align:-3px;margin-left:1px}
-  .egs{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-  .eg{font:500 12.5px var(--sans);color:var(--tx-2);background:none;border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
-  .eg:hover{color:var(--tx);border-color:var(--line-2)}
+  /* what you are reacting to, quoted the way the film said it */
+  .quote{display:grid;grid-template-columns:52px 1fr;gap:18px;padding-bottom:20px;border-bottom:1px solid var(--rule-2)}
+  .quote .t{font:11.5px var(--mono);color:var(--ink-3);padding-top:6px}
+  .quote .s{font-size:20px;line-height:1.5}
+  .quote .m{font-size:12.5px;color:var(--ink-3);margin:7px 0 0}
 
-  .read{margin-top:26px;background:var(--paper);color:var(--paper-tx);border-radius:14px;padding:24px 28px 26px}
-  .read .lbl{color:var(--paper-3)}
-  .said{font-size:21px;line-height:1.7;margin:10px 0 0;max-width:44ch}
-  .ph{border-bottom:2px solid var(--indigo);background:rgba(79,70,229,.08);cursor:text}
-  .ph:hover{background:rgba(79,70,229,.14)}
-  .nope{margin-top:16px;background:none;border:0;padding:0;font:500 13.5px var(--sans);color:var(--paper-3);cursor:pointer}
+  h1{font-size:29px;font-weight:600;letter-spacing:-.025em;margin:30px 0 8px}
+  .p{color:var(--ink-2);margin:0 0 22px;max-width:52ch}
+
+  .field{background:var(--sheet);border:1px solid var(--rule-2);border-radius:8px;padding:20px 22px}
+  .you{font-size:20px;line-height:1.55}
+  .caret{display:inline-block;width:2px;height:21px;background:var(--indigo);vertical-align:-4px;margin-left:1px}
+  .egs{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px}
+  .egs button{background:none;border:0;padding:0;color:var(--ink-3);font:13px var(--sans);cursor:pointer}
+  .egs button:hover{color:var(--indigo);text-decoration:underline}
+
+  /* studio's reading, as a sentence you can edit two words of */
+  .read{margin-top:34px;padding-left:20px;border-left:3px solid var(--indigo)}
+  .said{font-size:23px;line-height:1.6;margin:8px 0 0;max-width:40ch}
+  .ph{border-bottom:2px solid var(--indigo);cursor:text}
+  .ph:hover{background:#EFEEFC}
+  .nope{margin-top:16px;background:none;border:0;padding:0;font:600 13.5px var(--sans);color:var(--ink-3);cursor:pointer}
   .nope:hover{color:var(--indigo);text-decoration:underline}
 
-  .also{margin-top:22px;padding-left:14px;border-left:2px solid var(--line-2)}
-  .also p{margin:5px 0 0;font-size:13.5px;color:var(--tx-2);max-width:58ch}
+  .also{margin-top:32px;padding-top:20px;border-top:1px solid var(--rule)}
+  .also p{margin:6px 0 0;font-size:13.5px;color:var(--ink-2);max-width:58ch}
+  .also b{color:var(--ink);font-weight:600}
 
-  .go{display:flex;align-items:center;gap:14px;margin-top:28px}
-  button.primary{background:var(--tx);color:#14161B;border:1px solid var(--tx);font:600 14px var(--sans);border-radius:10px;padding:11px 18px;cursor:pointer}
-  button.primary:hover{background:#fff}
-  .ghost{background:none;border:1px solid var(--line-2);color:var(--tx-2);font:600 13px var(--sans);border-radius:9px;padding:10px 14px;cursor:pointer}
-  .hint{font-size:13px;color:var(--tx-3)}
+  .go{display:flex;align-items:center;gap:16px;margin-top:34px;flex-wrap:wrap}
+  .primary{font:600 14.5px var(--sans);border-radius:7px;padding:12px 19px;cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:#fff}
+  .primary:hover{background:#000}
+  .ghost{font:600 13.5px var(--sans);border-radius:7px;padding:11px 15px;cursor:pointer;border:1px solid var(--rule-2);background:none;color:var(--ink-2)}
+  .ghost:hover{border-color:var(--ink-3);color:var(--ink)}
+  .hint{font-size:13px;color:var(--ink-3)}
   :focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
 </style>
 
-<div class="scrim">
-  <div class="sheet">
-    <div class="ctx">
-      <img src="../assets/tour-frame.jpg" alt="">
-      <div>
-        <div class="m">Split payments shipped · Feature tours · <span class="at">0:03</span></div>
-        <p class="q">"Start with the Pro plan at 49 a month."</p>
-      </div>
-    </div>
+<header>
+  <span class="mark">nolan <span>studio</span></span>
+  <span class="crumb"><a href="#">What went out</a> · <a href="#">Split payments shipped</a> · <b>0:03</b></span>
+</header>
 
-    <h1>What is wrong with it?</h1>
-    <p class="p">Say it the way you would say it to someone on your team. Studio works out what
-    it means for everything you make after this.</p>
-
-    <div class="field">
-      <div class="you">Too pushy. Don't open on the price.<span class="caret"></span></div>
-      <div class="egs">
-        <button class="eg">too long</button>
-        <button class="eg">that pause drags</button>
-        <button class="eg">we don't sound like this</button>
-        <button class="eg">wrong thing first</button>
-      </div>
-    </div>
-
-    <div class="read">
-      <span class="lbl">Here is what I understood</span>
-      <p class="said"><span class="ph" tabindex="0">Feature tours</span> never open on price. Open
-      on <span class="ph" tabindex="0">what the person can now do</span>.</p>
-      <button class="nope">That is not what I meant</button>
-    </div>
-
-    <div class="also">
-      <span class="lbl">Worth knowing</span>
-      <p>The floor already catches em dashes, hedging and lines that run long. It cannot catch
-      this one, because opening on price is a judgment rather than a mistake. That is the kind
-      of thing worth telling Studio.</p>
-    </div>
-
-    <div class="go">
-      <button class="primary">See what this would have changed</button>
-      <button class="ghost">Just fix this one</button>
-      <span class="hint">Nothing holds until you have seen the reach.</span>
+<main>
+  <div class="quote">
+    <span class="t">0:03</span>
+    <div>
+      <p class="s">"Start with the Pro plan at 49 a month."</p>
+      <p class="m">Feature tours · went to 1,204 people this morning</p>
     </div>
   </div>
-</div>
+
+  <h1>What is wrong with it?</h1>
+  <p class="p">Say it the way you would say it to someone on your team. Studio works out what
+  that means for everything you make after this.</p>
+
+  <div class="field">
+    <div class="you">Too pushy. Don't open on the price.<span class="caret"></span></div>
+    <div class="egs">
+      <button>too long</button>
+      <button>that pause drags</button>
+      <button>we don't sound like this</button>
+      <button>wrong thing first</button>
+    </div>
+  </div>
+
+  <div class="read">
+    <span class="lbl">Here is what I understood</span>
+    <p class="said"><span class="ph" tabindex="0">Feature tours</span> never open on price.
+    Open on <span class="ph" tabindex="0">what the person can now do</span>.</p>
+    <button class="nope">That is not what I meant</button>
+  </div>
+
+  <div class="also">
+    <span class="lbl">Worth knowing</span>
+    <p>The floor already catches em dashes, hedging, and lines that run long, so none of those
+    reach anyone. <b>It cannot catch this one, because opening on price is a judgment rather
+    than a mistake.</b> Judgment is the reason you are in here.</p>
+  </div>
+
+  <div class="go">
+    <button class="primary">See what this would have changed</button>
+    <button class="ghost">Just fix this one</button>
+    <span class="hint">Nothing holds until you have seen the reach.</span>
+  </div>
+</main>

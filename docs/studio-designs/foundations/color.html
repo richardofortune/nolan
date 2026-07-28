@@ -1,77 +1,99 @@
-<!-- @dsCard group="Foundations" name="Colour" subtitle="Monochrome chrome, colour only on output" width="960" height="620" -->
+<!-- @dsCard group="Foundations" name="Colour" subtitle="A working sheet, and one dark mark on it" width="1000" height="700" -->
 <meta charset="utf-8">
 <title>Colour</title>
 <style>
   :root{
-    --ink:#101216; --ink-2:#171A20; --ink-3:#1E222A;
-    --line:#272B34; --line-2:#3A414E;
-    --tx:#E8E9EC; --tx-2:#9BA1AC; --tx-3:#6B7280;
-    --paper:#F2F0EA; --paper-tx:#1A1C22;
-    --indigo:#4F46E5; --pass:#34D399; --warn:#FFC53D; --stop:#FF6B6B;
+    --page:#F4F4F1; --sheet:#FFFFFF;
+    --ink:#1A1D21; --ink-2:#4A5058; --ink-3:#6C737B;
+    --rule:#DFDEDA; --rule-2:#C6C5C0;
+    --bar:#16181D;            /* nolan's caption bar. the only dark mass. */
+    --indigo:#4F46E5;         /* inherited from the product, not invented */
+    --good:#1F6B4A; --held:#9A6414; --wrong:#A62F22;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.6 var(--sans);padding:40px}
-  .lbl{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--tx-3)}
-  h1{font-size:30px;font-weight:600;letter-spacing:-.03em;margin:10px 0 6px}
-  .rule{color:var(--tx-2);max-width:56ch;margin:0 0 34px}
-  .rule b{color:var(--tx);font-weight:600}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin:14px 0 34px}
-  .sw{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--ink-2)}
-  .chip{height:74px}
-  .meta{padding:10px 12px}
-  .name{font-size:13px;font-weight:600}
-  .hex{font:12px/1.4 var(--mono);color:var(--tx-3)}
-  .use{font-size:12px;color:var(--tx-2);margin-top:4px}
-  .split{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
-  .demo{border:1px solid var(--line);border-radius:10px;padding:18px;background:var(--ink-2)}
-  .bar{display:flex;align-items:center;gap:10px;background:#16181D;border-radius:11px;padding:11px 14px;margin-top:12px}
-  .dot{width:22px;height:22px;border-radius:999px;background:var(--indigo);display:grid;place-items:center;font:600 11px var(--sans);color:#fff}
-  .bar span{font-size:14px}
-  .no{opacity:.5}
+  body{margin:0;background:var(--page);color:var(--ink);font:15px/1.65 var(--sans);padding:44px 48px 60px}
+  .lbl{font:600 11px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  h1{font-size:31px;font-weight:600;letter-spacing:-.025em;margin:10px 0 10px}
+  .rule{color:var(--ink-2);max-width:60ch;margin:0 0 34px}
+  .rule b{color:var(--ink);font-weight:600}
+
+  .band{display:flex;gap:0;border:1px solid var(--rule);border-radius:4px;overflow:hidden;margin:12px 0 8px;max-width:840px}
+  .band div{flex:1;height:64px}
+  .keys{display:flex;max-width:840px;margin-bottom:34px}
+  .keys div{flex:1;padding-right:12px}
+  .keys .n{font-size:12.5px;font-weight:600}
+  .keys .h{font:11.5px/1.5 var(--mono);color:var(--ink-3)}
+  .keys .u{font-size:11.5px;color:var(--ink-2);margin-top:2px}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;max-width:860px;align-items:start}
+  .demo .lbl{display:block;margin-bottom:10px}
+  .plate{border:1px solid var(--rule);background:var(--sheet);border-radius:6px;overflow:hidden}
+  .plate .app{height:104px;background:#F6F7F9;border-bottom:1px solid var(--rule)}
+  .cap{display:flex;align-items:center;gap:10px;background:var(--bar);padding:12px 14px}
+  .cap .chip{width:22px;height:22px;border-radius:999px;background:var(--indigo);display:grid;place-items:center;font:600 10px var(--sans);color:#fff;flex:none}
+  .cap .l{font-size:13.5px;color:#F2F3F5}
+  .bad .cap{background:var(--indigo)}
+  .bad .cap .chip{background:#fff;color:var(--indigo)}
+  .note{font-size:13px;color:var(--ink-2);margin:11px 0 0}
+
+  .verdicts{margin-top:38px;max-width:860px;border-top:1px solid var(--rule)}
+  .v{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:13px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+  .v .w{font-size:13.5px;font-weight:600}
+  .v p{margin:0;font-size:13.5px;color:var(--ink-2)}
 </style>
 
 <span class="lbl">Foundations</span>
 <h1>Colour</h1>
-<p class="rule">Studio's chrome is graphite and paper, top to bottom. <b>Colour only appears
-where a real walkthrough does.</b> An indigo chip on screen means you are looking at
-nolan's output, not at Studio's furniture. It keeps the thing being made louder than
-the thing making it.</p>
+<p class="rule">Studio is a place you read in for an hour at a time, so it is a working sheet
+rather than a console. Almost all of it is paper and ink. <b>The one dark mass on any screen
+is nolan's caption bar</b>, which is a real part of the film rather than furniture, so the
+walkthroughs stay the loudest thing on the page without the chrome shouting along with them.</p>
 
-<span class="lbl">Chrome</span>
-<div class="grid">
-  <div class="sw"><div class="chip" style="background:#101216"></div><div class="meta"><div class="name">Base</div><div class="hex">#101216</div><div class="use">Page</div></div></div>
-  <div class="sw"><div class="chip" style="background:#171A20"></div><div class="meta"><div class="name">Raised</div><div class="hex">#171A20</div><div class="use">Panels, rows</div></div></div>
-  <div class="sw"><div class="chip" style="background:#1E222A"></div><div class="meta"><div class="name">Well</div><div class="hex">#1E222A</div><div class="use">Inputs, code</div></div></div>
-  <div class="sw"><div class="chip" style="background:#272B34"></div><div class="meta"><div class="name">Line</div><div class="hex">#272B34</div><div class="use">Hairlines</div></div></div>
-  <div class="sw"><div class="chip" style="background:#F2F0EA"></div><div class="meta"><div class="name">Paper</div><div class="hex">#F2F0EA</div><div class="use">The brief. Reading surface only.</div></div></div>
+<span class="lbl">The sheet</span>
+<div class="band">
+  <div style="background:#F4F4F1"></div>
+  <div style="background:#FFFFFF"></div>
+  <div style="background:#DFDEDA"></div>
+  <div style="background:#6C737B"></div>
+  <div style="background:#4A5058"></div>
+  <div style="background:#1A1D21"></div>
+</div>
+<div class="keys">
+  <div><div class="n">Page</div><div class="h">#F4F4F1</div><div class="u">Warm off white</div></div>
+  <div><div class="n">Sheet</div><div class="h">#FFFFFF</div><div class="u">What you read</div></div>
+  <div><div class="n">Rule</div><div class="h">#DFDEDA</div><div class="u">Hairlines, not boxes</div></div>
+  <div><div class="n">Quiet</div><div class="h">#6C737B</div><div class="u">Times, counts</div></div>
+  <div><div class="n">Secondary</div><div class="h">#4A5058</div></div>
+  <div><div class="n">Ink</div><div class="h">#1A1D21</div><div class="u">The lines themselves</div></div>
 </div>
 
-<span class="lbl">Type on dark</span>
-<div class="grid">
-  <div class="sw"><div class="chip" style="background:#E8E9EC"></div><div class="meta"><div class="name">Primary</div><div class="hex">#E8E9EC</div></div></div>
-  <div class="sw"><div class="chip" style="background:#9BA1AC"></div><div class="meta"><div class="name">Secondary</div><div class="hex">#9BA1AC</div></div></div>
-  <div class="sw"><div class="chip" style="background:#6B7280"></div><div class="meta"><div class="name">Quiet</div><div class="hex">#6B7280</div><div class="use">Labels, ids</div></div></div>
-</div>
-
-<span class="lbl">Signal. Output and verdicts only</span>
-<div class="grid">
-  <div class="sw"><div class="chip" style="background:#4F46E5"></div><div class="meta"><div class="name">Nolan indigo</div><div class="hex">#4F46E5</div><div class="use">Presenter chip, live output</div></div></div>
-  <div class="sw"><div class="chip" style="background:#34D399"></div><div class="meta"><div class="name">Passed</div><div class="hex">#34D399</div><div class="use">The floor let it through</div></div></div>
-  <div class="sw"><div class="chip" style="background:#FFC53D"></div><div class="meta"><div class="name">Held</div><div class="hex">#FFC53D</div><div class="use">Warning, not a stop</div></div></div>
-  <div class="sw"><div class="chip" style="background:#FF6B6B"></div><div class="meta"><div class="name">Rejected</div><div class="hex">#FF6B6B</div><div class="use">The line cannot ship</div></div></div>
-</div>
-
-<div class="split">
+<div class="two">
   <div class="demo">
     <span class="lbl">Right</span>
-    <div class="bar"><span class="dot">M</span><span>You owe Ana 120, not 160.</span></div>
-    <p class="use" style="margin:12px 0 0">Indigo sits on the presenter chip, because that chip is part of the film.</p>
+    <div class="plate">
+      <div class="app"></div>
+      <div class="cap"><span class="chip">M</span><span class="l">You owe Ana 120, not 160.</span></div>
+    </div>
+    <p class="note">The bar is dark because it is dark in the film. It is the only thing on the
+    page allowed to be.</p>
   </div>
-  <div class="demo">
+  <div class="demo bad">
     <span class="lbl">Wrong</span>
-    <div class="bar no" style="background:linear-gradient(90deg,#4F46E5,#7C3AED)"><span class="dot" style="background:#fff;color:#4F46E5">M</span><span>You owe Ana 120, not 160.</span></div>
-    <p class="use" style="margin:12px 0 0">Chrome borrowing the output's colour. Now Studio is competing with the walkthrough.</p>
+    <div class="plate">
+      <div class="app"></div>
+      <div class="cap"><span class="chip">M</span><span class="l">You owe Ana 120, not 160.</span></div>
+    </div>
+    <p class="note">Brand colour poured into the output's own furniture. Now Studio is dressing
+    up the thing it is supposed to be showing you.</p>
   </div>
+</div>
+
+<div class="verdicts">
+  <span class="lbl" style="display:block;margin:22px 0 6px">Saying how something reads</span>
+  <div class="v"><span class="w" style="color:var(--good)">Reads better</span><p>Pigment green, not a screen green. It sits on paper without glowing.</p></div>
+  <div class="v"><span class="w" style="color:var(--held)">Worth a look</span><p>Ochre. Used when Studio is unsure, which is often.</p></div>
+  <div class="v"><span class="w" style="color:var(--wrong)">Reads worse</span><p>Brick. Always shown, never hidden behind a summary.</p></div>
+  <div class="v"><span class="w" style="color:var(--indigo)">Anything you can act on</span><p>Nolan indigo, borrowed from the presenter chip so the product and its control plane agree.</p></div>
 </div>

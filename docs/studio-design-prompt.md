@@ -8,9 +8,14 @@ The reasoning behind it is [`studio-design-brief.md`](./studio-design-brief.md),
 which is also pushed into the design project so it sits alongside the components.
 
 **On the design system:** it holds foundations only, on purpose. Colour, type,
-one real walkthrough still, and the brief. Everything shaped by the earlier
+two real walkthrough stills, and the brief. Everything shaped by the earlier
 authoring-shaped model has been deleted rather than reworked, so there are no
 screens to copy and no old vocabulary to inherit. Design the screens fresh.
+
+The foundations are a light working sheet, not a dark console. Studio is read in
+for an hour at a time, and the walkthrough frames are themselves light, so a dark
+chrome makes every frame a hole punched in the page. The one dark mass allowed on
+a screen is nolan's own caption bar, which is a real part of the film.
 
 ---
 

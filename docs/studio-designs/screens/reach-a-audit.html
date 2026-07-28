@@ -1,143 +1,130 @@
-<!-- @dsCard group="Screens" name="Reach, direction A" subtitle="Trust through volume. Every changed line, including the ones it gets wrong" width="1280" height="960" -->
+<!-- @dsCard group="Screens" name="Reach, direction A" subtitle="Trust through volume. Every line it moves, including the ones it spoils" width="1200" height="1000" -->
 <meta charset="utf-8">
 <title>Reach, direction A</title>
 <style>
   :root{
-    --ink:#101216; --ink-2:#171A20; --ink-3:#1E222A; --line:#272B34; --line-2:#3A414E;
-    --tx:#E8E9EC; --tx-2:#9BA1AC; --tx-3:#6B7280;
-    --indigo:#4F46E5; --pass:#34D399; --warn:#FFC53D; --stop:#FF6B6B;
+    --page:#F4F4F1; --sheet:#FFFFFF;
+    --ink:#1A1D21; --ink-2:#4A5058; --ink-3:#6C737B;
+    --rule:#DFDEDA; --rule-2:#C6C5C0; --bar:#16181D; --indigo:#4F46E5;
+    --good:#1F6B4A; --wrong:#A62F22;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.6 var(--sans)}
-  .lbl{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--tx-3)}
-  .top{display:flex;align-items:center;gap:14px;padding:0 26px;height:56px;border-bottom:1px solid var(--line)}
-  .mark{display:flex;align-items:center;gap:9px}
-  .mark .n{width:22px;height:22px;border-radius:7px;background:var(--tx);color:#14161B;display:grid;place-items:center;font:700 13px var(--sans)}
-  .mark b{font-weight:600;letter-spacing:-.02em}
-  .mark span{color:var(--tx-3);font-weight:400}
-  .top .spacer{margin-left:auto}
-  .dir{font:11.5px var(--mono);color:var(--tx-3)}
+  body{margin:0;background:var(--page);color:var(--ink);font:15px/1.65 var(--sans)}
+  .lbl{font:600 11px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  header{display:flex;align-items:baseline;padding:20px 44px;border-bottom:1px solid var(--rule)}
+  .mark{font-size:16px;font-weight:600;letter-spacing:-.02em}
+  .mark span{color:var(--ink-3);font-weight:400}
+  header .dir{margin-left:auto;font:11.5px var(--mono);color:var(--ink-3)}
 
-  .wrap{display:grid;grid-template-columns:1fr 300px;gap:0}
-  main{padding:28px 32px 60px;border-right:1px solid var(--line)}
-  h1{font-size:29px;font-weight:600;letter-spacing:-.03em;margin:6px 0 10px;max-width:24ch;line-height:1.25}
-  h1 em{font-style:normal;color:var(--warn)}
-  .said{color:var(--tx-2);margin:0 0 24px;max-width:58ch}
-  .said b{color:var(--tx);font-weight:600}
+  main{max-width:880px;margin:0 auto;padding:38px 24px 80px}
+  h1{font-size:33px;font-weight:600;letter-spacing:-.03em;line-height:1.25;margin:8px 0 14px;max-width:20ch}
+  .said{color:var(--ink-2);margin:0 0 4px;max-width:56ch}
+  .said b{color:var(--ink);font-weight:600}
 
-  .grp{margin-bottom:28px}
-  .grp h2{font-size:14px;font-weight:600;margin:0 0 3px}
-  .grp .n{font-size:13px;color:var(--tx-3);margin:0 0 12px}
-  .rows{border:1px solid var(--line);border-radius:11px;overflow:hidden}
-  .r{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:13px 16px;background:var(--ink-2);border-bottom:1px solid var(--line)}
+  .tally{display:flex;gap:34px;margin:26px 0 6px;padding:16px 0;border-top:1px solid var(--rule-2);border-bottom:1px solid var(--rule-2);flex-wrap:wrap}
+  .tally div{font-size:13.5px;color:var(--ink-2)}
+  .tally .n{font:600 22px var(--sans);letter-spacing:-.02em;display:block;color:var(--ink)}
+  .tally .worse .n{color:var(--wrong)}
+
+  section{margin-top:36px}
+  h2{font-size:19px;font-weight:600;letter-spacing:-.015em;margin:0 0 2px}
+  .count{font-size:13px;color:var(--ink-3);margin:0 0 16px}
+  .rows{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:2px 22px}
+  .r{display:grid;grid-template-columns:150px 1fr;gap:22px;padding:16px 0;border-bottom:1px solid var(--rule)}
   .r:last-child{border-bottom:0}
-  .r .who{font-size:12.5px;color:var(--tx-3);padding-top:2px}
-  .old{color:var(--tx-3);text-decoration:line-through;font-size:14.5px}
-  .new{font-size:14.5px;margin-top:3px}
-  .new::before{content:"→ ";color:var(--tx-3)}
-  .bad .new{color:#FFD9D9}
-  .flagline{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--stop);margin-top:7px}
-  .d{width:7px;height:7px;border-radius:999px;background:var(--stop);flex:none}
-  .showall{margin-top:12px;background:none;border:0;color:var(--tx-2);font:500 13px var(--sans);padding:0;cursor:pointer}
-  .showall:hover{color:var(--tx);text-decoration:underline}
+  .r .who{font-size:12.5px;color:var(--ink-3);padding-top:3px}
+  .old{color:var(--ink-3);text-decoration:line-through;font-size:16px;line-height:1.5}
+  .new{font-size:17px;line-height:1.5;margin-top:4px}
+  .spoils{color:var(--wrong);font-size:13px;margin-top:8px}
+  .showall{margin-top:14px;background:none;border:0;padding:0;font:600 13.5px var(--sans);color:var(--indigo);cursor:pointer}
+  .showall:hover{text-decoration:underline}
 
-  aside{padding:28px 26px;position:sticky;top:0;align-self:start}
-  .fig{font-size:52px;font-weight:600;letter-spacing:-.04em;line-height:1}
-  .figsub{font-size:13.5px;color:var(--tx-2);margin:6px 0 22px}
-  .split{border-top:1px solid var(--line);padding-top:16px;margin-bottom:22px}
-  .sr{display:flex;justify-content:space-between;font-size:13.5px;padding:6px 0}
-  .sr span:last-child{font-family:var(--mono);font-size:12.5px;color:var(--tx-2)}
-  .sr.warnrow span:last-child{color:var(--stop)}
-  button.primary{background:var(--tx);color:#14161B;border:1px solid var(--tx);font:600 14px var(--sans);border-radius:10px;padding:11px 16px;cursor:pointer;width:100%}
-  button.primary:hover{background:#fff}
-  .ghost{background:none;border:1px solid var(--line-2);color:var(--tx-2);font:600 13px var(--sans);border-radius:9px;padding:10px 14px;cursor:pointer;width:100%;margin-top:9px}
-  .note{font-size:12.5px;color:var(--tx-3);margin-top:14px}
+  .decide{margin-top:44px;padding-top:26px;border-top:1px solid var(--rule-2);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .primary{font:600 14.5px var(--sans);border-radius:7px;padding:12px 20px;cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:#fff}
+  .primary:hover{background:#000}
+  .ghost{font:600 13.5px var(--sans);border-radius:7px;padding:11px 16px;cursor:pointer;border:1px solid var(--rule-2);background:none;color:var(--ink-2)}
+  .ghost:hover{border-color:var(--ink-3);color:var(--ink)}
+  .note{font-size:13px;color:var(--ink-3);margin-top:14px;max-width:60ch}
   :focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
 </style>
 
-<div class="top">
-  <span class="mark"><span class="n">n</span><b>nolan</b> <span>studio</span></span>
-  <span class="spacer"></span>
+<header>
+  <span class="mark">nolan <span>studio</span></span>
   <span class="dir">reach · direction A · the audit</span>
-</div>
+</header>
 
-<div class="wrap">
-  <main>
-    <span class="lbl">Before this holds</span>
-    <h1>It would have changed <em>43</em> of the last 200 feature tours.</h1>
-    <p class="said">You said <b>"Feature tours never open on price. Open on what the person can
-    now do."</b> Here is every line it moves, including the six where it makes things worse.</p>
+<main>
+  <span class="lbl">Before this holds</span>
+  <h1>It would have changed 43 of the last 200 feature tours.</h1>
+  <p class="said">You said <b>"Feature tours never open on price. Open on what the person can
+  now do."</b> Here is every line it moves.</p>
 
-    <div class="grp">
-      <h2>Opened on price, now open on the action</h2>
-      <p class="n">31 walkthroughs</p>
-      <div class="rows">
-        <div class="r">
-          <span class="who">Split payments</span>
-          <div>
-            <div class="old">Start with the Pro plan at 49 a month.</div>
-            <div class="new">Anyone on your team can settle a bill now.</div>
-          </div>
-        </div>
-        <div class="r">
-          <span class="who">Shared budgets</span>
-          <div>
-            <div class="old">Budgets come with every plan from 29 a month.</div>
-            <div class="new">Set a budget once, and everyone sees where they are.</div>
-          </div>
-        </div>
-        <div class="r">
-          <span class="who">Bank feeds</span>
-          <div>
-            <div class="old">Connect your bank on any paid plan.</div>
-            <div class="new">Your balance updates on its own now.</div>
-          </div>
+  <div class="tally">
+    <div><span class="n">37</span>read better</div>
+    <div class="worse"><span class="n">6</span>read worse</div>
+    <div><span class="n">157</span>untouched, they already opened on an action</div>
+  </div>
+
+  <section>
+    <h2>Opened on price, now open on the action</h2>
+    <p class="count">31 walkthroughs</p>
+    <div class="rows">
+      <div class="r">
+        <span class="who">Split payments</span>
+        <div>
+          <div class="old">Start with the Pro plan at 49 a month.</div>
+          <div class="new">Anyone on your team can settle a bill now.</div>
         </div>
       </div>
-      <button class="showall">Show the other 28</button>
-    </div>
-
-    <div class="grp">
-      <h2>It gets these wrong</h2>
-      <p class="n">6 walkthroughs, where the price was the point</p>
-      <div class="rows">
-        <div class="r bad">
-          <span class="who">Price drop</span>
-          <div>
-            <div class="old">Pro is 39 a month now, down from 49.</div>
-            <div class="new">You can do more on Pro now.</div>
-            <div class="flagline"><span class="d"></span>The price was the news. This buries it.</div>
-          </div>
-        </div>
-        <div class="r bad">
-          <span class="who">Free for teams under 5</span>
-          <div>
-            <div class="old">Teams under five people pay nothing.</div>
-            <div class="new">Small teams get the same features.</div>
-            <div class="flagline"><span class="d"></span>Loses the only reason someone would act.</div>
-          </div>
+      <div class="r">
+        <span class="who">Shared budgets</span>
+        <div>
+          <div class="old">Budgets come with every plan from 29 a month.</div>
+          <div class="new">Set a budget once, and everyone sees where they are.</div>
         </div>
       </div>
-      <button class="showall">Show the other 4</button>
+      <div class="r">
+        <span class="who">Bank feeds</span>
+        <div>
+          <div class="old">Connect your bank on any paid plan.</div>
+          <div class="new">Your balance updates on its own now.</div>
+        </div>
+      </div>
     </div>
-  </main>
+    <button class="showall">Show the other 28</button>
+  </section>
 
-  <aside>
-    <div class="fig">43</div>
-    <p class="figsub">of the last 200 feature tours change. The other 157 already opened on
-    something someone can do.</p>
-
-    <div class="split">
-      <div class="sr"><span>Reads better</span><span>37</span></div>
-      <div class="sr warnrow"><span>Reads worse</span><span>6</span></div>
-      <div class="sr"><span>Untouched</span><span>157</span></div>
+  <section>
+    <h2 style="color:var(--wrong)">It spoils these</h2>
+    <p class="count">6 walkthroughs, where the price was the point</p>
+    <div class="rows">
+      <div class="r">
+        <span class="who">Price drop</span>
+        <div>
+          <div class="old">Pro is 39 a month now, down from 49.</div>
+          <div class="new">You can do more on Pro now.</div>
+          <p class="spoils">The price was the news. This buries it.</p>
+        </div>
+      </div>
+      <div class="r">
+        <span class="who">Free for teams under 5</span>
+        <div>
+          <div class="old">Teams under five people pay nothing.</div>
+          <div class="new">Small teams get the same features.</div>
+          <p class="spoils">Loses the only reason someone would act.</p>
+        </div>
+      </div>
     </div>
+    <button class="showall">Show the other 4</button>
+  </section>
 
+  <div class="decide">
     <button class="primary">Let it hold</button>
     <button class="ghost">Hold it, except when price is the news</button>
-    <p class="note">Holding it changes nothing that already went out. It shapes what your
-    pipeline writes from here.</p>
-  </aside>
-</div>
+    <button class="ghost">Leave it</button>
+  </div>
+  <p class="note">Holding it changes nothing that already went out. It shapes what your pipeline
+  writes from here, and it keeps shaping it.</p>
+</main>

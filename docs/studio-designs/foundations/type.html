@@ -1,55 +1,67 @@
-<!-- @dsCard group="Foundations" name="Type" subtitle="Sans for people, mono for machines" width="960" height="640" -->
+<!-- @dsCard group="Foundations" name="Type" subtitle="Lines get room. Times sit in the gutter" width="1000" height="760" -->
 <meta charset="utf-8">
 <title>Type</title>
 <style>
   :root{
-    --ink:#101216; --ink-2:#171A20; --ink-3:#1E222A; --line:#272B34;
-    --tx:#E8E9EC; --tx-2:#9BA1AC; --tx-3:#6B7280;
-    --paper:#F2F0EA; --paper-tx:#1A1C22; --indigo:#4F46E5;
+    --page:#F4F4F1; --sheet:#FFFFFF;
+    --ink:#1A1D21; --ink-2:#4A5058; --ink-3:#6C737B;
+    --rule:#DFDEDA; --rule-2:#C6C5C0; --bar:#16181D; --indigo:#4F46E5;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.6 var(--sans);padding:40px}
-  .lbl{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--tx-3)}
-  h1{font-size:30px;font-weight:600;letter-spacing:-.03em;margin:10px 0 6px}
-  .rule{color:var(--tx-2);max-width:60ch;margin:0 0 32px}
-  .rule b{color:var(--tx);font-weight:600}
-  .row{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:16px 0;border-top:1px solid var(--line);align-items:baseline}
-  .spec{font:12px/1.5 var(--mono);color:var(--tx-3)}
-  .d1{font-size:40px;font-weight:600;letter-spacing:-.03em;line-height:1.1}
-  .d2{font-size:24px;font-weight:600;letter-spacing:-.02em}
-  .body{font-size:15px}
-  .small{font-size:13px;color:var(--tx-2)}
-  .mono{font:13px/1.5 var(--mono)}
-  .paper{background:var(--paper);color:var(--paper-tx);border-radius:12px;padding:26px 30px;margin-top:10px}
-  .prose{font-size:19px;line-height:1.75;max-width:46ch;margin:0}
-  .prose u{text-decoration:none;border-bottom:2px solid rgba(79,70,229,.35);cursor:text}
-  .why{color:var(--tx-2);font-size:13px;margin:8px 0 0}
+  body{margin:0;background:var(--page);color:var(--ink);font:15px/1.65 var(--sans);padding:44px 48px 60px}
+  .lbl{font:600 11px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  h1{font-size:31px;font-weight:600;letter-spacing:-.025em;margin:10px 0 10px}
+  .intro{color:var(--ink-2);max-width:62ch;margin:0 0 34px}
+  .intro b{color:var(--ink);font-weight:600}
+
+  .row{display:grid;grid-template-columns:132px 1fr;gap:26px;padding:18px 0;border-top:1px solid var(--rule);align-items:baseline;max-width:900px}
+  .spec{font:11.5px/1.5 var(--mono);color:var(--ink-3)}
+  .d1{font-size:38px;font-weight:600;letter-spacing:-.03em;line-height:1.15}
+  .d2{font-size:23px;font-weight:600;letter-spacing:-.02em}
+  .said{font-size:17.5px;line-height:1.6}
+  .body{font-size:15px;color:var(--ink-2)}
+  .quiet{font-size:13px;color:var(--ink-3)}
+  .mono{font:12.5px/1.5 var(--mono);color:var(--ink-3)}
+
+  /* the gutter is the page's spine: what was said, and when */
+  .sheet{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:6px 22px 10px;max-width:600px}
+  .l{display:grid;grid-template-columns:56px 1fr;gap:18px;padding:11px 0;border-bottom:1px solid var(--rule)}
+  .l:last-child{border-bottom:0}
+  .l .t{font:11.5px var(--mono);color:var(--ink-3);padding-top:4px}
+  .l .s{font-size:17.5px;line-height:1.55}
+  .gap{padding:5px 0 5px 74px;font:11.5px var(--mono);color:var(--ink-3)}
+  .here{box-shadow:inset 3px 0 0 var(--indigo);margin-left:-22px;padding-left:19px;padding-right:22px;margin-right:-22px}
+  .why{color:var(--ink-2);font-size:13.5px;max-width:58ch;margin:12px 0 0}
 </style>
 
 <span class="lbl">Foundations</span>
 <h1>Type</h1>
-<p class="rule">Two faces, and the split carries meaning. <b>Sans is for anything a person
-wrote or will read out loud.</b> <b>Mono is for anything a machine owns:</b> kit ids, locale
-codes, rule names, versions. If you cannot tell which one a thing is, that is a sign
-the thing is doing two jobs.</p>
+<p class="intro">One face, doing two jobs. <b>Sans carries anything a person said or wrote</b>,
+and the lines themselves get the most room on the page, because reading them is the work.
+<b>Mono carries anything a machine owns</b>: times, durations, counts. It never carries a
+sentence, and it never appears as an identifier a person is expected to learn.</p>
 
-<div class="row"><div class="spec">display<br>40 / 600 / -.03em</div><div class="d1">Support answers</div></div>
-<div class="row"><div class="spec">section<br>24 / 600 / -.02em</div><div class="d2">What the floor held back</div></div>
-<div class="row"><div class="spec">body<br>15 / 1.6</div><div class="body">Domain teams refine the outputs they own. Nobody has to open the pipeline.</div></div>
-<div class="row"><div class="spec">quiet<br>13 / 1.6</div><div class="small">Published 2 days ago by Mia</div></div>
-<div class="row"><div class="spec">label<br>11 / 600 / .14em caps</div><div><span class="lbl">Inherits from company voice</span></div></div>
-<div class="row"><div class="spec">mono<br>13 / 1.5</div><div class="mono">support.en-nz · v4 · tone.em-dash</div></div>
+<div class="row"><div class="spec">display<br>38 / 600</div><div class="d1">What went out</div></div>
+<div class="row"><div class="spec">section<br>23 / 600</div><div class="d2">It gets these wrong</div></div>
+<div class="row"><div class="spec">a line<br>17.5 / 1.6</div><div class="said">You owe Ana 120, not 160.</div></div>
+<div class="row"><div class="spec">body<br>15 / 1.65</div><div class="body">Say it the way you would say it to someone on your team.</div></div>
+<div class="row"><div class="spec">quiet<br>13</div><div class="quiet">Went to 1,204 people on a team plan</div></div>
+<div class="row"><div class="spec">label<br>11 / 600 / caps</div><div><span class="lbl">Before this holds</span></div></div>
+<div class="row"><div class="spec">machine<br>11.5 mono</div><div class="mono">08:12 · 0:03 · 43 of 200</div></div>
 
-<div class="row" style="grid-template-columns:120px 1fr">
-  <div class="spec">brief prose<br>19 / 1.75<br>on paper</div>
+<div class="row">
+  <div class="spec">the gutter<br>56px<br>on every screen</div>
   <div>
-    <div class="paper">
-      <p class="prose">Support walkthroughs sound like <u>a calm colleague who has seen this
-      before</u>. Lines stay under <u>12 words</u>, and every one ends on <u>what to do next</u>.</p>
+    <div class="sheet">
+      <div class="l"><span class="t">0:00</span><span class="s">Splitting a bill just got easier.</span></div>
+      <div class="l here"><span class="t">0:03</span><span class="s">Start with the Pro plan at 49 a month.</span></div>
+      <div class="gap">0.9s pause</div>
+      <div class="l"><span class="t">0:07</span><span class="s">Anyone on your team can settle a bill now.</span></div>
     </div>
-    <p class="why">The brief is the one place people read rather than scan, so it gets a paper
-    surface, a longer measure, and room to breathe. Underlines mark the phrases you can change.</p>
+    <p class="why">Everything in Studio was said at a time, so a timecode gutter runs down every
+    screen and holds the page together. Pauses sit in it too, because a pause is something the
+    walkthrough did.</p>
   </div>
 </div>

@@ -1,42 +1,56 @@
 # Studio design system
 
-Foundations, and a first pass at the loop on the second model.
+A light working sheet, and a first pass at the loop.
 
 | | |
 |---|---|
-| `foundations/color.html` | The colour rule. Chrome is graphite and paper, and colour appears only where a real walkthrough does. |
-| `foundations/type.html` | Sans for anything a person wrote, mono for anything a machine owns. |
-| `screens/what-went-out.html` | The home. The stream, scanned as sentences. |
-| `screens/a-moment.html` | Stopped on the bit that is wrong. Pauses read as gaps. |
+| `foundations/color.html` | The sheet, and the one dark mark on it. |
+| `foundations/type.html` | One face, two jobs, and the timecode gutter. |
+| `screens/what-went-out.html` | The home. The stream, read as a transcript. |
+| `screens/a-moment.html` | Stopped on the bit that is wrong. Pauses break the rule. |
 | `screens/say-whats-wrong.html` | Plain words in, a sentence back. |
 | `screens/reach-a-audit.html` | Reach, direction A. Trust through volume. |
 | `screens/reach-b-watch.html` | Reach, direction B. Trust through depth. |
-| `assets/*.jpg` | Real frames from `support-answer` and `shipped-change`, so nobody designs against a grey box. |
+| `assets/*.jpg` | Real frames from `support-answer` and `shipped-change`. |
 
 Only the foundations and [`brief.md`](../studio-design-brief.md) are synced to the
 **Nolan Studio** project on claude.ai/design. The screens stay here on purpose, so
-a fresh pass over there has nothing of ours to copy and the two takes can be
-compared honestly.
+a fresh pass over there has nothing of ours to copy.
+
+## The direction
+
+**A transcript, not a console.** Studio is read in for an hour at a time, and
+everything in it was said at a time, so the page is a working sheet with a
+monospace timecode gutter as its spine and hairline rules instead of cards.
+
+**One dark mass per screen: nolan's caption bar.** The walkthrough frames are
+light, so dark chrome turns every frame into a hole punched in the page. Keeping
+the page light leaves the caption bar as the strongest mark on it, which is
+correct, because it is the only part of the page that is really the product.
+
+The first attempt was a dark console with pill tabs, rounded cards, coloured dot
+legends and a big number in a right rail. It was unpleasant to read and it looked
+like every other machine-made interface. That is worth remembering rather than
+quietly fixing: the palette was only half of the tell, and the furniture was the
+other half.
 
 ## What the screens argue
 
 **The stream is read, not watched.** Each walkthrough shows the lines it said, so
 you scan what your product told people this morning. Nothing is flagged for you.
 The floor already caught every mechanical fault, so anything still wrong is a
-judgment call, and judgment is the reason a person is here.
+judgment call, and judgment is why a person is here.
 
-**Reach is the product, so it gets two directions.** A audits: every changed line,
-old struck through, new underneath, grouped by what it does, including the six it
-makes worse. B refuses the list: three walkthroughs to watch properly, with the
-count as a footnote, on the argument that skimming 43 diffs tells you less than
-watching three. Both show the ones it gets wrong, because a reach view that only
-shows wins is a sales pitch.
+**Reach is the product, so it gets two directions.** A audits every changed line,
+old struck through, grouped, including the six it spoils. B refuses the list and
+makes you watch three properly, with the count as a footnote. Both show what the
+change makes worse, because a reach view that only shows wins is a sales pitch.
 
-**Nothing holds until the reach has been seen.** That is the only gate, and it
-replaces define, test, publish.
+**Nothing holds until the reach has been seen.** That single gate replaces
+define, test, publish.
 
 ## The first model
 
-Kits index, kit editor, gate view, and four components, deleted in `9e3726e`.
+Kits index, kit editor, gate view and four components, deleted in `9e3726e`.
 They treated Studio as an authoring tool over files it curated. Recoverable from
-`46ab2eb` if the argument ever needs re-reading.
+`46ab2eb`.
