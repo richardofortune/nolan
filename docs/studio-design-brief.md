@@ -11,11 +11,27 @@ bare, it produces a competent generic walkthrough.
 **Studio is the paid layer: a team-licensed control plane for *kits*.** A kit is
 brand + persona(s) + locale(s) + per-use-case instructions + a craft floor.
 
-The thing to hold onto, because it shapes every screen: **Studio does not make
-films.** The customer's own pipeline AI makes films, at runtime, in their
-product. Studio makes *the instructions films are made from*. Nobody sits in
-Studio watching a render bar. They sit in Studio deciding what every future
-render will sound like.
+The thing to hold onto, because it shapes every screen: **Studio is never in the
+production path.** The customer's own pipeline AI makes the films people
+actually receive, at runtime, in their product. Studio makes *the instructions
+those films are made from*. Nobody sits in Studio waiting on a customer's
+walkthrough. They sit in Studio deciding what every future one will sound like.
+
+Studio does film, but only ever **demo projects**, and only to answer "what did
+that change do". That is the test leg of define → test → publish, and it runs at
+two speeds:
+
+| | What it is | What it shows | Cost |
+|---|---|---|---|
+| **Preview** | paint logic ported from the engine, no browser | wording, presenter, captions, reading time | instant, per keystroke |
+| **Film a test** | the real engine, on demo projects | everything, including tempo and transitions | seconds to minutes, queued |
+
+The fast half is proven: the style desk's previews are ported from
+`src/caption.mjs` and the rig, and `npm run desk:check` fails if they drift from
+the engine. But a preview cannot show a cut, a hold, or how a walkthrough feels
+in motion, and **tempo and transitions are two of the four Ts**. That is the
+honest reason publishing waits on a real test rather than on a preference: half
+the craft is invisible in a still.
 
 ## Who it's for
 
@@ -58,6 +74,18 @@ spine, not a settings page.
    walkthrough before anyone else gets it.
 3. **Publish** — the pipeline picks it up. Versioned, reversible, and obvious who
    changed what.
+
+A fourth surface falls out of testing: **the timeline**. It is a way into the
+brief, not a film editor, and the difference is the whole point. Scrub a filmed
+test, stop on a moment, and see which kit phrase and which floor rule produced
+what is on screen. Change it there and the change lands in the kit, with the
+strip marking every other moment, across every demo project, that the same
+phrase just moved. You are not fixing this walkthrough. You are finding the
+instruction through it.
+
+It is also the only surface where holds and cuts are visible as gaps, so it is
+where tempo stops being an abstraction. The style desk already has a timeline
+for one film, which is a useful starting point and the wrong scope.
 
 Granularity is the interesting design problem. A kit can inherit from a parent
 ("company voice") and override one axis for a niche. Most tools make this a
