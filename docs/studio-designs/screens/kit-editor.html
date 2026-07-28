@@ -1,0 +1,162 @@
+<!-- @dsCard group="Screens" name="Kit editor" subtitle="The brief on paper, the effect beside it" width="1280" height="900" -->
+<meta charset="utf-8">
+<title>Kit editor</title>
+<style>
+  :root{
+    --ink:#101216; --ink-2:#171A20; --ink-3:#1E222A; --line:#272B34; --line-2:#3A414E;
+    --tx:#E8E9EC; --tx-2:#9BA1AC; --tx-3:#6B7280;
+    --paper:#F2F0EA; --paper-tx:#1A1C22; --paper-2:#D9D5CA; --paper-3:#6E6A5F;
+    --indigo:#4F46E5; --pass:#34D399; --warn:#FFC53D; --stop:#FF6B6B;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.6 var(--sans)}
+  .lbl{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--tx-3)}
+
+  .top{display:flex;align-items:center;gap:14px;padding:0 26px;height:56px;border-bottom:1px solid var(--line)}
+  .mark{display:flex;align-items:center;gap:9px}
+  .mark .n{width:22px;height:22px;border-radius:7px;background:var(--tx);color:#14161B;display:grid;place-items:center;font:700 13px var(--sans)}
+  .mark b{font-weight:600;letter-spacing:-.02em}
+  .mark span{color:var(--tx-3);font-weight:400}
+  .crumb{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--tx-2);margin-left:12px;padding-left:16px;border-left:1px solid var(--line)}
+  .crumb a{color:var(--tx-2);text-decoration:none}
+  .crumb a:hover{color:var(--tx)}
+  .crumb b{color:var(--tx);font-weight:600}
+  .top .spacer{margin-left:auto}
+
+  /* publish bar */
+  .pub{display:flex;align-items:center;gap:14px;padding:12px 26px;border-bottom:1px solid var(--line);background:var(--ink-2)}
+  .state{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600}
+  .d{width:8px;height:8px;border-radius:999px}
+  .pub .meta{font-size:13px;color:var(--tx-2)}
+  .pub .spacer{margin-left:auto}
+  button{font:600 13px var(--sans);border-radius:9px;padding:8px 14px;cursor:pointer}
+  .primary{background:var(--tx);color:#14161B;border:1px solid var(--tx)}
+  .primary[disabled]{background:none;color:var(--tx-3);border-color:var(--line);cursor:not-allowed}
+  .ghost{background:none;border:1px solid var(--line-2);color:var(--tx-2)}
+  .ghost:hover{color:var(--tx);border-color:#4a5262}
+
+  .work{display:grid;grid-template-columns:minmax(520px,1.15fr) minmax(420px,.85fr);gap:0}
+  .left{padding:30px 34px 60px;border-right:1px solid var(--line)}
+  .right{padding:30px 30px 60px}
+
+  /* the brief */
+  .sheet{background:var(--paper);color:var(--paper-tx);border-radius:14px;padding:30px 34px 32px}
+  .sheet header{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--paper-2);padding-bottom:13px;margin-bottom:20px}
+  .sheet h2{margin:0;font-size:14px;font-weight:600}
+  .from{font:11.5px var(--mono);color:var(--paper-3)}
+  .prose{font-size:19.5px;line-height:1.85;margin:0 0 20px;max-width:50ch}
+  .ph{border-bottom:1.5px dotted #B4AFA1;cursor:text}
+  .ph:hover{background:#E6E2D6}
+  .set{border-bottom:2px solid var(--indigo);background:rgba(79,70,229,.07);cursor:text}
+  .set:hover{background:rgba(79,70,229,.13)}
+  .para2{border-top:1px solid var(--paper-2);padding-top:20px}
+  .add{background:none;border:0;color:var(--paper-3);font:500 13.5px var(--sans);padding:0;cursor:pointer}
+  .add:hover{color:var(--indigo);text-decoration:underline}
+
+  .aside{margin-top:22px;padding-left:14px;border-left:2px solid var(--indigo)}
+  .aside .lbl{color:var(--tx-3)}
+  .aside p{margin:5px 0 0;font-size:13.5px;color:var(--tx-2);max-width:52ch}
+  .aside s{color:var(--tx-3)}
+
+  /* effect */
+  .h3{font-size:14px;font-weight:600;margin:0 0 4px}
+  .sub{font-size:13px;color:var(--tx-3);margin:0 0 14px}
+  .tabs{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap}
+  .tab{font:500 12.5px var(--sans);color:var(--tx-2);background:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+  .tab[aria-selected=true]{color:var(--tx);background:var(--ink-3);border-color:var(--line-2)}
+  .frame{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--ink-2)}
+  .shot{display:block;width:100%;background:#F6F7F9}
+  .bar{display:flex;align-items:center;gap:11px;background:#16181D;padding:13px 15px}
+  .chip{width:24px;height:24px;border-radius:999px;background:var(--indigo);display:grid;place-items:center;font:600 11px var(--sans);color:#fff;flex:none}
+  .line{font-size:14.5px}
+  .strip{display:flex;justify-content:space-between;padding:9px 14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--tx-2)}
+  .strip .m{font:11.5px var(--mono);color:var(--tx-3)}
+  .was{font-size:13px;color:var(--tx-3);margin:10px 0 0}
+  .was s{color:#565d6a}
+
+  .floor{margin-top:28px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .floor .hd{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:var(--ink-2);border-bottom:1px solid var(--line)}
+  .floor .hd h4{margin:0;font-size:13.5px;font-weight:600}
+  .r{display:flex;align-items:center;gap:11px;padding:11px 16px;border-bottom:1px solid var(--line);font-size:13.5px}
+  .r:last-child{border-bottom:0}
+  .r .m{font:11.5px var(--mono);color:var(--tx-3);margin-left:auto}
+  .r .off{color:var(--tx-3)}
+  :focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+</style>
+
+<div class="top">
+  <span class="mark"><span class="n">n</span><b>nolan</b> <span>studio</span></span>
+  <span class="crumb"><a href="#">Kits</a> · <a href="#">Company voice</a> · <b>Support answers</b></span>
+  <span class="spacer"></span>
+  <span class="lbl">support · en-nz, ja</span>
+</div>
+
+<div class="pub">
+  <span class="state"><span class="d" style="background:var(--warn)"></span>Draft</span>
+  <span class="meta">3 changes since v4. Last by Mia, 20 minutes ago.</span>
+  <span class="spacer"></span>
+  <button class="ghost">See what changed</button>
+  <button class="ghost">Test against a demo</button>
+  <button class="primary" disabled>Publish</button>
+</div>
+
+<div class="work">
+  <section class="left">
+    <span class="lbl">The brief</span>
+    <p class="sub" style="margin:8px 0 16px">Your pipeline writes to this. Change a phrase, and
+    every support walkthrough made after you publish follows it.</p>
+
+    <div class="sheet">
+      <header><h2>Support answers</h2><span class="from">inherits company voice · v4</span></header>
+
+      <p class="prose">Support walkthroughs sound like <span class="set" tabindex="0">a calm
+      colleague who has seen this before</span>. <span class="ph" tabindex="0">Mia</span>
+      presents them, in <span class="ph" tabindex="0">English (NZ)</span> and
+      <span class="set" tabindex="0">Japanese</span>.</p>
+
+      <p class="prose">Lines stay under <span class="ph" tabindex="0">12 words</span>, open on
+      <span class="ph" tabindex="0">the thing the person asked about</span>, and end on
+      <span class="set" tabindex="0">what to do next</span>.</p>
+
+      <div class="para2">
+        <button class="add">Add a line to the brief</button>
+      </div>
+    </div>
+
+    <div class="aside">
+      <span class="lbl">Changed here</span>
+      <p>Company voice says <s>a confident colleague showing you something they built</s>.
+      Support softened it in March, because people arriving at a support walkthrough are
+      already stuck.</p>
+    </div>
+  </section>
+
+  <section class="right">
+    <span class="lbl">The effect</span>
+    <p class="h3" style="margin-top:8px">One real line, under this brief</p>
+    <p class="sub">From the demo project your team picked. Studio does not film anything.</p>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true">Support answer</button>
+      <button class="tab" role="tab" aria-selected="false">Refund flow</button>
+      <button class="tab" role="tab" aria-selected="false">Japanese</button>
+    </div>
+
+    <div class="frame">
+      <img class="shot" src="../assets/walkthrough-frame.jpg" alt="The demo app mid walkthrough, with the cursor on the button.">
+      <div class="bar"><span class="chip">M</span><span class="line">You owe Ana 120, not 160.</span></div>
+      <div class="strip"><span>6 words · reads in 1.8s</span><span class="m">draft</span></div>
+    </div>
+    <p class="was">Under v4 this line read <s>Set Split between to four people, then work it out.</s></p>
+
+    <div class="floor">
+      <div class="hd"><h4>The floor</h4><button class="ghost" style="padding:5px 11px">Edit the floor</button></div>
+      <div class="r"><span class="d" style="background:var(--pass)"></span>No em dashes<span class="m">tone.em-dash</span></div>
+      <div class="r"><span class="d" style="background:var(--pass)"></span>Under 12 words a line<span class="m">text.length</span></div>
+      <div class="r"><span class="d" style="background:var(--pass)"></span>No hedging<span class="m">tone.hedge</span></div>
+      <div class="r"><span class="d" style="background:#3A414E"></span><span class="off">Forced triads. Loosened by Support in March.</span><span class="m">tone.triad</span></div>
+    </div>
+  </section>
+</div>

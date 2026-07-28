@@ -1,0 +1,55 @@
+<!-- @dsCard group="Foundations" name="Type" subtitle="Sans for people, mono for machines" width="960" height="640" -->
+<meta charset="utf-8">
+<title>Type</title>
+<style>
+  :root{
+    --ink:#101216; --ink-2:#171A20; --ink-3:#1E222A; --line:#272B34;
+    --tx:#E8E9EC; --tx-2:#9BA1AC; --tx-3:#6B7280;
+    --paper:#F2F0EA; --paper-tx:#1A1C22; --indigo:#4F46E5;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.6 var(--sans);padding:40px}
+  .lbl{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--tx-3)}
+  h1{font-size:30px;font-weight:600;letter-spacing:-.03em;margin:10px 0 6px}
+  .rule{color:var(--tx-2);max-width:60ch;margin:0 0 32px}
+  .rule b{color:var(--tx);font-weight:600}
+  .row{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:16px 0;border-top:1px solid var(--line);align-items:baseline}
+  .spec{font:12px/1.5 var(--mono);color:var(--tx-3)}
+  .d1{font-size:40px;font-weight:600;letter-spacing:-.03em;line-height:1.1}
+  .d2{font-size:24px;font-weight:600;letter-spacing:-.02em}
+  .body{font-size:15px}
+  .small{font-size:13px;color:var(--tx-2)}
+  .mono{font:13px/1.5 var(--mono)}
+  .paper{background:var(--paper);color:var(--paper-tx);border-radius:12px;padding:26px 30px;margin-top:10px}
+  .prose{font-size:19px;line-height:1.75;max-width:46ch;margin:0}
+  .prose u{text-decoration:none;border-bottom:2px solid rgba(79,70,229,.35);cursor:text}
+  .why{color:var(--tx-2);font-size:13px;margin:8px 0 0}
+</style>
+
+<span class="lbl">Foundations</span>
+<h1>Type</h1>
+<p class="rule">Two faces, and the split carries meaning. <b>Sans is for anything a person
+wrote or will read out loud.</b> <b>Mono is for anything a machine owns:</b> kit ids, locale
+codes, rule names, versions. If you cannot tell which one a thing is, that is a sign
+the thing is doing two jobs.</p>
+
+<div class="row"><div class="spec">display<br>40 / 600 / -.03em</div><div class="d1">Support answers</div></div>
+<div class="row"><div class="spec">section<br>24 / 600 / -.02em</div><div class="d2">What the floor held back</div></div>
+<div class="row"><div class="spec">body<br>15 / 1.6</div><div class="body">Domain teams refine the outputs they own. Nobody has to open the pipeline.</div></div>
+<div class="row"><div class="spec">quiet<br>13 / 1.6</div><div class="small">Published 2 days ago by Mia</div></div>
+<div class="row"><div class="spec">label<br>11 / 600 / .14em caps</div><div><span class="lbl">Inherits from company voice</span></div></div>
+<div class="row"><div class="spec">mono<br>13 / 1.5</div><div class="mono">support.en-nz · v4 · tone.em-dash</div></div>
+
+<div class="row" style="grid-template-columns:120px 1fr">
+  <div class="spec">brief prose<br>19 / 1.75<br>on paper</div>
+  <div>
+    <div class="paper">
+      <p class="prose">Support walkthroughs sound like <u>a calm colleague who has seen this
+      before</u>. Lines stay under <u>12 words</u>, and every one ends on <u>what to do next</u>.</p>
+    </div>
+    <p class="why">The brief is the one place people read rather than scan, so it gets a paper
+    surface, a longer measure, and room to breathe. Underlines mark the phrases you can change.</p>
+  </div>
+</div>

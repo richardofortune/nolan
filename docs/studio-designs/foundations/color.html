@@ -1,0 +1,77 @@
+<!-- @dsCard group="Foundations" name="Colour" subtitle="Monochrome chrome, colour only on output" width="960" height="620" -->
+<meta charset="utf-8">
+<title>Colour</title>
+<style>
+  :root{
+    --ink:#101216; --ink-2:#171A20; --ink-3:#1E222A;
+    --line:#272B34; --line-2:#3A414E;
+    --tx:#E8E9EC; --tx-2:#9BA1AC; --tx-3:#6B7280;
+    --paper:#F2F0EA; --paper-tx:#1A1C22;
+    --indigo:#4F46E5; --pass:#34D399; --warn:#FFC53D; --stop:#FF6B6B;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.6 var(--sans);padding:40px}
+  .lbl{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--tx-3)}
+  h1{font-size:30px;font-weight:600;letter-spacing:-.03em;margin:10px 0 6px}
+  .rule{color:var(--tx-2);max-width:56ch;margin:0 0 34px}
+  .rule b{color:var(--tx);font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin:14px 0 34px}
+  .sw{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--ink-2)}
+  .chip{height:74px}
+  .meta{padding:10px 12px}
+  .name{font-size:13px;font-weight:600}
+  .hex{font:12px/1.4 var(--mono);color:var(--tx-3)}
+  .use{font-size:12px;color:var(--tx-2);margin-top:4px}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+  .demo{border:1px solid var(--line);border-radius:10px;padding:18px;background:var(--ink-2)}
+  .bar{display:flex;align-items:center;gap:10px;background:#16181D;border-radius:11px;padding:11px 14px;margin-top:12px}
+  .dot{width:22px;height:22px;border-radius:999px;background:var(--indigo);display:grid;place-items:center;font:600 11px var(--sans);color:#fff}
+  .bar span{font-size:14px}
+  .no{opacity:.5}
+</style>
+
+<span class="lbl">Foundations</span>
+<h1>Colour</h1>
+<p class="rule">Studio's chrome is graphite and paper, top to bottom. <b>Colour only appears
+where a real walkthrough does.</b> An indigo chip on screen means you are looking at
+nolan's output, not at Studio's furniture. It keeps the thing being made louder than
+the thing making it.</p>
+
+<span class="lbl">Chrome</span>
+<div class="grid">
+  <div class="sw"><div class="chip" style="background:#101216"></div><div class="meta"><div class="name">Base</div><div class="hex">#101216</div><div class="use">Page</div></div></div>
+  <div class="sw"><div class="chip" style="background:#171A20"></div><div class="meta"><div class="name">Raised</div><div class="hex">#171A20</div><div class="use">Panels, rows</div></div></div>
+  <div class="sw"><div class="chip" style="background:#1E222A"></div><div class="meta"><div class="name">Well</div><div class="hex">#1E222A</div><div class="use">Inputs, code</div></div></div>
+  <div class="sw"><div class="chip" style="background:#272B34"></div><div class="meta"><div class="name">Line</div><div class="hex">#272B34</div><div class="use">Hairlines</div></div></div>
+  <div class="sw"><div class="chip" style="background:#F2F0EA"></div><div class="meta"><div class="name">Paper</div><div class="hex">#F2F0EA</div><div class="use">The brief. Reading surface only.</div></div></div>
+</div>
+
+<span class="lbl">Type on dark</span>
+<div class="grid">
+  <div class="sw"><div class="chip" style="background:#E8E9EC"></div><div class="meta"><div class="name">Primary</div><div class="hex">#E8E9EC</div></div></div>
+  <div class="sw"><div class="chip" style="background:#9BA1AC"></div><div class="meta"><div class="name">Secondary</div><div class="hex">#9BA1AC</div></div></div>
+  <div class="sw"><div class="chip" style="background:#6B7280"></div><div class="meta"><div class="name">Quiet</div><div class="hex">#6B7280</div><div class="use">Labels, ids</div></div></div>
+</div>
+
+<span class="lbl">Signal. Output and verdicts only</span>
+<div class="grid">
+  <div class="sw"><div class="chip" style="background:#4F46E5"></div><div class="meta"><div class="name">Nolan indigo</div><div class="hex">#4F46E5</div><div class="use">Presenter chip, live output</div></div></div>
+  <div class="sw"><div class="chip" style="background:#34D399"></div><div class="meta"><div class="name">Passed</div><div class="hex">#34D399</div><div class="use">The floor let it through</div></div></div>
+  <div class="sw"><div class="chip" style="background:#FFC53D"></div><div class="meta"><div class="name">Held</div><div class="hex">#FFC53D</div><div class="use">Warning, not a stop</div></div></div>
+  <div class="sw"><div class="chip" style="background:#FF6B6B"></div><div class="meta"><div class="name">Rejected</div><div class="hex">#FF6B6B</div><div class="use">The line cannot ship</div></div></div>
+</div>
+
+<div class="split">
+  <div class="demo">
+    <span class="lbl">Right</span>
+    <div class="bar"><span class="dot">M</span><span>You owe Ana 120, not 160.</span></div>
+    <p class="use" style="margin:12px 0 0">Indigo sits on the presenter chip, because that chip is part of the film.</p>
+  </div>
+  <div class="demo">
+    <span class="lbl">Wrong</span>
+    <div class="bar no" style="background:linear-gradient(90deg,#4F46E5,#7C3AED)"><span class="dot" style="background:#fff;color:#4F46E5">M</span><span>You owe Ana 120, not 160.</span></div>
+    <p class="use" style="margin:12px 0 0">Chrome borrowing the output's colour. Now Studio is competing with the walkthrough.</p>
+  </div>
+</div>
