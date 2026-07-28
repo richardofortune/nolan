@@ -1,7 +1,13 @@
 # `nolan feedback` — design
 
 **Date:** 2026-07-26
-**Status:** approved, not yet implemented
+**Status:** implemented, 2026-07-28
+
+One addition the design didn't anticipate: node's own errors quote absolute
+paths, so a friction footer built from an error message would have pre-written
+the user's directory tree into the issue body — against the privacy rule above.
+`redactPaths()` strips cwd and `$HOME` from *nolan-written* summaries only; the
+user's typed message is still passed through literally.
 
 ## The problem
 

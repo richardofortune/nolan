@@ -1,0 +1,8 @@
+# Load-bearing. `nolan feedback` builds an issues/new?body=… URL, which opens
+# the *blank* issue editor. With blank issues disabled, GitHub redirects to the
+# template chooser and the prefilled content is silently lost.
+blank_issues_enabled: true
+contact_links:
+  - name: The craft rules
+    url: https://github.com/richardofortune/nolan/blob/main/docs/craft.md
+    about: Before filing a lint disagreement, the rule's reasoning is written down here.

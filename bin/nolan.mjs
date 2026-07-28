@@ -8,8 +8,22 @@
  *   nolan demo.screenplay.json --style=mine.json
  *   nolan verify demo.screenplay.json           resolve every target, film nothing
  */
+import { readFileSync } from "node:fs";
+import { basename } from "node:path";
 import { render, verify, restyle, DEFAULT_STYLE } from "../src/render.mjs";
 import { lint } from "../src/lint.mjs";
+import { buildFeedbackUrl, openUrl, redactPaths } from "../src/feedback.mjs";
+
+const VERSION = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).version;
+
+/**
+ * Print the one-line "say something about this" prompt, pre-written so the
+ * summary is already typed. Failures only — a successful run doesn't need a nag.
+ */
+const inviteFeedback = (summary, quiet) => {
+  if (quiet) return;
+  console.error(`↳ nolan wrong about this? nolan feedback ${JSON.stringify(redactPaths(summary))}`);
+};
 
 const USAGE = `nolan — screenplay-driven demo films for web apps
 
@@ -17,6 +31,7 @@ const USAGE = `nolan — screenplay-driven demo films for web apps
   nolan verify <screenplay.json> [opts]    check every target still resolves
   nolan lint <screenplay.json> [--strict]  check the writing craft (no browser)
   nolan restyle <segments.json> [opts]     re-caption a saved master (no re-film)
+  nolan feedback "<what happened>"         file it as a GitHub issue, prefilled
 
 Options
   --cut=<name>     which cut to film (default: the first in "cuts")
@@ -24,6 +39,12 @@ Options
   --style=<path>   style document     (default: ${DEFAULT_STYLE})
   --overlay=<how>  captions 'burn' (default) or 'post' — post keeps a clean
                    master + segments so restyling is a re-encode, not a re-film
+  --print          feedback only: print the issue URL instead of opening it
+                   (automatic when stdout isn't a TTY, or CI is set — so an
+                   agent gets a link to hand its human, not a hijacked browser)
+  --with-context=<path>
+                   feedback only: attach a file to the issue. Off by default and
+                   never sticky — nothing about your app is sent without it.
   --on-drift=<p>   verify only: what to do when a target no longer resolves —
                    'fail' (default, exit non-zero — the CI gate),
                    'warn'  (report it, exit 0 — a heads-up you don't own), or
@@ -51,8 +72,45 @@ async function main(argv) {
     quiet: args.includes("--quiet"),
   };
 
-  const command = ["verify", "restyle", "lint"].includes(args[0]) ? args[0] : null;
+  const command = ["verify", "restyle", "lint", "feedback"].includes(args[0]) ? args[0] : null;
   const positional = args.filter((a) => !a.startsWith("--") && a !== command);
+
+  // Ahead of the file guard: feedback's positional is a sentence, not a path,
+  // so "no screenplay given" would be nonsense here.
+  if (command === "feedback") {
+    const message = positional.join(" ").trim();
+    if (!message) {
+      console.error('nolan: say what happened — nolan feedback "restyle only recolours captions"\n');
+      return 1;
+    }
+
+    let context;
+    const ctxPath = flag("with-context");
+    if (ctxPath) {
+      try {
+        context = { name: basename(ctxPath), text: readFileSync(ctxPath, "utf8") };
+      } catch (err) {
+        console.error(`nolan: can't read --with-context=${ctxPath} — ${err.code ?? err.message}`);
+        return 1;
+      }
+    }
+
+    const url = buildFeedbackUrl({
+      message,
+      context,
+      meta: { nolan: VERSION, node: process.version, platform: process.platform, arch: process.arch },
+    });
+
+    // Print rather than open when nobody's watching a browser.
+    const print = args.includes("--print") || !process.stdout.isTTY || Boolean(process.env.CI);
+    if (print || !(await openUrl(url))) {
+      console.log(url);
+      return 0;
+    }
+    if (!opts.quiet) console.log("Opened a prefilled issue — read it over, then hit submit.");
+    return 0;
+  }
+
   const file = positional[0];
   if (!file) {
     console.error(`nolan: no ${command === "restyle" ? "segments file" : "screenplay"} given\n`);
@@ -81,6 +139,8 @@ async function main(argv) {
     const errors = findings.filter((f) => f.sev === "error").length;
     const warns = findings.length - errors;
     console.error(`\n${errors} error(s), ${warns} warning(s). The rules live in docs/craft.md.`);
+    // Disagreement with a craft rule is exactly the signal the craft guide needs.
+    inviteFeedback(`lint: ${findings[0].rule} fired on ${basename(file)} and I disagree`, opts.quiet);
     return errors || (strict && warns) ? 1 : 0;
   }
 
@@ -109,8 +169,10 @@ async function main(argv) {
     console.error(`${mark} ${problems.length} target(s) no longer resolve:\n`);
     for (const p of problems) console.error(`  [${p.scene}] ${p.beat}: ${p.error}`);
 
+    const drifted = `verify: targets stopped resolving in ${basename(file)}`;
     if (policy === "fail") {
       console.error("\nThe app moved under the screenplay. Update the beats, or the demo will lie.");
+      inviteFeedback(drifted, opts.quiet);
       return 1;
     }
     console.error(
@@ -120,6 +182,7 @@ async function main(argv) {
           : "This walkthrough may be stale until the beats are updated.") +
         " (--on-drift=" + policy + ", not failing)",
     );
+    inviteFeedback(drifted, opts.quiet);
     return 0;
   }
 
@@ -131,5 +194,7 @@ main(process.argv)
   .then((code) => process.exit(code))
   .catch((err) => {
     console.error("✗", err.message);
+    // Outside main(): no command or file in scope, so the message is the summary.
+    inviteFeedback(err.message, process.argv.includes("--quiet"));
     process.exit(1);
   });

@@ -288,6 +288,41 @@ craft rules in [`docs/craft.md`](docs/craft.md). Errors fail; warnings report;
 `--strict` fails on warnings too. The *taste* (warmth, specificity, whether the
 arc builds) stays with the author; lint just holds the floor, consistently.
 
+## Tell us when it's wrong
+
+When nolan does the wrong thing — or won't do the thing you need — say so from
+where you already are:
+
+```bash
+nolan feedback "restyle can't reposition captions, only recolour them"
+```
+
+That opens a prefilled GitHub issue: your sentence, plus nolan's version, node's
+version, and your platform. You read it over and hit submit. Nothing is ever
+sent automatically.
+
+Every time nolan reports bad news it prints the line back to you with the
+summary already typed, so filing is a copy-paste:
+
+```
+The app moved under the screenplay. Update the beats, or the demo will lie.
+↳ nolan wrong about this? nolan feedback "verify: targets stopped resolving in demo.screenplay.json"
+```
+
+| Flag | |
+|---|---|
+| `--print` | print the URL instead of opening a browser. Automatic when stdout isn't a TTY or `CI` is set — so an **agent** driving nolan gets a link to hand its human, not a hijacked browser. Agents hit nolan's limits first-hand more often than people do. |
+| `--with-context=<path>` | attach a screenplay, style, or segments file to the issue. |
+
+**Nothing about your app leaves your machine unless you pass `--with-context`.**
+The default body carries only the sentence you typed and those three version
+fields — no paths, no cwd, no screenplay contents, no environment. There's no
+setting that makes context sticky, deliberately: sticky context sharing is how
+people leak things they forgot they turned on.
+
+Disagreeing with a lint rule counts. The craft rules are meant to be argued with
+— that's how [`docs/craft.md`](docs/craft.md) gets better.
+
 ## Point it at your own app
 
 nolan drives a real browser, so it can film anything that renders — but its

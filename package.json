@@ -16,6 +16,7 @@
   },
   "files": ["bin", "src", "styles", "LICENSE", "README.md"],
   "scripts": {
+    "test": "node --test test/*.test.mjs",
     "start": "node bin/onboard.mjs",
     "onboard": "node bin/onboard.mjs",
     "example": "node bin/nolan.mjs examples/splitter.screenplay.json --cut=hero",
