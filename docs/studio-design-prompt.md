@@ -68,6 +68,23 @@ numbers, or anything revealing how the engine works underneath. If someone has t
 learn that a walkthrough is a spec plus a style document, the product has failed.
 A decision is a sentence. "We don't say seamless." Never a rule id.
 
+THE DESIGN SYSTEM IS A GUIDE, NOT A SPEC
+The Nolan Studio project holds one worked answer: a light working sheet, warm off
+white page, white reading surfaces, hairline rules rather than cards, and a
+monospace timecode gutter, on the reasoning that everything here was said at a
+time. Take the reasoning. Depart from the execution wherever a better idea turns
+up, and say what you departed from and why.
+
+Three things are not up for grabs, because they come from the product rather than
+from taste. Studio is read in for long stretches, so it cannot be punishing to
+read. The walkthroughs are the content and should be the loudest thing on screen.
+And nolan's caption bar is a real part of the film, so it keeps its own dark
+lozenge wherever it appears.
+
+Reach past the default shapes: dark consoles, pill tabs, rounded metric tiles,
+boxed sidebars, a big number in a right rail. This product is closer to a
+transcript being marked up than to a dashboard.
+
 DESIGN THESE
 
 The loop
@@ -114,6 +131,18 @@ whole flow.
 Empty states are an invitation to act. Errors say what happened and how to fix it.
 
 DELIVERABLE
-Work through the three blocks in order. Two directions for screen 4. Responsive
-down to phone, visible keyboard focus, motion only where it explains something.
+Give me three distinct options for the app, not one answer polished three times.
+Each option should commit to a different idea about what the person is mostly
+doing here, and the screens should follow from that idea rather than being
+reskins of each other. For instance one might treat Studio as a morning read, one
+as an inbox of things to judge, one as something that comes to you when it needs
+a decision. Those are examples, not the brief. Pick your own three if you have
+better ones, and name the thesis of each in a line.
+
+For each option, show at least the loop: what went out, a moment, saying what is
+wrong, and reach. Reach carries the most weight, so it is the screen to push
+hardest in every option.
+
+Then say which one you would build and what it costs you. Responsive down to
+phone, visible keyboard focus, motion only where it explains something.
 ```
