@@ -8,16 +8,26 @@ A light working sheet, and a first pass at the loop.
 npm run designs
 ```
 
-That serves this directory and opens `index.html`, a small review page: the list
-on the left, a live preview at desktop, tablet or phone width, and a contact
-sheet showing every screen at once. Previews are live iframes rather than
-screenshots, so they can never drift from the files.
+That serves this directory and opens `index.html`, a small review page. Five ways
+to look:
+
+- **Desktop, tablet, phone** put one screen at that width, full size.
+- **Flow** lays the loop out in the order someone moves through it, whole screens
+  side by side, with the reach fork at the end. This is the view for judging the
+  experience rather than the page.
+- **Every screen** shows all of them whole, for comparing them against each other.
+
+Thumbnails are whole pages, not crops: each one asks the loaded page for its own
+height and scales to fit, so nothing is cut off and nothing has to be kept in
+sync by hand. Previews are live iframes rather than screenshots, so they can
+never drift from the files.
 
 It needs the server because browsers refuse to load `file://` iframes. Nothing
 is installed to run it: `serve.mjs` is about forty lines of `node:http`, in
 keeping with the rest of the repo. `j` and `k` move between screens, `1` `2` `3`
-set the width, `0` shows them all, and the address bar tracks where you are, so
-a link can point at one screen (`#a-moment`, or `#all`).
+set the width, `0` shows every screen whole, `f` shows the flow, and the address
+bar tracks where you are, so a link can point at one view (`#a-moment`, `#flow`,
+`#all`).
 
 | | |
 |---|---|

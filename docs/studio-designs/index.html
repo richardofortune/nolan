@@ -48,16 +48,31 @@
   .frame{overflow:auto;padding:22px;display:flex;justify-content:center;align-items:flex-start}
   iframe{border:1px solid var(--rule-2);border-radius:7px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.05);flex:none}
 
-  /* contact sheet: every screen at once, live, scaled down */
-  .sheet-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:22px;padding:22px;overflow:auto;align-content:start}
+  /* whole screens, live rather than captured, so they never go stale */
+  .sheet-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(348px,1fr));gap:26px;padding:22px;overflow:auto;align-content:start}
   body[data-view=sheet] .sheet-grid{display:grid}
   body[data-view=sheet] .frame,body[data-view=sheet] .note{display:none}
   .cell button{display:block;width:100%;padding:0;background:none;border:0;cursor:pointer;text-align:left}
-  .shot{display:block;position:relative;height:262px;border:1px solid var(--rule-2);border-radius:7px;overflow:hidden;background:#fff}
-  .shot iframe{position:absolute;top:0;left:0;width:1200px;height:900px;transform:scale(.291);transform-origin:0 0;border:0;border-radius:0;box-shadow:none;pointer-events:none}
+  .shot{display:block;position:relative;border:1px solid var(--rule-2);border-radius:7px;overflow:hidden;background:#fff}
+  .shot iframe{position:absolute;top:0;left:0;width:1200px;transform-origin:0 0;border:0;border-radius:0;box-shadow:none;pointer-events:none}
   .cell:hover .shot{border-color:var(--indigo)}
   .cap{display:block;padding:9px 2px 0;font-size:13px;font-weight:600}
   .cap small{display:block;font-weight:400;font-size:12px;color:var(--ink-3);margin-top:2px}
+
+  /* flow: the loop in the order you move through it, whole screens */
+  .flow{display:none;overflow:auto;padding:26px 24px 40px}
+  body[data-view=flow] .flow{display:block}
+  body[data-view=flow] .frame,body[data-view=flow] .note{display:none}
+  .flow h2{font-size:15px;font-weight:600;margin:0 0 2px}
+  .flow .lede{font-size:13.5px;color:var(--ink-2);margin:0 0 22px;max-width:76ch}
+  .steps{display:flex;align-items:flex-start;gap:0}
+  .step{flex:0 0 288px}
+  .step .verb{font:600 10.5px var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+  .step .cap{padding-top:8px}
+  .arrow{flex:0 0 46px;display:flex;align-items:center;justify-content:center;padding-top:120px;color:var(--rule-2);font-size:19px}
+  .fork{flex:0 0 288px;display:flex;flex-direction:column;gap:18px}
+  .fork .tag{font:600 10.5px var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--indigo)}
+  .ends{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--ink-2);max-width:74ch}
 </style>
 
 <header>
@@ -68,7 +83,8 @@
     <button data-w="1200" aria-pressed="true">Desktop</button>
     <button data-w="834">Tablet</button>
     <button data-w="390">Phone</button>
-    <button data-w="sheet">Contact sheet</button>
+    <button data-w="flow">Flow</button>
+    <button data-w="sheet">Every screen</button>
   </div>
   <a class="open" id="open" href="#" target="_blank" rel="noopener">Open on its own</a>
 </header>
@@ -79,6 +95,7 @@
     <div class="note"><h1 id="title"></h1><p id="desc"></p></div>
     <div class="frame"><iframe id="view" title="Preview"></iframe></div>
     <div class="sheet-grid" id="grid"></div>
+    <div class="flow" id="flow"></div>
   </div>
 </div>
 
@@ -128,18 +145,74 @@ ITEMS.forEach((it, i) => {
 });
 const hint = document.createElement("p");
 hint.className = "hint";
-hint.innerHTML = "<kbd>j</kbd> and <kbd>k</kbd> move between screens. <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> set the width, <kbd>0</kbd> shows them all.<br><br>The address bar tracks the screen you are on, so you can send someone a link to one of them.";
+hint.innerHTML = "<kbd>j</kbd> and <kbd>k</kbd> move between screens. <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> set the width, <kbd>0</kbd> shows every screen whole, <kbd>f</kbd> shows the flow.<br><br>The address bar tracks the screen you are on, so you can send someone a link to one of them.";
 nav.appendChild(hint);
 
-// contact sheet, live rather than screenshots so it never goes stale
-ITEMS.forEach((it, i) => {
+// A thumbnail of a WHOLE screen. The height comes from the page itself once it
+// loads, so nothing is cropped and nothing has to be kept in sync by hand.
+function thumb(it, cellW, onClick) {
+  const scale = cellW / 1200;
   const cell = document.createElement("div");
   cell.className = "cell";
   cell.innerHTML = '<button><span class="shot"><iframe src="' + it.file + '" scrolling="no" tabindex="-1"></iframe></span>' +
                    '<span class="cap">' + it.name + '<small>' + it.sub + '</small></span></button>';
-  cell.querySelector("button").onclick = () => { setWidth(1200); select(i); };
-  grid.appendChild(cell);
+  const box = cell.querySelector(".shot"), f = cell.querySelector("iframe");
+  f.style.transform = "scale(" + scale + ")";
+  box.style.height = Math.round(900 * scale) + "px";   // until it reports its real height
+  f.addEventListener("load", () => {
+    try {
+      const h = f.contentDocument.documentElement.scrollHeight;
+      f.style.height = h + "px";
+      box.style.height = Math.round(h * scale) + "px";
+    } catch { /* a cross origin page would land here. ours never do. */ }
+  });
+  cell.querySelector("button").onclick = onClick;
+  return cell;
+}
+
+// every screen, whole
+ITEMS.forEach((it, i) => grid.appendChild(thumb(it, 346, () => { setWidth(1200); select(i); })));
+
+// the loop, in the order you move through it
+const flow = document.getElementById("flow");
+const idx = (name) => ITEMS.findIndex((it) => it.name === name);
+const STEPS = [
+  { verb:"Notice", i: idx("What went out") },
+  { verb:"Stop on it", i: idx("A moment") },
+  { verb:"Say it", i: idx("Say what is wrong") },
+];
+flow.innerHTML = '<h2>The loop</h2><p class="lede">Four screens, in the order someone moves ' +
+  'through them. Reach forks, because there are two takes on it and only one should survive.</p>';
+const steps = document.createElement("div");
+steps.className = "steps";
+STEPS.forEach((st, n) => {
+  const wrap = document.createElement("div");
+  wrap.className = "step";
+  const v = document.createElement("div"); v.className = "verb"; v.textContent = st.verb;
+  wrap.appendChild(v);
+  wrap.appendChild(thumb(ITEMS[st.i], 286, () => { setWidth(1200); select(st.i); }));
+  steps.appendChild(wrap);
+  const a = document.createElement("div"); a.className = "arrow"; a.textContent = "\u2192";
+  steps.appendChild(a);
 });
+const fork = document.createElement("div");
+fork.className = "fork";
+const fv = document.createElement("div"); fv.className = "verb"; fv.textContent = "See the reach, then let it hold";
+fork.appendChild(fv);
+[idx("Reach, direction A"), idx("Reach, direction B")].forEach((i) => {
+  const t = document.createElement("div"); t.className = "tag";
+  t.textContent = ITEMS[i].name.replace("Reach, ", "");
+  fork.appendChild(t);
+  fork.appendChild(thumb(ITEMS[i], 286, () => { setWidth(1200); select(i); }));
+});
+steps.appendChild(fork);
+flow.appendChild(steps);
+const ends = document.createElement("p");
+ends.className = "ends";
+ends.textContent = "Holding a decision is the end of the loop and the start of the next one, " +
+  "because the change shapes everything the pipeline writes from then on, and the next thing " +
+  "worth noticing turns up in what went out.";
+flow.appendChild(ends);
 
 const slug = (it) => it.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -158,7 +231,7 @@ function setWidth(w) {
   width = w;
   [...document.querySelectorAll("#widths button")].forEach(b =>
     b.setAttribute("aria-pressed", String(b.dataset.w === String(w))));
-  if (w === "sheet") { document.body.dataset.view = "sheet"; return; }
+  if (w === "sheet" || w === "flow") { document.body.dataset.view = w; return; }
   document.body.dataset.view = "one";
   view.style.width = w + "px";
   // tall enough that the screens do not scroll inside their own frame
@@ -166,7 +239,7 @@ function setWidth(w) {
 }
 
 document.querySelectorAll("#widths button").forEach(b =>
-  b.onclick = () => setWidth(b.dataset.w === "sheet" ? "sheet" : Number(b.dataset.w)));
+  b.onclick = () => setWidth(["sheet", "flow"].includes(b.dataset.w) ? b.dataset.w : Number(b.dataset.w)));
 
 addEventListener("keydown", (e) => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -176,12 +249,13 @@ addEventListener("keydown", (e) => {
   if (e.key === "2") setWidth(834);
   if (e.key === "3") setWidth(390);
   if (e.key === "0") setWidth("sheet");
+  if (e.key === "f") setWidth("flow");
 });
 
 // deep link: #a-moment opens that screen, #all opens the contact sheet
 const asked = decodeURIComponent(location.hash.slice(1));
 const found = ITEMS.findIndex((it) => slug(it) === asked);
-setWidth(asked === "all" ? "sheet" : 1200);
+setWidth(asked === "all" ? "sheet" : asked === "flow" ? "flow" : 1200);
 select(found === -1 ? 0 : found);
 </script>
 </html>
