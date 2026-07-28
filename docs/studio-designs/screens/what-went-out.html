@@ -1,0 +1,156 @@
+<!-- @dsCard group="Screens" name="What went out" subtitle="The stream, scanned as sentences rather than video cards" width="1280" height="900" -->
+<meta charset="utf-8">
+<title>What went out</title>
+<style>
+  :root{
+    --ink:#101216; --ink-2:#171A20; --ink-3:#1E222A; --line:#272B34; --line-2:#3A414E;
+    --tx:#E8E9EC; --tx-2:#9BA1AC; --tx-3:#6B7280;
+    --indigo:#4F46E5; --pass:#34D399; --warn:#FFC53D;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.6 var(--sans)}
+  .lbl{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--tx-3)}
+
+  .top{display:flex;align-items:center;gap:14px;padding:0 26px;height:56px;border-bottom:1px solid var(--line)}
+  .mark{display:flex;align-items:center;gap:9px}
+  .mark .n{width:22px;height:22px;border-radius:7px;background:var(--tx);color:#14161B;display:grid;place-items:center;font:700 13px var(--sans)}
+  .mark b{font-weight:600;letter-spacing:-.02em}
+  .mark span{color:var(--tx-3);font-weight:400}
+  .top .spacer{margin-left:auto}
+  .who{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--tx-2)}
+  .av{width:24px;height:24px;border-radius:999px;background:#3A414E;display:grid;place-items:center;font:600 11px var(--sans);color:var(--tx)}
+
+  .body{display:grid;grid-template-columns:212px 1fr}
+  .rail{border-right:1px solid var(--line);padding:22px 14px}
+  .rail .lbl{display:block;padding:0 10px 10px}
+  .rail a{display:flex;justify-content:space-between;padding:8px 10px;border-radius:8px;color:var(--tx-2);text-decoration:none;font-size:14px}
+  .rail a:hover{background:var(--ink-2);color:var(--tx)}
+  .rail a[aria-current]{background:var(--ink-3);color:var(--tx);font-weight:600}
+  .rail .n{font:11px var(--mono);color:var(--tx-3)}
+  .rail hr{border:0;border-top:1px solid var(--line);margin:16px 6px}
+
+  main{padding:28px 34px 60px;max-width:1040px}
+  h1{font-size:31px;font-weight:600;letter-spacing:-.03em;margin:6px 0 8px}
+  .sub{color:var(--tx-2);margin:0 0 6px;max-width:56ch}
+  .live{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--tx-3);margin-bottom:26px}
+  .pulse{width:7px;height:7px;border-radius:999px;background:var(--pass)}
+
+  .w{display:grid;grid-template-columns:132px 1fr auto;gap:20px;padding:20px 6px;border-top:1px solid var(--line);align-items:start}
+  .w:hover{background:var(--ink-2)}
+  .w:last-child{border-bottom:1px solid var(--line)}
+  .thumb{position:relative;border-radius:8px;overflow:hidden;background:#F6F7F9;border:1px solid var(--line)}
+  .thumb img{display:block;width:100%}
+  .dur{position:absolute;right:5px;bottom:5px;background:rgba(16,18,22,.86);color:var(--tx);font:11px var(--mono);padding:2px 5px;border-radius:4px}
+  .why{font-size:13px;color:var(--tx-3);margin:0 0 9px}
+  .why b{color:var(--tx-2);font-weight:500}
+  .spine{margin:0;padding:0;list-style:none}
+  .spine li{font-size:15.5px;line-height:1.5;padding:1px 0 1px 13px;border-left:2px solid var(--line);color:var(--tx)}
+  .spine li+li{margin-top:2px}
+  .right{text-align:right;white-space:nowrap}
+  .time{font:12px var(--mono);color:var(--tx-3)}
+  .to{font-size:12.5px;color:var(--tx-2);margin-top:5px}
+  .watch{margin-top:10px;font:600 12.5px var(--sans);background:none;border:1px solid var(--line-2);color:var(--tx-2);border-radius:8px;padding:6px 11px;cursor:pointer}
+  .watch:hover{color:var(--tx);border-color:#4a5262}
+  .more{margin-top:22px;font-size:13px;color:var(--tx-3)}
+  :focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+</style>
+
+<div class="top">
+  <span class="mark"><span class="n">n</span><b>nolan</b> <span>studio</span></span>
+  <span class="spacer"></span>
+  <span class="who"><span class="av">M</span>Mia · Northwind</span>
+</div>
+
+<div class="body">
+  <nav class="rail">
+    <span class="lbl">What we make</span>
+    <a href="#" aria-current="page">Everything <span class="n">340</span></a>
+    <a href="#">Support answers <span class="n">211</span></a>
+    <a href="#">Feature tours <span class="n">88</span></a>
+    <a href="#">Release notes <span class="n">41</span></a>
+    <hr>
+    <span class="lbl">Us</span>
+    <a href="#">How we sound</a>
+    <a href="#">What we've decided</a>
+  </nav>
+
+  <main>
+    <span class="lbl">Northwind</span>
+    <h1>What went out</h1>
+    <p class="sub">Everything your product explained to someone this week. Read the lines.
+    You are looking for the one that does not sound like you.</p>
+    <span class="live"><span class="pulse"></span>340 this week. Four in the last hour.</span>
+
+    <div class="w">
+      <div class="thumb"><img src="../assets/walkthrough-frame.jpg" alt=""><span class="dur">0:10</span></div>
+      <div>
+        <p class="why"><b>Cass asked</b> why her share looked too high</p>
+        <ul class="spine">
+          <li>Hi Cass. There were four of you, not three.</li>
+          <li>Change Split between to four people.</li>
+          <li>You owe Ana 120, not 160.</li>
+        </ul>
+      </div>
+      <div class="right">
+        <span class="time">08:12</span>
+        <div class="to">Support answers</div>
+        <button class="watch">Watch</button>
+      </div>
+    </div>
+
+    <div class="w">
+      <div class="thumb"><img src="../assets/tour-frame.jpg" alt=""><span class="dur">0:14</span></div>
+      <div>
+        <p class="why"><b>Split payments shipped</b> to everyone on a team plan</p>
+        <ul class="spine">
+          <li>Start with the Pro plan at 49 a month.</li>
+          <li>Anyone on your team can settle a bill now.</li>
+          <li>They will see it in their own currency.</li>
+        </ul>
+      </div>
+      <div class="right">
+        <span class="time">07:40</span>
+        <div class="to">Feature tours</div>
+        <button class="watch">Watch</button>
+      </div>
+    </div>
+
+    <div class="w">
+      <div class="thumb"><img src="../assets/walkthrough-frame.jpg" alt=""><span class="dur">0:09</span></div>
+      <div>
+        <p class="why"><b>Priya asked</b> how to get a refund on an annual plan</p>
+        <ul class="spine">
+          <li>You are three weeks into the year, Priya.</li>
+          <li>Open Billing, then Cancel plan.</li>
+          <li>You will get 11 months back, today.</li>
+        </ul>
+      </div>
+      <div class="right">
+        <span class="time">07:31</span>
+        <div class="to">Support answers</div>
+        <button class="watch">Watch</button>
+      </div>
+    </div>
+
+    <div class="w">
+      <div class="thumb"><img src="../assets/walkthrough-frame.jpg" alt=""><span class="dur">0:12</span></div>
+      <div>
+        <p class="why"><b>Ben asked</b> why his bank feed stopped updating</p>
+        <ul class="spine">
+          <li>Your bank asks for a new login every 90 days.</li>
+          <li>Reconnect it here, and nothing else changes.</li>
+          <li>Your history stays where it is.</li>
+        </ul>
+      </div>
+      <div class="right">
+        <span class="time">06:58</span>
+        <div class="to">Support answers</div>
+        <button class="watch">Watch</button>
+      </div>
+    </div>
+
+    <p class="more">336 more this week. Nothing here needs your attention unless you decide it does.</p>
+  </main>
+</div>

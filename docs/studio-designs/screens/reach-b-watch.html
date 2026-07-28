@@ -1,0 +1,112 @@
+<!-- @dsCard group="Screens" name="Reach, direction B" subtitle="Trust through depth. Watch three, and the count is a footnote" width="1280" height="920" -->
+<meta charset="utf-8">
+<title>Reach, direction B</title>
+<style>
+  :root{
+    --ink:#101216; --ink-2:#171A20; --ink-3:#1E222A; --line:#272B34; --line-2:#3A414E;
+    --tx:#E8E9EC; --tx-2:#9BA1AC; --tx-3:#6B7280;
+    --indigo:#4F46E5; --pass:#34D399; --warn:#FFC53D; --stop:#FF6B6B;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.6 var(--sans)}
+  .lbl{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--tx-3)}
+  .top{display:flex;align-items:center;gap:14px;padding:0 26px;height:56px;border-bottom:1px solid var(--line)}
+  .mark{display:flex;align-items:center;gap:9px}
+  .mark .n{width:22px;height:22px;border-radius:7px;background:var(--tx);color:#14161B;display:grid;place-items:center;font:700 13px var(--sans)}
+  .mark b{font-weight:600;letter-spacing:-.02em}
+  .mark span{color:var(--tx-3);font-weight:400}
+  .top .spacer{margin-left:auto}
+  .dir{font:11.5px var(--mono);color:var(--tx-3)}
+
+  main{padding:34px 34px 70px;max-width:1140px;margin:0 auto}
+  .lead{max-width:60ch}
+  h1{font-size:34px;font-weight:600;letter-spacing:-.03em;line-height:1.2;margin:8px 0 12px}
+  .lead p{color:var(--tx-2);margin:0 0 6px}
+  .lead p b{color:var(--tx);font-weight:600}
+  .stance{font-size:13.5px;color:var(--tx-3);margin:14px 0 30px;padding-left:13px;border-left:2px solid var(--line-2);max-width:52ch}
+
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--ink-2);display:flex;flex-direction:column}
+  .card .play{margin-top:auto}
+  .card .who{padding:12px 15px 0;font-size:12.5px;color:var(--tx-3)}
+  .card img{display:block;width:100%;margin-top:10px;background:#F6F7F9}
+  .now{display:flex;align-items:center;gap:10px;background:#1a1c22;padding:12px 14px;border-top:1px solid var(--line)}
+  .now .chip{width:22px;height:22px;border-radius:999px;background:#4a4f5c;display:grid;place-items:center;font:600 10px var(--sans);color:#fff;flex:none}
+  .now .l{font-size:13.5px;color:#B7BCC5;text-decoration:line-through}
+  .after{display:flex;align-items:center;gap:10px;background:#16181D;padding:12px 14px}
+  .after .chip{width:22px;height:22px;border-radius:999px;background:var(--indigo);display:grid;place-items:center;font:600 10px var(--sans);color:#fff;flex:none}
+  .after .l{font-size:13.5px}
+  .play{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--tx-2)}
+  .play .t{font:11.5px var(--mono);color:var(--tx-3)}
+  .card.worse{border-color:#4a2c2c}
+  .card.worse .after .l{color:#FFD9D9}
+  .tagline{display:flex;align-items:center;gap:8px;padding:11px 15px;font-size:12.5px;border-top:1px solid var(--line)}
+  .tagline .d{width:7px;height:7px;border-radius:999px;flex:none}
+
+  .foot{display:flex;align-items:center;gap:18px;margin-top:34px;padding-top:24px;border-top:1px solid var(--line);flex-wrap:wrap}
+  button.primary{background:var(--tx);color:#14161B;border:1px solid var(--tx);font:600 14px var(--sans);border-radius:10px;padding:12px 20px;cursor:pointer}
+  button.primary:hover{background:#fff}
+  .ghost{background:none;border:1px solid var(--line-2);color:var(--tx-2);font:600 13px var(--sans);border-radius:9px;padding:11px 15px;cursor:pointer}
+  .ghost:hover{color:var(--tx);border-color:#4a5262}
+  .count{margin-left:auto;font-size:13px;color:var(--tx-3);text-align:right}
+  .count b{color:var(--tx-2);font-weight:600}
+  .count button{background:none;border:0;color:var(--tx-3);font:500 12.5px var(--sans);padding:0;cursor:pointer;text-decoration:underline}
+  :focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+</style>
+
+<div class="top">
+  <span class="mark"><span class="n">n</span><b>nolan</b> <span>studio</span></span>
+  <span class="spacer"></span>
+  <span class="dir">reach · direction B · watch three</span>
+</div>
+
+<main>
+  <div class="lead">
+    <span class="lbl">Before this holds</span>
+    <h1>Watch what it does to three of them.</h1>
+    <p>You said <b>"Feature tours never open on price. Open on what the person can now do."</b></p>
+    <p class="stance">Skimming 43 changed lines tells you less than watching three of them
+    properly. These are the three it changes most, and one is a case it gets wrong.</p>
+  </div>
+
+  <div class="three">
+    <div class="card">
+      <div class="who">Split payments · went to 1,204 people</div>
+      <img src="../assets/tour-frame.jpg" alt="">
+      <div class="now"><span class="chip">T</span><span class="l">Start with the Pro plan at 49 a month.</span></div>
+      <div class="after"><span class="chip">T</span><span class="l">Anyone on your team can settle a bill now.</span></div>
+      <div class="play"><span>Watch the change</span><span class="t">0:14</span></div>
+      <div class="tagline"><span class="d" style="background:var(--pass)"></span>Opens on the thing they can do.</div>
+    </div>
+
+    <div class="card">
+      <div class="who">Shared budgets · went to 890 people</div>
+      <img src="../assets/tour-frame.jpg" alt="">
+      <div class="now"><span class="chip">T</span><span class="l">Budgets come with every plan from 29 a month.</span></div>
+      <div class="after"><span class="chip">T</span><span class="l">Set a budget once, and everyone sees where they are.</span></div>
+      <div class="play"><span>Watch the change</span><span class="t">0:11</span></div>
+      <div class="tagline"><span class="d" style="background:var(--pass)"></span>Same length, better opening.</div>
+    </div>
+
+    <div class="card worse">
+      <div class="who">Price drop · went to 3,410 people</div>
+      <img src="../assets/tour-frame.jpg" alt="">
+      <div class="now"><span class="chip">T</span><span class="l">Pro is 39 a month now, down from 49.</span></div>
+      <div class="after"><span class="chip">T</span><span class="l">You can do more on Pro now.</span></div>
+      <div class="play"><span>Watch the change</span><span class="t">0:09</span></div>
+      <div class="tagline"><span class="d" style="background:var(--stop)"></span>The price was the news. This buries it.</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <button class="primary">Let it hold</button>
+    <button class="ghost">Hold it, except when price is the news</button>
+    <button class="ghost">Show me more first</button>
+    <div class="count">
+      <b>43 of the last 200</b> feature tours would have changed. Six read worse.<br>
+      <button>See all of them</button>
+    </div>
+  </div>
+</main>

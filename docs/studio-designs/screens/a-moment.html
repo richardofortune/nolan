@@ -1,0 +1,127 @@
+<!-- @dsCard group="Screens" name="A moment" subtitle="Stopped on the bit that is wrong. Holds read as gaps" width="1280" height="900" -->
+<meta charset="utf-8">
+<title>A moment</title>
+<style>
+  :root{
+    --ink:#101216; --ink-2:#171A20; --ink-3:#1E222A; --line:#272B34; --line-2:#3A414E;
+    --tx:#E8E9EC; --tx-2:#9BA1AC; --tx-3:#6B7280;
+    --indigo:#4F46E5; --pass:#34D399; --warn:#FFC53D;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.6 var(--sans)}
+  .lbl{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--tx-3)}
+
+  .top{display:flex;align-items:center;gap:14px;padding:0 26px;height:56px;border-bottom:1px solid var(--line)}
+  .mark{display:flex;align-items:center;gap:9px}
+  .mark .n{width:22px;height:22px;border-radius:7px;background:var(--tx);color:#14161B;display:grid;place-items:center;font:700 13px var(--sans)}
+  .mark b{font-weight:600;letter-spacing:-.02em}
+  .mark span{color:var(--tx-3);font-weight:400}
+  .crumb{margin-left:12px;padding-left:16px;border-left:1px solid var(--line);font-size:13.5px;color:var(--tx-2)}
+  .crumb a{color:var(--tx-2);text-decoration:none}
+  .crumb b{color:var(--tx);font-weight:600}
+  .top .spacer{margin-left:auto}
+  .went{font-size:13px;color:var(--tx-3)}
+
+  .work{display:grid;grid-template-columns:minmax(560px,1fr) 380px}
+  .stage{padding:26px 30px 40px;border-right:1px solid var(--line)}
+  .side{padding:26px 28px 40px}
+
+  .player{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--ink-2);max-width:640px}
+  .player img{display:block;width:100%;background:#F6F7F9}
+  .bar{display:flex;align-items:center;gap:11px;background:#16181D;padding:14px 16px}
+  .chip{width:25px;height:25px;border-radius:999px;background:var(--indigo);display:grid;place-items:center;font:600 11px var(--sans);color:#fff;flex:none}
+  .line{font-size:15px}
+
+  /* the spine: every beat, with real time. holds are the gaps. */
+  .spine{max-width:640px;margin:22px 0 0}
+  .spine .hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+  .spine .hd .lbl{margin:0}
+  .spine .hd span{font:11.5px var(--mono);color:var(--tx-3)}
+  .track{position:relative;height:44px;border-radius:8px;background:var(--ink-2);border:1px solid var(--line);overflow:hidden}
+  .beat{position:absolute;top:8px;height:28px;border-radius:5px;background:#2F3542}
+  .beat.said{background:#3A4152}
+  .beat.here{background:var(--tx);box-shadow:0 0 0 2px rgba(232,233,236,.25)}
+  .beat.cut{background:var(--indigo)}
+  .head{position:absolute;top:0;bottom:0;width:2px;background:var(--tx)}
+  .ticks{display:flex;justify-content:space-between;margin-top:7px;font:11px var(--mono);color:var(--tx-3)}
+  .legend{display:flex;gap:20px;margin-top:12px;font-size:12.5px;color:var(--tx-3);flex-wrap:wrap}
+  .sw{display:inline-block;width:16px;height:8px;border-radius:3px;vertical-align:middle;margin-right:7px}
+  .gapnote{font-size:13px;color:var(--tx-2);margin:14px 0 0;max-width:58ch}
+
+  /* right: the lines, jumpable */
+  .side h3{font-size:14px;font-weight:600;margin:8px 0 4px}
+  .side .p{font-size:13px;color:var(--tx-3);margin:0 0 16px}
+  .lines{list-style:none;margin:0;padding:0}
+  .lines li{display:grid;grid-template-columns:46px 1fr;gap:12px;padding:11px 10px;border-radius:9px;cursor:pointer;align-items:start}
+  .lines li:hover{background:var(--ink-2)}
+  .lines li[aria-current]{background:var(--ink-3);box-shadow:inset 2px 0 0 var(--tx)}
+  .at{font:11.5px var(--mono);color:var(--tx-3);padding-top:2px}
+  .txt{font-size:14.5px}
+  .lines li[aria-current] .txt{font-weight:600}
+  .gap{padding:5px 10px 5px 68px;font-size:12px;color:var(--tx-3);font-style:normal}
+
+  .act{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+  button{font:600 13px var(--sans);border-radius:9px;padding:9px 14px;cursor:pointer}
+  .primary{background:var(--tx);color:#14161B;border:1px solid var(--tx);width:100%}
+  .primary:hover{background:#fff}
+  .hint{font-size:12.5px;color:var(--tx-3);margin:10px 0 0}
+  :focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+</style>
+
+<div class="top">
+  <span class="mark"><span class="n">n</span><b>nolan</b> <span>studio</span></span>
+  <span class="crumb"><a href="#">What went out</a> · <b>Split payments shipped</b></span>
+  <span class="spacer"></span>
+  <span class="went">Went to 1,204 people on a team plan, 07:40</span>
+</div>
+
+<div class="work">
+  <section class="stage">
+    <div class="player">
+      <img src="../assets/tour-frame.jpg" alt="The product mid walkthrough.">
+      <div class="bar"><span class="chip">T</span><span class="line">Start with the Pro plan at 49 a month.</span></div>
+    </div>
+
+    <div class="spine">
+      <div class="hd"><span class="lbl">The whole thing</span><span>0:14</span></div>
+      <div class="track">
+        <div class="beat said" style="left:1%;width:20%"></div>
+        <div class="beat here" style="left:23%;width:24%"></div>
+        <div class="beat cut" style="left:49%;width:3%"></div>
+        <div class="beat said" style="left:54%;width:22%"></div>
+        <div class="beat said" style="left:78%;width:19%"></div>
+        <div class="head" style="left:35%"></div>
+      </div>
+      <div class="ticks"><span>0:00</span><span>0:05</span><span>0:10</span><span>0:14</span></div>
+      <div class="legend">
+        <span><span class="sw" style="background:#3A4152"></span>Something said</span>
+        <span><span class="sw" style="background:var(--indigo)"></span>A cut</span>
+        <span><span class="sw" style="background:#101216;border:1px solid var(--line)"></span>A pause</span>
+      </div>
+      <p class="gapnote">The gaps are pauses. This one holds for a beat after the price and
+      then cuts, which is why it lands harder than it reads.</p>
+    </div>
+  </section>
+
+  <aside class="side">
+    <span class="lbl">Everything it said</span>
+    <h3>Jump to a line</h3>
+    <p class="p">Reading is faster than watching. Pick the bit that is wrong.</p>
+
+    <ul class="lines">
+      <li><span class="at">0:00</span><span class="txt">Splitting a bill just got easier.</span></li>
+      <li aria-current="true"><span class="at">0:03</span><span class="txt">Start with the Pro plan at 49 a month.</span></li>
+      <li class="gap">0.9s pause</li>
+      <li><span class="at">0:07</span><span class="txt">Anyone on your team can settle a bill now.</span></li>
+      <li><span class="at">0:10</span><span class="txt">They will see it in their own currency.</span></li>
+    </ul>
+
+    <div class="act">
+      <button class="primary">Say what is wrong</button>
+      <p class="hint">Your words, not a setting. Studio works out what it means for everything
+      you make after this.</p>
+    </div>
+  </aside>
+</div>
