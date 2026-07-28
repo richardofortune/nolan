@@ -1,151 +1,140 @@
 # Nolan Studio — design brief
 
-**Status:** brief, no designs yet
+**Status:** brief, second model. The first one was authoring-shaped and is
+recorded at the end so we don't walk back into it.
 **Date:** 2026-07-28
 
-## What Studio is
+## What Studio is for
 
-Open-source **nolan** is the engine: screenplay in, filmed walkthrough out. Run
-bare, it produces a competent generic walkthrough.
+Open-source **nolan** is the engine: a screenplay in, a filmed walkthrough of a
+real app out. A customer wires it into their pipeline, and from then on their own
+AI writes and films walkthroughs continuously, in response to real events. A
+customer asks a question. A feature ships. Something gets explained.
 
-**Studio is the paid layer: a team-licensed control plane for *kits*.** A kit is
-brand + persona(s) + locale(s) + per-use-case instructions + a craft floor.
+**Studio's job is to make that stream better over time.** It earns its place by
+uplift, not by ownership.
 
-The thing to hold onto, because it shapes every screen: **Studio is never in the
-production path.** The customer's own pipeline AI makes the films people
-actually receive, at runtime, in their product. Studio makes *the instructions
-those films are made from*. Nobody sits in Studio waiting on a customer's
-walkthrough. They sit in Studio deciding what every future one will sound like.
+## The one structural fact
 
-Studio does film, but only ever **demo projects**, and only to answer "what did
-that change do". That is the test leg of define → test → publish, and it runs at
-two speeds:
+**Studio is not the source, and can never be.** The pipeline produces more in a
+day than anyone can curate in a month. Anything Studio holds as a sample is stale
+before it is looked at, and any design that asks a person to assemble the
+material they want to reason over has already failed, because nobody knows what
+to assemble.
 
-| | What it is | What it shows | Cost |
-|---|---|---|---|
-| **Preview** | paint logic ported from the engine, no browser | wording, presenter, captions, reading time | instant, per keystroke |
-| **Film a test** | the real engine, on demo projects | everything, including tempo and transitions | seconds to minutes, queued |
+So Studio never asks for input material. It watches what the pipeline is already
+making.
 
-The fast half is proven: the style desk's previews are ported from
-`src/caption.mjs` and the rig, and `npm run desk:check` fails if they drift from
-the engine. But a preview cannot show a cut, a hold, or how a walkthrough feels
-in motion, and **tempo and transitions are two of the four Ts**. That is the
-honest reason publishing waits on a real test rather than on a preference: half
-the craft is invisible in a still.
+## The loop
 
-## Who it's for
+**Notice. Say. Reach. Hold.**
 
-Two users, and they arrive months apart.
+**Notice** a moment in something that actually went out. Not a demo, not a
+sample. The real thing, with the customer's name still on it.
 
-**The developer** wires nolan into their pipeline once. Their win is walking
-away. Today they're the bottleneck: every team's stylistic request routes
-through them to triage, implement, and troubleshoot, and every new level of
-specificity is another thing they hand-build and maintain.
+**Say what is wrong**, in the words you would use to a colleague. "Too pushy."
+"We don't say seamless." "That pause is too long." "Don't open on the price."
+Nobody types a threshold. Nobody picks a rule from a list.
 
-**Domain teams** — support owns the support kit, marketing owns the feature-tour
-kit — arrive after the wiring and never touch the pipeline. They refine the
-outputs they own. They are not developers and will not be taught JSON.
+**Reach** is where Studio does the work nothing else can. It replays the change
+across what has already gone out and reports the truth: *this would have changed
+43 of the last 200 support walkthroughs. Here are six of them.* You watch a
+couple, and you know what you are actually asking for.
 
-Studio sells three things at once: autonomy to domain teams, relief from being
-the bottleneck to the developer, consistency and scale to the org.
+**Hold.** It applies from here on, and it keeps applying, because a fast writer
+with no memory will drift back within a week.
 
-## The core mechanic to make visible
+## Why reach is the product
 
-The pipeline AI is the **writer** — free to script each task as it sees fit. The
-kit is the **director's brief** laid over that freedom.
+Everything else in this space is a settings screen that promises an outcome.
+Reach *shows* the outcome, against real history, before you commit. It is the
+only honest answer to "what will this do", and it is only possible because the
+pipeline has already made thousands of things.
 
-Getting a guarantee out of a free writer takes two touchpoints:
+Two problems disappear with it. **Nobody assembles a test set**, because impact
+is measured backwards over what already happened. And **nothing goes stale**,
+because you are looking at real output rather than a synthetic preview of it.
 
-```
-steer in  →   the kit conditions the draft      (instructions, brand, persona, locale)
-gate out  →   a conformance check before ship   (the craft floor, promoted from
-                                                 nolan's CLI linter to a pipeline guard)
-```
+## The two people
 
-**Freedom plus guarantee = steer plus gate.** A design that shows only the
-steering half misses why anyone would trust this. The gate is the product's
-spine, not a settings page.
+**The developer** connects the pipeline once. Their win is walking away. After
+that connection, Studio must never ask them for a file, a path, or a project
+again.
 
-## The jobs, in order
+**Domain teams** (support owns how support sounds, marketing owns feature tours)
+arrive later, never touch the pipeline, and will not be taught its vocabulary.
+They own an outcome, not a configuration.
 
-1. **Define** a kit — from "everything sounds like us" down to "our webhook
-   guide, for enterprise, in Japanese." Depth is a dial, not a fork in the road.
-2. **Test** it against demo projects — see what this kit does to a real
-   walkthrough before anyone else gets it.
-3. **Publish** — the pipeline picks it up. Versioned, reversible, and obvious who
-   changed what.
+## What Studio must never show
 
-A fourth surface falls out of testing: **the timeline**. It is a way into the
-brief, not a film editor, and the difference is the whole point. Scrub a filmed
-test, stop on a moment, and see which kit phrase and which floor rule produced
-what is on screen. Change it there and the change lands in the kit, with the
-strip marking every other moment, across every demo project, that the same
-phrase just moved. You are not fixing this walkthrough. You are finding the
-instruction through it.
+Files, paths, screenplays, style documents, segments, JSON, rule identifiers,
+version numbers, or anything that reveals what the engine is doing underneath.
 
-It is also the only surface where holds and cuts are visible as gaps, so it is
-where tempo stops being an abstraction. The style desk already has a timeline
-for one film, which is a useful starting point and the wrong scope.
+If a person has to know that a walkthrough is a screenplay plus a style
+document, the product has failed. They know that walkthroughs go out, that some
+of them are not right, and that they can do something about it.
 
-Granularity is the interesting design problem. A kit can inherit from a parent
-("company voice") and override one axis for a niche. Most tools make this a
-folder tree and lose everyone. It's closer to how a house style and a section
-style relate on a magazine.
+A decision is a sentence. "We don't say seamless." Not `tone.ai-word`.
 
-## Design constraints
+## The surfaces
 
-- **Do not organise around the schema.** The existing `editor/style-desk.html` is
-  a preview tool for one corner of *define* (the look), and its own critique is
-  that it's a form over the style JSON. It maps sections 1:1 to config blocks.
-  That's the anti-pattern to design away from: organise around what the human is
-  trying to do, not around what the file contains.
-- **Show the effect, not the setting.** Every change is only meaningful as its
-  effect on a walkthrough. A kit edit that doesn't visibly change something is a
-  dead control.
-- **The craft floor is content, not preferences.** The rules are written down
-  (`docs/craft.md`, the four Ts — tone, text, tempo, transitions) and machine
-  checked (`nolan lint`). Domain teams should be able to argue with a rule, see
-  what it rejects, and tighten or loosen the gate for their kit.
-- **Localisation is deep, not a language dropdown.** Locale carries its own
-  personas, formats, and pacing.
-- **The output carries the colour.** Per the landing spec's visual direction:
-  dark editorial base, calm sans, monospace for anything machine-shaped, and no
-  gradient-and-dashboard chrome competing with the walkthroughs on screen.
+1. **What went out.** The home. Real walkthroughs the pipeline made, most recent
+   first, watchable in place, filtered by the outcome a team owns. This is the
+   raw material, and it arrives on its own.
+2. **A moment.** Stopped inside one walkthrough, at the bit that is wrong.
+   Moving through a walkthrough to find it is a finding tool, not an editor.
+   Holds and cuts are visible here as gaps, so tempo can be judged.
+3. **Reach.** What a proposed change would have done to what already went out,
+   with real examples to watch, and the decision to let it hold.
+4. **How we sound.** The accumulated decisions, read back as plain sentences.
+   This is an output of the loop rather than a form. It is also directly
+   editable, because sometimes you know what you want without waiting to be
+   annoyed by it, and a newcomer should be able to read it to learn the voice.
+5. **What we've decided.** The standing record: what is being enforced, what has
+   been let go, and what keeps coming up. What keeps coming up is a signal about
+   how the team writes, not just about the pipeline.
+6. **Connect the pipeline.** Once, by the developer, then never again.
+
+Ownership, permissions and empty states run through all of it.
 
 ## Voice
 
-Nolan's own writing rules apply to Studio's interface copy, and the linter
-enforces them on walkthroughs, so the product would look silly breaking them:
-no em-dashes, contractions, no hedging, one idea per line, no AI vocabulary
-(delve, leverage, unlock, robust, seamless), no forced triads. A confident
-colleague showing you something they built.
+Nolan's own writing rules apply to Studio's interface, since the product enforces
+them on walkthroughs and would look silly breaking them: no em dashes,
+contractions, active voice, no hedging, one idea per line, none of the AI
+vocabulary (delve, leverage, unlock, robust, seamless), no forced triads.
 
-Say `walkthrough`, `real app`, `screenplay`, `kit`, `change`, `people`.
-
-## What already exists to build on
-
-| | |
-|---|---|
-| `editor/style-desk.html` | working local editor: caption/variants, cursor, presenter with cast faces, steps, transitions with a cut preview, timing, templates, timeline. Its paint logic is ported from the engine, so its previews are faithful. |
-| `docs/craft.md` | the four Ts, floor vs judgment layer |
-| `src/lint.mjs` | the mechanical floor, today a CLI command |
-| `docs/landing/assets/` | real renders and marks — the visual identity |
+A confident colleague showing you something they built.
 
 ## Success
 
-Someone in a support team, who has never opened the pipeline, changes how every
-support walkthrough sounds, sees the effect on a real one, publishes it, and the
-developer never hears about it.
+Someone in a support team watches a walkthrough that went out this morning,
+says the opening is too pushy, sees that the same thing has been happening 40
+times a week, and fixes all of it before lunch. They never learn what a
+screenplay is. The developer does not hear about it.
 
-## Out of scope for v1 designs
+## Out of scope
 
-Billing and licence administration, the pipeline integration itself, anything
-that films or renders inside Studio, and analytics.
+Billing and licence administration, the pipeline integration itself, analytics
+for their own sake, and anything that films a customer's product in Studio.
 
 ## Open, and worth a designer's opinion
 
-1. Is the primary object a **kit** or a **use case**? "Support walkthroughs, in
-   Japanese, for enterprise" is arguably a use case that *has* a kit.
-2. How does inheritance surface without becoming a folder tree?
-3. Where does the gate live — a step in publishing, or a standing dashboard of
-   what it has been rejecting?
+1. How much of a walkthrough do you watch before you can react? Autoplay, or a
+   still with the line under it?
+2. Reach needs a number and evidence. Which lands first, and how many examples
+   are enough to trust it?
+3. When two teams' decisions collide, whose holds? Company voice presumably wins,
+   but the person hitting the wall needs to understand why without a lecture.
+
+## What this replaces
+
+The first model treated Studio as an authoring tool: define a kit, test it
+against demo projects you picked, publish it. Three things were wrong with it.
+It made Studio a source of record it can never be, since the pipeline outruns it.
+It asked people to assemble the material to reason over, which is the exact thing
+nobody knows how to do. And its screens were shaped like the repo, down to lint
+rule identifiers and version strings in the chrome.
+
+Kits still exist underneath as the unit a team owns and licences. They are not
+what the interface is about.

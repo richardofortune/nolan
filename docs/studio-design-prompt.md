@@ -1,112 +1,113 @@
 # Studio design prompt
 
-For claude.ai/design, with the **Nolan Studio** design-system project attached.
-Paste it whole, or work through `DESIGN THESE` one block at a time if the output
-thins out. The context above that heading is short enough to repeat each time.
+For claude.ai/design. Paste it whole, or work through `DESIGN THESE` one block at
+a time if the output thins out. The context above that heading is short enough to
+repeat each time.
 
-Kept here rather than in a chat window because it will keep changing. The
-reasoning behind it is [`studio-design-brief.md`](./studio-design-brief.md).
+The reasoning behind it is [`studio-design-brief.md`](./studio-design-brief.md),
+which is also pushed into the design project so it sits alongside the components.
+
+**On the design system:** take colour, type and voice from it. Its three screens
+(Kits, Kit editor, The floor) model the earlier authoring-shaped idea and should
+not be extended. They are being reworked.
 
 ---
 
 ```
 Design Nolan Studio, end to end.
 
-WHAT IT IS
-Studio is a control plane where non-developers shape how their company's
-automated product walkthroughs sound and look. The open-source nolan engine turns
-a screenplay into a filmed walkthrough of a real web app. Studio is the paid layer
-on top: a team-licensed place to define, test and publish "kits".
+WHAT IT IS FOR
+The open-source nolan engine turns a spec into a filmed walkthrough of a real web
+app. A company wires it into their pipeline, and from then on their own AI writes
+and films walkthroughs continuously, in response to real events. A customer asks
+a question. A feature ships. Something needs explaining.
 
-A kit is brand, presenters, locales, per-use-case instructions, and a craft floor.
+Studio is the paid layer whose job is to make that stream better over time. It
+earns its place by uplift, not by ownership.
 
-Studio is never in the production path. The customer's own pipeline AI writes and
-films the walkthroughs people actually receive, at runtime, inside their product.
-Studio makes the instructions those films are made from. Studio does film, but
-only ever demo projects, and only to answer "what did that change do".
+THE ONE STRUCTURAL FACT
+Studio is not the source and can never be. The pipeline produces more in a day
+than anyone can curate in a month, so anything Studio holds as a sample is stale
+before it is looked at. Any screen that asks a person to assemble the material
+they want to reason over has already failed, because nobody knows what to
+assemble. Studio never asks for input material. It watches what the pipeline is
+already making.
 
-THE MECHANIC TO KEEP VISIBLE
-The pipeline AI is a free writer. Getting a guarantee out of it takes two
-touchpoints: the kit steers the draft going in, and the craft floor gates it
-coming out. Freedom plus guarantee. A design that shows only the steering half
-misses why anyone would trust this.
+THE LOOP, WHICH IS THE PRODUCT
+Notice a moment in a walkthrough that actually went out. Say what is wrong with
+it in the words you would use to a colleague: "too pushy", "we don't say
+seamless", "that pause is too long". Nobody types a threshold or picks a rule
+from a list.
 
-TESTING RUNS AT TWO SPEEDS, AND THE DIFFERENCE IS A DESIGN PROBLEM
-Preview is instant and runs on paint logic ported from the engine, so wording,
-presenter, captions and reading time update as you type.
-Filming a test runs the real engine over demo projects. It takes seconds to
-minutes and it is queued.
-A preview cannot show a cut, a hold, or how a walkthrough feels in motion, and
-tempo and transitions are half of the craft. So publishing waits on a filmed
-test, and a preview that has drifted from the last test needs to say so.
+Then Studio shows the reach: it replays that change over what has already gone
+out and reports the truth. "This would have changed 43 of the last 200 support
+walkthroughs. Here are six." You watch two, and you know what you are really
+asking for. Then it holds, and keeps holding, because a fast writer with no
+memory drifts back within a week.
 
-TWO USERS, ARRIVING MONTHS APART
-The developer wires nolan into the pipeline once. Their win is walking away.
-Today every team's stylistic request routes through them.
-Domain teams (support owns the support kit, marketing owns feature tours) arrive
-after the wiring, never touch the pipeline, and will not be taught JSON.
+Reach is the thing to design hardest. Everything else in this space is a settings
+screen that promises an outcome. Reach shows the outcome, against real history,
+before anyone commits.
 
-VOCABULARY
-kit, brief, the floor, walkthrough, demo project, pipeline, preview, filmed test,
-published, draft. Not: template, config, settings, campaign, asset, render.
+TWO PEOPLE
+The developer connects the pipeline once, and their win is walking away. After
+that, Studio never asks them for a file, a path or a project again.
+Domain teams (support owns how support sounds, marketing owns feature tours)
+arrive later, never touch the pipeline, and own an outcome rather than a
+configuration.
 
-USE THE DESIGN SYSTEM
-Take colour, type, spacing and voice from the Nolan Studio design system. Its
-rule: chrome is graphite and paper throughout, and colour appears only where a
-real walkthrough does, so an indigo presenter chip means you are looking at
-nolan's output rather than at Studio's furniture.
-
-Three screens already exist: Kits, Kit editor, The floor. Extend them, don't
-redo them.
+WHAT STUDIO MUST NEVER SHOW
+Files, paths, screenplays, style documents, JSON, rule identifiers, version
+numbers, or anything revealing how the engine works underneath. If someone has to
+learn that a walkthrough is a spec plus a style document, the product has failed.
+A decision is a sentence. "We don't say seamless." Never a rule id.
 
 DESIGN THESE
 
-Getting started, for the developer
-1. Wire nolan into a pipeline. Connect, confirm it is running, see the first
-   walkthrough come through.
-2. Pick demo projects: the real walkthroughs every kit gets tested against.
-3. Hand off. Invite teams, give each one the kits they own, and leave.
+The loop
+1. What went out. The home. Real walkthroughs the pipeline made, most recent
+   first, watchable in place, filtered by the outcome a team owns. Design for
+   someone scanning for something that feels off, not searching for a known item.
+2. A moment. Stopped inside one walkthrough at the bit that is wrong. Getting
+   there is a finding tool, not an editor. Holds and cuts should be visible as
+   gaps, since tempo cannot be judged from a still.
+3. Saying what is wrong, in plain words, from that moment. Show how Studio
+   confirms it understood without making the person fill in a form.
+4. Reach. What this would have changed across what already went out: the number,
+   the evidence, and enough real examples to trust it. Then the decision to let
+   it hold. This is the most important screen in the product, so show two
+   directions.
 
-Shaping, for the domain team
-4. Start a kit. It begins as company voice with nothing changed, so the first
-   screen is about what to change first.
-5. A kit in a second locale. Localisation goes deeper than a language dropdown:
-   its own presenters, formats and pacing. Show a Japanese variant of a kit whose
-   parent is in English.
-6. Test against demo projects. Several real walkthroughs, before and after, in
-   one view, with a decision at the end of it. This is the missing middle of
-   define, test, publish.
-7. Film a test: asking for one, waiting on one, and the state where the kit has
-   changed since the last one so what you are looking at is stale.
-8. The timeline. This is a way into the brief, not a film editor. Scrub a filmed
-   test, stop on a moment, and see which kit phrase and which floor rule produced
-   what is on screen. Editing there edits the kit, so show how many other moments
-   across the demo projects the same change moves. Holds and cuts are visible as
-   gaps, which makes this the one place tempo can be judged.
-9. Edit the floor for one kit. Which craft rules apply, and tightening or
-   loosening one, knowing the company floor sits underneath.
-10. Version history. What changed, who changed it, and going back.
+Living with it
+5. How we sound. The accumulated decisions read back as plain sentences, editable
+   directly, and readable by a newcomer learning the voice.
+6. What we've decided. The standing record: what is enforced, what has been let
+   go, and what keeps coming up. What keeps coming up says something about how
+   the team writes, not only about the pipeline.
+7. A decision that collides with the company's. Whose holds, and how the person
+   hitting it understands why without a lecture.
 
 The edges
-11. An org with no kits yet.
-12. A team member who can edit but not publish, asking for review.
-13. The kit editor at tablet and phone width.
+8. Connect the pipeline. Once, by the developer, then never again.
+9. A team that has just connected and has nothing yet, next to a team six months
+   in.
+10. Someone who can suggest but not decide.
+11. The moment view at tablet and phone width, since noticing happens anywhere.
 
 CONSTRAINTS
-Avoid settings forms. The kit editor reads as prose you edit phrase by phrase,
-and everything should feel like the same product. No vanity metric tiles, no
-gradient chrome, no dashboard furniture competing with the walkthroughs on screen.
+No settings forms, no rule tables, no vanity metric tiles, no gradient chrome, no
+dashboard furniture competing with the walkthroughs on screen. The walkthroughs
+are the interface's content and should be the loudest thing in it.
 
-Interface copy follows nolan's own craft rules, because the floor enforces them
-on walkthroughs and the product would look silly breaking them: no em dashes,
-contractions, active voice, no hedging, one idea per line, and none of the AI
-vocabulary (delve, leverage, unlock, robust, seamless). An action keeps its name
-through the whole flow, so what says Publish produces a kit that says Published.
+Interface copy follows nolan's own craft rules, because the product enforces them
+on walkthroughs and would look silly breaking them: no em dashes, contractions,
+active voice, no hedging, one idea per line, and none of the AI vocabulary
+(delve, leverage, unlock, robust, seamless). An action keeps its name through the
+whole flow.
 
 Empty states are an invitation to act. Errors say what happened and how to fix it.
 
 DELIVERABLE
-Work through the three blocks in order. Show two directions each for screens 6
-and 8, since nobody has designed either yet. Responsive down to phone, visible
-keyboard focus, motion only where it explains something.
+Work through the three blocks in order. Two directions for screen 4. Responsive
+down to phone, visible keyboard focus, motion only where it explains something.
 ```
