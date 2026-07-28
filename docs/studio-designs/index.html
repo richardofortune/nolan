@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nolan Studio — design review</title>
+<style>
+  :root{
+    --page:#F4F4F1; --sheet:#FFFFFF;
+    --ink:#1A1D21; --ink-2:#4A5058; --ink-3:#6C737B;
+    --rule:#DFDEDA; --rule-2:#C6C5C0; --indigo:#4F46E5;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--page);color:var(--ink);font:15px/1.6 var(--sans);
+       display:grid;grid-template-rows:auto 1fr;overflow:hidden}
+  .lbl{font:600 10.5px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+
+  header{display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:1px solid var(--rule-2);background:var(--sheet)}
+  .mark{font-size:15px;font-weight:600;letter-spacing:-.02em}
+  .mark span{color:var(--ink-3);font-weight:400}
+  header .sp{margin-left:auto}
+  .seg{display:flex;border:1px solid var(--rule-2);border-radius:7px;overflow:hidden}
+  .seg button{font:600 12.5px var(--sans);padding:6px 12px;background:none;border:0;border-right:1px solid var(--rule-2);color:var(--ink-2);cursor:pointer}
+  .seg button:last-child{border-right:0}
+  .seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+  .seg button:hover:not([aria-pressed=true]){background:#EDECE8}
+  .open{font:600 12.5px var(--sans);color:var(--indigo);text-decoration:none}
+  .open:hover{text-decoration:underline}
+
+  .body{display:grid;grid-template-columns:246px 1fr;min-height:0}
+  nav{border-right:1px solid var(--rule);padding:18px 12px;overflow:auto}
+  nav .lbl{display:block;padding:12px 10px 8px}
+  nav button{display:block;width:100%;text-align:left;background:none;border:0;border-radius:7px;
+             padding:9px 10px;font:14px var(--sans);color:var(--ink-2);cursor:pointer;line-height:1.35}
+  nav button small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+  nav button:hover{background:#EDECE8;color:var(--ink)}
+  nav button[aria-current]{background:var(--ink);color:#fff}
+  nav button[aria-current] small{color:#B9BDC4}
+  .hint{padding:14px 10px;font-size:11.5px;color:var(--ink-3);line-height:1.5;border-top:1px solid var(--rule);margin-top:12px}
+  kbd{font:11px var(--mono);border:1px solid var(--rule-2);border-bottom-width:2px;border-radius:4px;padding:1px 4px;color:var(--ink-2)}
+
+  .stage{min-height:0;display:grid;grid-template-rows:auto 1fr;overflow:hidden}
+  .note{padding:14px 22px;border-bottom:1px solid var(--rule);background:var(--sheet)}
+  .note h1{font-size:16px;font-weight:600;margin:0 0 3px;letter-spacing:-.01em}
+  .note p{margin:0;font-size:13.5px;color:var(--ink-2);max-width:78ch}
+  .frame{overflow:auto;padding:22px;display:flex;justify-content:center;align-items:flex-start}
+  iframe{border:1px solid var(--rule-2);border-radius:7px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.05);flex:none}
+
+  /* contact sheet: every screen at once, live, scaled down */
+  .sheet-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:22px;padding:22px;overflow:auto;align-content:start}
+  body[data-view=sheet] .sheet-grid{display:grid}
+  body[data-view=sheet] .frame,body[data-view=sheet] .note{display:none}
+  .cell button{display:block;width:100%;padding:0;background:none;border:0;cursor:pointer;text-align:left}
+  .shot{display:block;position:relative;height:262px;border:1px solid var(--rule-2);border-radius:7px;overflow:hidden;background:#fff}
+  .shot iframe{position:absolute;top:0;left:0;width:1200px;height:900px;transform:scale(.291);transform-origin:0 0;border:0;border-radius:0;box-shadow:none;pointer-events:none}
+  .cell:hover .shot{border-color:var(--indigo)}
+  .cap{display:block;padding:9px 2px 0;font-size:13px;font-weight:600}
+  .cap small{display:block;font-weight:400;font-size:12px;color:var(--ink-3);margin-top:2px}
+</style>
+
+<header>
+  <span class="mark">nolan <span>studio</span></span>
+  <span class="lbl">design review</span>
+  <span class="sp"></span>
+  <div class="seg" id="widths">
+    <button data-w="1200" aria-pressed="true">Desktop</button>
+    <button data-w="834">Tablet</button>
+    <button data-w="390">Phone</button>
+    <button data-w="sheet">Contact sheet</button>
+  </div>
+  <a class="open" id="open" href="#" target="_blank" rel="noopener">Open on its own</a>
+</header>
+
+<div class="body">
+  <nav id="nav"></nav>
+  <div class="stage">
+    <div class="note"><h1 id="title"></h1><p id="desc"></p></div>
+    <div class="frame"><iframe id="view" title="Preview"></iframe></div>
+    <div class="sheet-grid" id="grid"></div>
+  </div>
+</div>
+
+<script>
+const ITEMS = [
+  { group:"Foundations", file:"foundations/color.html", name:"Colour",
+    sub:"The sheet, and the one dark mark on it",
+    desc:"Studio is read in for an hour at a time, so it is a working sheet rather than a console. The only dark mass on a screen is nolan's caption bar, which is a real part of the film. Includes the wrong version for comparison." },
+  { group:"Foundations", file:"foundations/type.html", name:"Type",
+    sub:"One face, two jobs, and the gutter",
+    desc:"Sans carries anything a person said. Mono carries anything a machine owns, and never a sentence. The timecode gutter runs down every screen, because everything here was said at a time." },
+
+  { group:"The loop", file:"screens/what-went-out.html", name:"What went out",
+    sub:"The home",
+    desc:"The stream is read, not watched. Each walkthrough shows the lines it said, so you scan what your product told people this morning. Nothing is flagged for you: the floor already caught every mechanical fault, so anything still wrong is a judgment call." },
+  { group:"The loop", file:"screens/a-moment.html", name:"A moment",
+    sub:"Stopped on the bit that is wrong",
+    desc:"The transcript leads and the film sits beside it, because reading is faster than watching. Pauses appear in the gutter and as breaks in the tempo strip, which is the only place tempo can be judged without playing it." },
+  { group:"The loop", file:"screens/say-whats-wrong.html", name:"Say what is wrong",
+    sub:"Plain words in, a sentence back",
+    desc:"You type what you would say to a colleague. Studio answers with a sentence, not a form, and the only two controls are phrases inside that sentence. Scope is set by editing words." },
+  { group:"The loop", file:"screens/reach-a-audit.html", name:"Reach, direction A",
+    sub:"Trust through volume",
+    desc:"Every line the change moves, grouped, old struck through, including the six it spoils. Fast to audit. Compare against direction B and pick one." },
+  { group:"The loop", file:"screens/reach-b-watch.html", name:"Reach, direction B",
+    sub:"Trust through depth",
+    desc:"Refuses the list. Three walkthroughs to watch properly, count as a footnote, on the argument that skimming 43 diffs tells you less than watching three. One of the three is a case the change spoils." },
+];
+
+const nav = document.getElementById("nav");
+const view = document.getElementById("view");
+const grid = document.getElementById("grid");
+let current = 0, width = 1200;
+
+// left list, grouped
+let lastGroup = null;
+ITEMS.forEach((it, i) => {
+  if (it.group !== lastGroup) {
+    const l = document.createElement("span");
+    l.className = "lbl"; l.textContent = it.group;
+    nav.appendChild(l); lastGroup = it.group;
+  }
+  const b = document.createElement("button");
+  b.innerHTML = it.name + "<small>" + it.sub + "</small>";
+  b.onclick = () => select(i);
+  nav.appendChild(b);
+});
+const hint = document.createElement("p");
+hint.className = "hint";
+hint.innerHTML = "<kbd>j</kbd> and <kbd>k</kbd> move between screens. <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> set the width, <kbd>0</kbd> shows them all.<br><br>The address bar tracks the screen you are on, so you can send someone a link to one of them.";
+nav.appendChild(hint);
+
+// contact sheet, live rather than screenshots so it never goes stale
+ITEMS.forEach((it, i) => {
+  const cell = document.createElement("div");
+  cell.className = "cell";
+  cell.innerHTML = '<button><span class="shot"><iframe src="' + it.file + '" scrolling="no" tabindex="-1"></iframe></span>' +
+                   '<span class="cap">' + it.name + '<small>' + it.sub + '</small></span></button>';
+  cell.querySelector("button").onclick = () => { setWidth(1200); select(i); };
+  grid.appendChild(cell);
+});
+
+const slug = (it) => it.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+function select(i) {
+  current = i;
+  const it = ITEMS[i];
+  history.replaceState(null, "", "#" + slug(it));   // a review link can point at one screen
+  [...nav.querySelectorAll("button")].forEach((b, n) => b.toggleAttribute("aria-current", n === i));
+  document.getElementById("title").textContent = it.name;
+  document.getElementById("desc").textContent = it.desc;
+  document.getElementById("open").href = it.file;
+  if (view.getAttribute("src") !== it.file) view.src = it.file;
+}
+
+function setWidth(w) {
+  width = w;
+  [...document.querySelectorAll("#widths button")].forEach(b =>
+    b.setAttribute("aria-pressed", String(b.dataset.w === String(w))));
+  if (w === "sheet") { document.body.dataset.view = "sheet"; return; }
+  document.body.dataset.view = "one";
+  view.style.width = w + "px";
+  // tall enough that the screens do not scroll inside their own frame
+  view.style.height = (w === 390 ? 1500 : w === 834 ? 1200 : 1000) + "px";
+}
+
+document.querySelectorAll("#widths button").forEach(b =>
+  b.onclick = () => setWidth(b.dataset.w === "sheet" ? "sheet" : Number(b.dataset.w)));
+
+addEventListener("keydown", (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === "j") select(Math.min(current + 1, ITEMS.length - 1));
+  if (e.key === "k") select(Math.max(current - 1, 0));
+  if (e.key === "1") setWidth(1200);
+  if (e.key === "2") setWidth(834);
+  if (e.key === "3") setWidth(390);
+  if (e.key === "0") setWidth("sheet");
+});
+
+// deep link: #a-moment opens that screen, #all opens the contact sheet
+const asked = decodeURIComponent(location.hash.slice(1));
+const found = ITEMS.findIndex((it) => slug(it) === asked);
+setWidth(asked === "all" ? "sheet" : 1200);
+select(found === -1 ? 0 : found);
+</script>
+</html>

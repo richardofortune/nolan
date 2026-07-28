@@ -2,6 +2,23 @@
 
 A light working sheet, and a first pass at the loop.
 
+## Reviewing it
+
+```bash
+npm run designs
+```
+
+That serves this directory and opens `index.html`, a small review page: the list
+on the left, a live preview at desktop, tablet or phone width, and a contact
+sheet showing every screen at once. Previews are live iframes rather than
+screenshots, so they can never drift from the files.
+
+It needs the server because browsers refuse to load `file://` iframes. Nothing
+is installed to run it: `serve.mjs` is about forty lines of `node:http`, in
+keeping with the rest of the repo. `j` and `k` move between screens, `1` `2` `3`
+set the width, `0` shows them all, and the address bar tracks where you are, so
+a link can point at one screen (`#a-moment`, or `#all`).
+
 | | |
 |---|---|
 | `foundations/color.html` | The sheet, and the one dark mark on it. |

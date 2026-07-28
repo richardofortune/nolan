@@ -39,6 +39,7 @@
     "example:support": "node bin/nolan.mjs examples/support-answer.screenplay.json --cut=full --style=examples/showcase.style.json --out=examples/out",
     "example:shipped": "node bin/nolan.mjs examples/shipped-change.screenplay.json --cut=full --style=examples/showcase.style.json --out=examples/out",
     "example:drift": "node bin/nolan.mjs verify examples/drift/stale.screenplay.json",
+    "designs": "node docs/studio-designs/serve.mjs",
     "desk": "open editor/style-desk.html || xdg-open editor/style-desk.html || start editor/style-desk.html",
     "desk:embed": "node editor/embed-templates.mjs",
     "desk:check": "node editor/check-fidelity.mjs"
