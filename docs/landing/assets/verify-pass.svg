@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="128" viewBox="0 0 720 128" role="img" aria-label="Terminal: nolan verify reports that every target resolves.">
+  <title>nolan verify passing after the screenplay is updated</title>
+  <desc>Real output of `nolan verify examples/support-answer.screenplay.json`. Every target resolves, so the walkthrough still describes the app.</desc>
+
+  <rect width="720" height="128" rx="12" fill="#16181D"/>
+  <rect x="0.5" y="0.5" width="719" height="127" rx="11.5" fill="none" stroke="#2A2E37"/>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13.5">
+    <text x="28" y="46" fill="#F2F3F5"><tspan fill="#6B7280">$ </tspan>nolan verify examples/support-answer.screenplay.json</text>
+    <text x="28" y="90" fill="#F2F3F5"><tspan fill="#34D399" font-weight="600">✓ </tspan>every target resolves <tspan fill="#8B93A1">— this screenplay still describes the app</tspan></text>
+  </g>
+</svg>

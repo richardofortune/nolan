@@ -1,0 +1,49 @@
+{
+  "title": "Shipped — Splitter knows who paid",
+  "slug": "shipped-change",
+
+  "$comment": "Landing page asset: 'Ship a change people can follow'. One feature, explained to the people it affects, instead of a line in a changelog. Deliberately short — a change note is not a product tour. Films the bundled toy app in examples/site.",
+
+  "cuts": { "full": { "pace": 0.7 } },
+
+  "cast": {
+    "theo": { "kind": "human", "name": "Theo", "bg": "#059669", "ink": "#fff", "role": "shipped it", "cam": "./assets/people/man-2.jpg" }
+  },
+
+  "vars": {
+    "app": "http://localhost:8099/index.html",
+    "total": "480",
+    "payer": "Bo"
+  },
+
+  "set": {
+    "servers": [
+      { "cmd": "python3", "args": ["-m", "http.server", "8099"], "cwd": "site" }
+    ],
+    "waitFor": ["http://localhost:8099/index.html"]
+  },
+
+  "scenes": [
+    {
+      "id": "change",
+      "beats": [
+        { "do": "goto", "url": "{{app}}" },
+        { "do": "actor", "who": "theo" },
+
+        { "do": "say", "text": "Splitter knows who actually paid now." },
+        { "do": "click", "to": { "sel": "#total" }, "ms": 700 },
+        { "do": "type", "text": "{{total}}", "delay": 85 },
+        { "do": "hold", "ms": 300 },
+
+        { "do": "say", "text": "Pick whoever covered the bill." },
+        { "do": "move", "to": { "sel": "#payer" }, "ms": 600 },
+        { "do": "js", "code": "document.getElementById('payer').value='Bo'", "settle": 400 },
+        { "do": "hold", "ms": 400 },
+
+        { "do": "click", "to": { "role": "button", "name": "Work it out" }, "ms": 800, "settle": 500 },
+        { "do": "say", "text": "{{payer}}'s square. The rest owe {{payer}}." },
+        { "do": "hold", "ms": 1800 }
+      ]
+    }
+  ]
+}

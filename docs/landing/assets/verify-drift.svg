@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="248" viewBox="0 0 720 248" role="img" aria-label="Terminal: nolan verify reports two targets that no longer resolve.">
+  <title>nolan verify catching selector drift</title>
+  <desc>Real output of `nolan verify examples/drift/stale.screenplay.json` against the bundled example app. Two targets no longer resolve: the #tip field and a button named "Calculate split".</desc>
+
+  <rect width="720" height="248" rx="12" fill="#16181D"/>
+  <rect x="0.5" y="0.5" width="719" height="247" rx="11.5" fill="none" stroke="#2A2E37"/>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13.5" xml:space="preserve">
+    <text x="28" y="46" fill="#F2F3F5"><tspan fill="#6B7280">$ </tspan>nolan verify examples/drift/stale.screenplay.json</text>
+
+    <text x="28" y="90" fill="#F2F3F5"><tspan fill="#FF6B6B" font-weight="600">✗ </tspan>2 target(s) no longer resolve:</text>
+
+    <text x="28" y="126" fill="#C7CBD3"><tspan fill="#8B93A1">  [walkthrough] </tspan>click: no visible element matching <tspan fill="#FFC53D">&quot;#tip&quot;</tspan></text>
+    <text x="28" y="148" fill="#C7CBD3"><tspan fill="#8B93A1">  [walkthrough] </tspan>click: no visible button named <tspan fill="#FFC53D">&quot;Calculate split&quot;</tspan></text>
+
+    <text x="28" y="192" fill="#8B93A1">The app moved under the screenplay. Update the beats,</text>
+    <text x="28" y="214" fill="#8B93A1">or the demo will lie.</text>
+  </g>
+</svg>

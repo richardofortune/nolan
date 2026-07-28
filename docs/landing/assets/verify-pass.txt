@@ -1,0 +1,6 @@
+$ nolan verify examples/support-answer.screenplay.json
+
+✓ every target resolves — this screenplay still describes the app
+
+$ echo $?
+0

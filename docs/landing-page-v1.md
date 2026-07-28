@@ -221,11 +221,23 @@ walkthrough of a real product.
 
 ## Assets required before implementation
 
-1. A web-optimised hero MP4 and poster from the existing showcase render.
-2. A 6 to 10 second support-response example, built with a real screenplay.
-3. A small shipping-change example, also built with a real screenplay.
-4. A short selector-drift terminal capture or rendered terminal asset.
-5. A Nolan wordmark or deliberately simple typographic lockup.
+All built — see [`landing/README.md`](landing/README.md) for provenance and the
+commands that regenerate each one.
+
+1. ✅ A web-optimised hero MP4 and poster from the existing showcase render.
+   → `landing/assets/hero.mp4`, `hero-poster.jpg`
+2. ✅ A 6 to 10 second support-response example, built with a real screenplay.
+   → `landing/assets/support-answer.mp4` (10.0s), from
+   `examples/support-answer.screenplay.json`
+3. ✅ A small shipping-change example, also built with a real screenplay.
+   → `landing/assets/shipped-change.mp4` (9.7s), from
+   `examples/shipped-change.screenplay.json`
+4. ✅ A short selector-drift terminal capture or rendered terminal asset.
+   → `landing/assets/verify-drift.svg` / `.txt`, real output from the
+   deliberately stale `examples/drift/stale.screenplay.json`. Its passing
+   counterpart for §5 is `verify-pass.svg` / `.txt`.
+5. ✅ A Nolan wordmark or deliberately simple typographic lockup.
+   → `landing/assets/wordmark.svg`, plus `lockup.svg` for standalone use.
 
 ## Acceptance criteria
 

@@ -1,0 +1,34 @@
+{
+  "title": "Splitter (stale) — what drift looks like",
+  "slug": "stale",
+
+  "$comment": "Deliberately out of date, and kept that way on purpose. It describes a Splitter that renamed 'Work it out' to 'Calculate split' and had a #tip field, so `nolan verify examples/drift/stale.screenplay.json` fails against the real app in examples/site. That failure is the point: it's the demo used on the landing page and in the README to show what drift looks like. Do not 'fix' these targets. It lives in a subdirectory so the examples/*.screenplay.json globs (lint:demos, the onboarding menu) skip it.",
+
+  "cuts": { "full": { "pace": 1 } },
+
+  "vars": { "app": "http://localhost:8099/index.html" },
+
+  "set": {
+    "servers": [
+      { "cmd": "python3", "args": ["-m", "http.server", "8099"], "cwd": "../site" }
+    ],
+    "waitFor": ["http://localhost:8099/index.html"]
+  },
+
+  "scenes": [
+    {
+      "id": "walkthrough",
+      "beats": [
+        { "do": "goto", "url": "{{app}}" },
+        { "do": "say", "text": "Put in what the trip cost." },
+        { "do": "click", "to": { "sel": "#total" } },
+        { "do": "type", "text": "480" },
+        { "do": "say", "text": "Add the tip you left." },
+        { "do": "click", "to": { "sel": "#tip" } },
+        { "do": "say", "text": "Then work it out." },
+        { "do": "click", "to": { "role": "button", "name": "Calculate split" } },
+        { "do": "hold", "ms": 900 }
+      ]
+    }
+  ]
+}

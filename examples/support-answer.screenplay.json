@@ -1,0 +1,52 @@
+{
+  "title": "Support answer — there were four of us",
+  "slug": "support-answer",
+
+  "$comment": "Landing page asset: 'Answer a real customer'. Cass wrote in confused about the split, and support answers with a walkthrough of HER path, not a generic help article. The customer's name and numbers are vars, so the same screenplay re-films for the next person who asks. Films the bundled toy app in examples/site — no setup.",
+
+  "cuts": { "full": { "pace": 0.72 } },
+
+  "cast": {
+    "mia": { "kind": "human", "name": "Mia", "bg": "#4f46e5", "ink": "#fff", "role": "support", "cam": "./assets/people/woman-2.jpg" }
+  },
+
+  "vars": {
+    "app": "http://localhost:8099/index.html",
+    "who": "Cass",
+    "total": "480",
+    "party": "4 people",
+    "share": "120",
+    "thought": "160"
+  },
+
+  "set": {
+    "servers": [
+      { "cmd": "python3", "args": ["-m", "http.server", "8099"], "cwd": "site" }
+    ],
+    "waitFor": ["http://localhost:8099/index.html"]
+  },
+
+  "scenes": [
+    {
+      "id": "answer",
+      "beats": [
+        { "do": "goto", "url": "{{app}}" },
+        { "do": "actor", "who": "mia" },
+
+        { "do": "say", "text": "Hi {{who}}. There were four of you, not three." },
+        { "do": "click", "to": { "sel": "#total" }, "ms": 700 },
+        { "do": "type", "text": "{{total}}", "delay": 85 },
+        { "do": "hold", "ms": 300 },
+
+        { "do": "say", "text": "Change Split between to {{party}}." },
+        { "do": "move", "to": { "sel": "#people" }, "ms": 600 },
+        { "do": "js", "code": "document.getElementById('people').value='4 people'", "settle": 400 },
+        { "do": "hold", "ms": 400 },
+
+        { "do": "click", "to": { "role": "button", "name": "Work it out" }, "ms": 800, "settle": 500 },
+        { "do": "say", "text": "You owe Ana {{share}}, not {{thought}}." },
+        { "do": "hold", "ms": 1800 }
+      ]
+    }
+  ]
+}

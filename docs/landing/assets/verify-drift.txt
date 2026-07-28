@@ -1,0 +1,11 @@
+$ nolan verify examples/drift/stale.screenplay.json
+
+✗ 2 target(s) no longer resolve:
+
+  [walkthrough] click: no visible element matching "#tip"
+  [walkthrough] click: no visible button named "Calculate split"
+
+The app moved under the screenplay. Update the beats, or the demo will lie.
+
+$ echo $?
+1
