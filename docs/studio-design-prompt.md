@@ -7,9 +7,10 @@ repeat each time.
 The reasoning behind it is [`studio-design-brief.md`](./studio-design-brief.md),
 which is also pushed into the design project so it sits alongside the components.
 
-**On the design system:** take colour, type and voice from it. Its three screens
-(Kits, Kit editor, The floor) model the earlier authoring-shaped idea and should
-not be extended. They are being reworked.
+**On the design system:** it holds foundations only, on purpose. Colour, type,
+one real walkthrough still, and the brief. Everything shaped by the earlier
+authoring-shaped model has been deleted rather than reworked, so there are no
+screens to copy and no old vocabulary to inherit. Design the screens fresh.
 
 ---
 
