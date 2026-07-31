@@ -118,6 +118,41 @@ screenplay is. The developer does not hear about it.
 Billing and licence administration, the pipeline integration itself, analytics
 for their own sake, and anything that films a customer's product in Studio.
 
+## A worked case: a film that needs to state a cost
+
+From an eleven-film project built on core nolan, 2026-07-31. Recorded because it
+is the clearest small example of the Notice/Say/Reach/Hold loop earning its
+place, and because the core-side answer is deliberately worse.
+
+Four of the eleven films existed to show that a requested feature carries a cost.
+Saying so plainly needs the constructions the craft floor blocks as errors —
+`not just X`, `it's not X, it's Y`, `not X, but Y`. Core's only escape today is
+`craftFloor: false`, which disarms the word-count and tempo rules too.
+
+**The core fix is a per-rule override** (nolan#7): `craft: { antithesis: false }`.
+Mechanical, and enough to unblock. But it is a person picking a rule from a list,
+which this brief says should never be the interface.
+
+**The Studio version of the same need** is the loop working as intended:
+
+- **Notice** — a film that went out hedging a tradeoff it should have stated.
+- **Say** — *"when a walkthrough is showing a cost, let it say so plainly."*
+  No rule name, no threshold.
+- **Reach** — *this would have changed 4 of the last 11 walkthroughs; here they
+  are.* You watch two and know whether you meant it.
+- **Hold** — it keeps applying, so the next writer does not re-hedge by default.
+
+An earlier draft of nolan#7 proposed a `stance` field on the screenplay — declare
+a film's intent, let the linter relax the matching family. It was cut from that
+issue and belongs here instead: **intent is the input Studio should be reading**,
+and inferring policy from it across a stream is exactly the uplift Studio exists
+to provide. In core it would just be a config key with a nicer name.
+
+Worth a designer's opinion on whether intent is something the pipeline *declares*
+(the generating agent knows the film is about a constraint) or something Studio
+*infers* from the films themselves. The first is cheaper; the second is the one
+that cannot be got wrong by whoever wired the pipeline up.
+
 ## Open, and worth a designer's opinion
 
 1. How much of a walkthrough do you watch before you can react? Autoplay, or a
