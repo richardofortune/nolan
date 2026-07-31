@@ -51,6 +51,21 @@ Options
                    'refresh' (report it, and re-render if the demo still resolves)
   --quiet          only print errors
 
+Surfaces — five beats put words on screen, and they are not interchangeable
+  say     the caption bar. Duration DERIVED from the text. Restylable. Linted.
+  card    a full-screen title card. Fixed 'ms' you author — it does NOT scale
+          with its text, and lint does not inspect it.
+  cut     a titled scene change. Requires a 'url' and navigates, so it is not
+          a free title card — use 'card' for a title over the current page.
+  actor   the presenter chip.
+  step    the how-to progress rail (needs 'steps.show' in the style).
+
+  Only 'say' is restylable: restyle re-composites captions over a clean master,
+  so card and cut text is already burned in and needs a re-film.
+
+  timing.readingSpeed is MILLISECONDS PER CHARACTER — a higher number is a
+  slower film.
+
 Docs: https://github.com/richardofortune/nolan`;
 
 async function main(argv) {

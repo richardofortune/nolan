@@ -125,6 +125,31 @@ every agent writing one) should follow.
 }
 ```
 
+### Surfaces — what can put words on screen
+
+Five beats put words on screen, and they are not interchangeable. Reach for the
+wrong one and the writing fights the medium.
+
+| Surface | Beat | Good for | Duration | Restylable | Linted |
+|---|---|---|---|---|---|
+| Caption bar | `say` | Narrating what is happening now | **derived from text** | **yes** | **yes** |
+| Title card | `card` | Establishing, framing, closing | fixed `ms` you author | no | no |
+| Scene change | `cut` | A titled transition **that navigates** | fixed `ms` | no | no |
+| Presenter | `actor` | Attributing narration to a persona | n/a | no | no |
+| Step rail | `step` | Position in a long multi-step flow | n/a | no | no |
+
+`step` needs opting into: the style sets `steps.show`, the screenplay supplies
+top-level `steps: [...]` labels, and each `step` beat advances the rail to `n`.
+
+Three consequences worth knowing before you write:
+
+- **Only `say` scales with its text**, and only `say` has a craft floor. Put
+  setup in the caption bar and every caption gets longer and the linter starts
+  complaining. Put it on a `card` and the caption bar stays short.
+- **Only `say` is restylable.** See [Restyle without re-filming](#restyle-without-re-filming).
+- **`cut` is not a free title card** — it requires a `url` and performs a
+  navigation. For a title over the current page, use `card`.
+
 ### Beats
 
 | `do` | Fields | |
@@ -135,6 +160,7 @@ every agent writing one) should follow.
 | `actor` | `who` | set the persona chip |
 | `say` | `text`, `as` | narrate — duration **derived** from length; `as` picks a caption variant |
 | `hold` | `ms` | explicit pause (scales with pace) |
+| `step` | `n` | advance the how-to rail (needs `steps.show`) |
 | `move` / `click` | `to` | glide the cursor, optionally click |
 | `type` | `text`, `delay` | keyboard input |
 | `scrollTo` | `to` | centre a target |
@@ -197,6 +223,12 @@ afterwards, keeping the clean master and a segment manifest next to the outputs:
 ```bash
 nolan demo.screenplay.json --overlay=post
 ```
+
+**Captions only.** `restyle` re-composites the caption layer over the clean
+master. Anything filmed *into* the master — a `card`, a `cut` title, the app's
+own pixels — is already burned in, so changing a card's text or a title's
+wording still needs a re-film. Worth knowing before you design a pipeline
+around cheap iteration.
 
 Now a new look is a re-encode, not a re-film — no browser, no app, seconds:
 
@@ -353,6 +385,24 @@ is the app you control.
 `say` computes its own duration from the caption length. It is never hardcoded,
 so when voiceover lands, duration becomes real audio length and **every
 screenplay you already wrote re-times itself** — no re-authoring.
+
+**`timing.readingSpeed` is milliseconds per character, so a higher number is a
+slower film.** It reads like a speed and behaves like a duration:
+
+```js
+captionMs = max(minCaption, text.length * readingSpeed)
+```
+
+`readingSpeed: 30` holds a caption longer than `readingSpeed: 22`. If you assume
+the opposite, every duration you derive comes out plausible and wrong, and
+nothing fails — so nothing tells you.
+
+**`card` is the exception: its hold does not derive from its text.** A `card`
+sleeps for exactly the `ms` you give it (default 2200) however many lines it
+carries, and `lint` does not inspect cards. A card with three lines of setup at
+the default hold is unreadable, renders correctly, and passes every gate. Until
+that is fixed, author `ms` for any card carrying more than a few words — the
+same formula above is a reasonable starting point.
 
 ## Status
 
