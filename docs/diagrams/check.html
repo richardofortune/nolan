@@ -1,0 +1,43 @@
+<!doctype html>
+<!--
+  Load the generated scene into the real Excalidraw, so the file is checked by
+  the thing that has to open it rather than by our own renderer. Serve this
+  directory over http and open /check.html. Any element Excalidraw has to
+  repair, or reject, shows up in the banner at the top.
+-->
+<meta charset="utf-8" />
+<title>Scene check</title>
+<link rel="stylesheet" href="https://unpkg.com/@excalidraw/excalidraw@0.17.6/dist/excalidraw.production.min.css" />
+<style>
+  html, body { margin: 0; height: 100%; font: 14px ui-monospace, monospace; }
+  #status { padding: 8px 14px; background: #f1f3f5; border-bottom: 1px solid #dee2e6; }
+  #app { height: calc(100% - 36px); }
+</style>
+<div id="status">loading…</div>
+<div id="app"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@excalidraw/excalidraw@0.17.6/dist/excalidraw.production.min.js"></script>
+<script>
+  const status = document.getElementById("status");
+  (async () => {
+    const scene = await fetch((new URLSearchParams(location.search).get("scene") ?? "core-and-studio") + ".excalidraw").then((r) => r.json());
+    const restored = ExcalidrawLib.restore(scene, null, null);
+    const lost = scene.elements.length - restored.elements.length;
+    status.textContent =
+      `in ${scene.elements.length} · restored ${restored.elements.length}` +
+      (lost ? ` · DROPPED ${lost}` : " · nothing dropped");
+    status.style.background = lost ? "#ffc9c9" : "#d3f9d8";
+    const root = ReactDOM.createRoot(document.getElementById("app"));
+    root.render(
+      React.createElement(ExcalidrawLib.Excalidraw, {
+        initialData: { ...restored, scrollToContent: true },
+        viewModeEnabled: true,
+        zenModeEnabled: true,
+      }),
+    );
+  })().catch((e) => {
+    status.textContent = "FAILED: " + e.message;
+    status.style.background = "#ffc9c9";
+  });
+</script>

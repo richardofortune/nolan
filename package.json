@@ -40,6 +40,8 @@
     "example:shipped": "node bin/nolan.mjs examples/shipped-change.screenplay.json --cut=full --style=examples/showcase.style.json --out=examples/out",
     "example:drift": "node bin/nolan.mjs verify examples/drift/stale.screenplay.json",
     "designs": "node docs/studio-designs/serve.mjs",
+    "diagram": "node docs/diagrams/build.mjs && node docs/diagrams/journey.mjs && node docs/diagrams/two-opportunities.mjs && node docs/diagrams/preview.mjs core-and-studio && node docs/diagrams/preview.mjs journey && node docs/diagrams/preview.mjs two-opportunities",
+    "diagram:check": "node docs/diagrams/check.mjs",
     "desk": "open editor/style-desk.html || xdg-open editor/style-desk.html || start editor/style-desk.html",
     "desk:embed": "node editor/embed-templates.mjs",
     "desk:check": "node editor/check-fidelity.mjs"
