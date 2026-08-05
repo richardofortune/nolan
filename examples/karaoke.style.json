@@ -1,5 +1,5 @@
 {
-  "$comment": "Cap-style karaoke captions: words light up one at a time. This is a BURN-mode effect — film WITHOUT --overlay=post, since post compositing draws captions in their resting (fully revealed) state. Word timing is derived from length (no speech recognition), because the captions are authored.",
+  "$comment": "Cap-style karaoke captions: words light up one at a time. Works in both caption modes — burn draws the highlight live, and post composites each word-state as its own clip (see composite.mjs), so --overlay=post keeps the animation. Word timing is derived from length (no speech recognition), because the captions are authored.",
 
   "pace": 1,
 
