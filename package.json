@@ -1,20 +1,33 @@
 {
   "name": "@richfort/nolan",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Screenplay-driven demo films for web apps — direct your real app, get a GIF or MP4 that regenerates on every release.",
   "type": "module",
-  "repository": { "type": "git", "url": "git+https://github.com/richardofortune/nolan.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richardofortune/nolan.git"
+  },
   "homepage": "https://github.com/richardofortune/nolan#readme",
   "bugs": "https://github.com/richardofortune/nolan/issues",
-  "publishConfig": { "access": "public" },
-  "bin": { "nolan": "bin/nolan.mjs" },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "nolan": "bin/nolan.mjs"
+  },
   "main": "src/render.mjs",
   "exports": {
     ".": "./src/render.mjs",
     "./director": "./src/director.mjs",
     "./lint": "./src/lint.mjs"
   },
-  "files": ["bin/nolan.mjs", "src", "styles", "LICENSE", "README.md"],
+  "files": [
+    "bin/nolan.mjs",
+    "src",
+    "styles",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "test": "node --test test/*.test.mjs",
     "start": "node bin/onboard.mjs",
@@ -43,9 +56,22 @@
     "desk:embed": "node editor/embed-templates.mjs",
     "desk:check": "node editor/check-fidelity.mjs"
   },
-  "keywords": ["demo", "gif", "screencast", "playwright", "readme", "documentation", "walkthrough", "screenplay"],
+  "keywords": [
+    "demo",
+    "gif",
+    "screencast",
+    "playwright",
+    "readme",
+    "documentation",
+    "walkthrough",
+    "screenplay"
+  ],
   "license": "MIT",
-  "engines": { "node": ">=18" },
-  "peerDependencies": { "playwright": ">=1.40" },
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "playwright": ">=1.40"
+  },
   "dependencies": {}
 }
