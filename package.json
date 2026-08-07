@@ -25,6 +25,8 @@
     "bin/nolan.mjs",
     "src",
     "styles",
+    "docs/craft.md",
+    "docs/style-events.md",
     "LICENSE",
     "README.md"
   ],

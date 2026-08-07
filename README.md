@@ -59,6 +59,40 @@ tells you what to install if not.
 Prefer to skip the menu? `npm run example` films the bundled toy app in
 `examples/site` directly — no other setup, nothing to configure.
 
+## Hand this to your agent
+
+nolan's point is that an **agent** writes the walkthrough. So the fastest way to
+see what it's worth is to let one. [Install nolan in your
+project](#install-it-in-your-own-project), then paste this to whatever coding
+agent you already use:
+
+> Use nolan to film a 30-second walkthrough of **&lt;the feature&gt;** in this app.
+>
+> nolan drives a real browser and narrates what it does, so the film shows the
+> real UI, not a mockup. You write a screenplay (JSON) and it films it.
+>
+> 1. Read `node_modules/@richfort/nolan/README.md` for the screenplay format, and
+>    `node_modules/@richfort/nolan/docs/craft.md` for the writing rules. Follow the
+>    rules — they're what stops it reading as AI-written.
+> 2. Find the real selectors by reading this app's source. Don't guess them.
+> 3. Write `<name>.screenplay.json`. Open on the page the feature lives on. Keep it
+>    under ten beats. One idea per caption, six to twelve words.
+> 4. If the app needs a server to run, start it from `set.servers` so the film is
+>    reproducible. If it needs a login, use `set.initScript`.
+> 5. Run `npx nolan lint <name>.screenplay.json` and fix every error.
+> 6. Run `npx nolan verify <name>.screenplay.json` to prove every target resolves.
+> 7. Run `npx nolan <name>.screenplay.json --out=./demo` and show me the GIF.
+>
+> If a step fails, fix the screenplay and run it again. Don't skip the lint.
+
+The three commands are the loop: **lint** says whether it's written well, **verify**
+says whether it still matches the app, and the render is only worth doing once both
+pass. That's the same loop you'd put in CI later.
+
+**No app handy?** Point the prompt at the bundled toy app instead — swap step 2
+for *"the app is `examples/site/index.html`, served by `set.servers`"* and the
+whole thing runs on a fresh clone.
+
 ## Install it in your own project
 
 ```bash
@@ -271,6 +305,11 @@ headshot; without one they get a coloured avatar of their initial:
 "cast": { "host": { "kind": "human", "name": "Mia", "bg": "#1A73E8", "cam": "./mia.jpg" } }
 ```
 
+The bubble is a **circle**, so a face cropped tight against its edges loses hair
+and ears to the mask. [`examples/assets/README.md`](examples/assets/README.md)
+has the framing rules a presenter shot has to meet, and prompts for generating
+one that does.
+
 It's burned in like the cursor, so it works in both burn and post modes, and it
 lifts clear of the caption bar automatically. (The rig is Trusted-Types-safe, so
 the bubble — and every overlay — renders even on strict sites like Google.)
@@ -316,7 +355,10 @@ nolan lint demo.screenplay.json
 It reads the screenplay (no browser) and flags the mechanical tells that make a
 walkthrough read as AI-written or feel unpolished — em-dashes, forced triads,
 clichés, over-long captions, no breathing room, choppy transitions — against the
-craft rules in [`docs/craft.md`](docs/craft.md). Errors fail; warnings report;
+craft rules in [`docs/craft.md`](docs/craft.md). It checks **every surface that
+puts words on screen**, not just captions: the how-to rail labels and title-card
+lines are held to the same floor, since a tell in a rail that sits there all film
+costs more than one in a caption that flashes past. Errors fail; warnings report;
 `--strict` fails on warnings too. The *taste* (warmth, specificity, whether the
 arc builds) stays with the author; lint just holds the floor, consistently.
 
@@ -399,10 +441,10 @@ nothing fails — so nothing tells you.
 
 **`card` is the exception: its hold does not derive from its text.** A `card`
 sleeps for exactly the `ms` you give it (default 2200) however many lines it
-carries, and `lint` does not inspect cards. A card with three lines of setup at
-the default hold is unreadable, renders correctly, and passes every gate. Until
-that is fixed, author `ms` for any card carrying more than a few words — the
-same formula above is a reasonable starting point.
+carries. `lint` now reads card *copy* and holds it to the craft floor, but it
+still can't judge the *hold* — a card with three lines of setup at the default
+2200ms is unreadable, renders correctly, and passes every gate. Author `ms` for
+any card carrying more than a few words; the formula above is a fair start.
 
 ## Status
 
