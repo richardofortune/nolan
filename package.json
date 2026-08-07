@@ -6,7 +6,7 @@
   "repository": { "type": "git", "url": "git+https://github.com/richardofortune/nolan.git" },
   "homepage": "https://github.com/richardofortune/nolan#readme",
   "bugs": "https://github.com/richardofortune/nolan/issues",
-  "publishConfig": { "access": "restricted" },
+  "publishConfig": { "access": "public" },
   "bin": { "nolan": "bin/nolan.mjs" },
   "main": "src/render.mjs",
   "exports": {
@@ -14,7 +14,7 @@
     "./director": "./src/director.mjs",
     "./lint": "./src/lint.mjs"
   },
-  "files": ["bin", "src", "styles", "LICENSE", "README.md"],
+  "files": ["bin/nolan.mjs", "src", "styles", "LICENSE", "README.md"],
   "scripts": {
     "test": "node --test test/*.test.mjs",
     "start": "node bin/onboard.mjs",

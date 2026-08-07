@@ -2,7 +2,7 @@
 
 **Let your agents show, not just tell.**
 
-![nolan, demonstrating itself](examples/out/showcase-full.gif)
+![nolan, demonstrating itself](https://raw.githubusercontent.com/richardofortune/nolan/main/examples/out/showcase-full.gif)
 
 *The GIF above is a nolan walkthrough — generated from a spec, filmed against a
 real app, narrating its own features. Rebuild it with `npm run example:showcase`.*
