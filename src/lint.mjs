@@ -19,8 +19,9 @@ const AI_WORDS = [
   "robust", "meticulous", "seamless", "tapestry", "testament",
 ];
 // Cliché / antithesis-for-its-own-sake patterns.
+// "Show, don't tell" deliberately isn't here: it's nolan's own positioning, and
+// a rule that fails the product's tagline is the rule being wrong.
 const CLICHES = [
-  { re: /\bshow,?\s+don'?t\s+tell\b/i, name: '"show, don\'t tell"' },
   { re: /\bnot just\b/i, name: '"not just X"' },
   { re: /\bit'?s not\b[^.?!]*\bit'?s\b/i, name: '"it\'s not X, it\'s Y"' },
   { re: /\bnot\b[^.,?!]*,\s*but\b/i, name: '"not X, but Y"' },
@@ -54,6 +55,16 @@ export function lintScreenplay(sp) {
   for (const scene of sp.scenes ?? []) {
     let sayRun = 0, prevCut = false, flaggedRun = false;
     for (const beat of scene.beats ?? []) {
+      // Every beat that puts words on screen meets the same floor as a caption
+      // (docs/craft.md § Text) — a tell inside a card or a rail label reads just
+      // as machine-written as one inside a `say`.
+      const alsoOnScreen = beat.do === "card" ? (beat.lines ?? []).map((l) => l?.text)
+        : beat.do === "step" ? [beat.text]  // some drafts carry the rail label on the beat
+        : [];
+      for (const t of alsoOnScreen) {
+        if (t) for (const f of lintCaption(t)) push(scene.id, f.sev, f.rule, f.msg, t);
+      }
+
       if (beat.do === "say") {
         for (const f of lintCaption(beat.text ?? "")) push(scene.id, f.sev, f.rule, f.msg, beat.text);
         sayRun++;
@@ -73,6 +84,13 @@ export function lintScreenplay(sp) {
         prevCut = false;
       }
     }
+  }
+
+  // The how-to rail labels sit on screen for the whole film, so they carry more
+  // weight than any single caption — and they're declared top-level, outside any
+  // scene, which is exactly how they used to escape the floor entirely.
+  for (const [i, label] of (sp.steps ?? []).entries()) {
+    if (label) for (const f of lintCaption(label)) push("*", f.sev, f.rule, `step ${i + 1}: ${f.msg}`, label);
   }
 
   // Cut-title consistency across the film (docs/craft.md § Transitions).

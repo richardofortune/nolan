@@ -30,8 +30,8 @@ How it sounds. The single biggest quality signal, and the easiest to get wrong.
 - **No forced triads.** The rule of three, overused, reads as AI. Say the real
   number of things. Usually one.
 - **Use contractions** — "it's", "you'll", "here's", "that's".
-- **No clichés or antithesis for its own sake:** "Show, don't tell", "not just X
-  but Y", "it's not X, it's Y".
+- **No clichés or antithesis for its own sake:** "not just X but Y", "it's not X,
+  it's Y". ("Show, don't tell" is exempt — it's nolan's own positioning.)
 - **No hedging:** "may", "might", "could potentially", "generally". State it.
 - **No AI vocabulary:** delve, realm, underscore, leverage, unlock, elevate,
   robust, meticulous, seamless, tapestry, testament.
@@ -43,7 +43,7 @@ How it sounds. The single biggest quality signal, and the easiest to get wrong.
 |---|---|
 | "One command, and nolan narrates the build — beats, pace, seconds." | "Run it, and nolan tells you what it did." |
 | "The full article — live, not a screenshot." | "Here's the full article, live." |
-| "Show, don't tell — in your voice. This walkthrough made itself." | "That's it. Your voice, and it made itself." |
+| "A full walkthrough — in your voice. This walkthrough made itself." | "That's it. Your voice, and it made itself." |
 
 ---
 
