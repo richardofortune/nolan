@@ -55,7 +55,9 @@ Keep every other word identical between generations so the set coheres.
 ## Register 2 — illustrated (`face-*.png`)
 
 For **product tours and documentation**, where a photograph sits oddly against
-app UI. Should read as an avatar the product itself would ship.
+app UI. Should read as an avatar the product itself would ship. The `feature-tour`
+template is the one that shows a presenter over product chrome, so it's the first
+place this register earns its keep.
 
 Beyond the framing rules: flat shapes, a small confident palette, a solid or
 softly graded ground. Legible at 132px — no fine detail that turns to mush.
