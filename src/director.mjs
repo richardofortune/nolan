@@ -331,13 +331,18 @@ export function rigScript(style, { captions = true, steps = null } = {}) {
       rail = document.createElement('div');
       rail.id = 'film-steps';
       rail.style.cssText = railCss;
+      // The chip background stays fully opaque and only its contents fade. Dimming
+      // the whole chip made the background translucent too, so whatever the page
+      // had underneath (Google's own nav, in the SuperGold demo) bled through and
+      // both were unreadable. The rail has to occlude, not blend.
       setHTML(rail, S.steps.map((label, i) =>
-        '<span data-step="' + i + '" style="display:flex;align-items:center;gap:6px;padding:5px 11px 5px 6px;' +
-        'border-radius:14px;background:' + SS.bg + ';color:' + SS.ink + ';opacity:.5;' +
-        'transition:opacity .35s,color .35s;white-space:nowrap">' +
+        '<span data-step="' + i + '" style="display:flex;padding:5px 11px 5px 6px;' +
+        'border-radius:14px;background:' + SS.bg + ';color:' + SS.ink + ';' +
+        'transition:color .35s;white-space:nowrap">' +
+        '<span data-fade style="display:flex;align-items:center;gap:6px;opacity:.5;transition:opacity .35s">' +
         '<span data-dot style="width:17px;height:17px;border-radius:50%;border:2px solid currentColor;' +
         'display:inline-flex;align-items:center;justify-content:center;font:700 10px/1 -apple-system,sans-serif">' +
-        (i + 1) + '</span>' + esc(label) + '</span>').join(''));
+        (i + 1) + '</span>' + esc(label) + '</span></span>').join(''));
       document.body.appendChild(rail);
       return rail;
     };
@@ -346,14 +351,15 @@ export function rigScript(style, { captions = true, steps = null } = {}) {
       const rail = build();
       [].slice.call(rail.querySelectorAll('[data-step]')).forEach((el, i) => {
         const dot = el.querySelector('[data-dot]');
+        const fade = el.querySelector('[data-fade]');
         if (i < n - 1) {            // done
-          el.style.opacity = '1'; el.style.color = SS.done;
+          fade.style.opacity = '1'; el.style.color = SS.done;
           dot.textContent = '✓'; dot.style.borderColor = SS.done;
         } else if (i === n - 1) {   // active
-          el.style.opacity = '1'; el.style.color = SS.active;
+          fade.style.opacity = '1'; el.style.color = SS.active;
           dot.textContent = String(i + 1); dot.style.borderColor = SS.active;
         } else {                    // upcoming
-          el.style.opacity = '.5'; el.style.color = SS.ink;
+          fade.style.opacity = '.5'; el.style.color = SS.ink;
           dot.textContent = String(i + 1); dot.style.borderColor = 'currentColor';
         }
       });

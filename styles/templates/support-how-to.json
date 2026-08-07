@@ -26,7 +26,7 @@
   "cursor": { "show": true, "size": 22, "fill": "#0B2136", "stroke": "#ffffff",
     "click": { "show": true, "colour": "#38BDF8", "from": 14, "to": 62, "ms": 520, "width": 3, "dot": true, "dotTo": 34, "rings": 2 } },
 
-  "steps": { "show": true, "corner": "top", "margin": 16, "bg": "rgba(11,33,54,.88)", "ink": "#C7D8EA", "active": "#38BDF8", "done": "#22C55E" },
+  "steps": { "show": true, "corner": "top", "margin": 16, "bg": "#0B2136", "ink": "#C7D8EA", "active": "#38BDF8", "done": "#22C55E" },
 
   "transition": { "curtain": "#0B2136", "fadeMs": 320, "titleFont": "600 22px -apple-system,BlinkMacSystemFont,sans-serif", "titleInk": "#EAF2FF" },
 

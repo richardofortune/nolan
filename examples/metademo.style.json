@@ -48,7 +48,7 @@
     "click": { "show": true, "colour": "#FFC53D", "from": 14, "to": 62, "ms": 520, "width": 3, "dot": true, "dotTo": 34, "rings": 2 }
   },
 
-  "steps": { "$comment": "Progress rail for how-tos: agenda up front, current step highlighted, done steps checked. Labels come from the screenplay's top-level steps[]. See docs/style-events.md.", "show": true, "corner": "top", "bg": "rgba(15,23,42,.86)", "ink": "#CBD5E1", "active": "#FFC53D", "done": "#22C55E" },
+  "steps": { "$comment": "Progress rail for how-tos: agenda up front, current step highlighted, done steps checked. Labels come from the screenplay's top-level steps[]. See docs/style-events.md.", "show": true, "corner": "top", "bg": "#0F172A", "ink": "#CBD5E1", "active": "#FFC53D", "done": "#22C55E" },
 
   "transition": { "$comment": "Mid-slate curtain (not near-black) so the wipe reads against both the dark terminal/done scenes and the light app scene.", "curtain": "#334155", "fadeMs": 340, "titleFont": "700 30px -apple-system,Roboto,sans-serif", "titleInk": "#F8FAFC" },
 
