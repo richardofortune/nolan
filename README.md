@@ -82,8 +82,19 @@ agent you already use:
 > 5. Run `npx nolan lint <name>.screenplay.json` and fix every error.
 > 6. Run `npx nolan verify <name>.screenplay.json` to prove every target resolves.
 > 7. Run `npx nolan <name>.screenplay.json --out=./demo` and show me the GIF.
+> 8. Open the GIF and read it back against your captions. Every number, label and
+>    outcome you narrated has to be the one actually on screen. If you said "owes
+>    her 120" and the app shows 160, the walkthrough is lying — fix the caption or
+>    the beats until they agree.
 >
 > If a step fails, fix the screenplay and run it again. Don't skip the lint.
+
+Step 8 is not padding. `lint` checks the *writing* and `verify` checks the
+*targets*; neither reads what's on screen, so a caption can be well written,
+resolve perfectly, and still state a number the app never produced. That is the
+most likely mistake an agent makes, because inventing a plausible figure is
+exactly what language models do. Until [`expect`](docs/superpowers/specs/2026-08-08-expect-design.md)
+lands, a human or an agent re-reading the film is the only thing that catches it.
 
 The three commands are the loop: **lint** says whether it's written well, **verify**
 says whether it still matches the app, and the render is only worth doing once both
