@@ -129,6 +129,14 @@ marks everything complete. It persists across `goto`/`cut` like the presenter.
 Knobs (`steps`): `show`, `corner` (`top` | `top-left` | `top-right`),
 `bg`, `ink` (upcoming), `active` (current), `done` (completed).
 
+**Give `bg` a solid colour.** The rail floats over the top of the page, which on a
+real site is where that site keeps its own navigation. A translucent chip lets both
+show through and neither can be read — the SuperGold demo shipped with Google's
+"Gmail" link bleeding through "Open your card". Upcoming steps are dimmed by fading
+the chip's *contents*, never the chip, so the rail always occludes what's beneath
+it. An overlay that covers page chrome reads as intentional; one that half-covers
+it reads as broken.
+
 **Pattern to copy** (from `examples/supergold.screenplay.json`):
 
 1. Open by *saying* the plan — "…takes three small steps." The rail is already

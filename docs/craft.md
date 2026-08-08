@@ -51,6 +51,11 @@ How it sounds. The single biggest quality signal, and the easiest to get wrong.
 
 The words on screen. A caption is read in a glance, not studied.
 
+**This section covers every surface, not just captions.** Progress-rail labels and
+title-card lines are held to the same floor by `lint`, and a rail label earns more
+scrutiny than a caption, not less: it sits on screen for the whole film while a
+caption flashes past.
+
 **Rules (the floor):**
 - **One idea per caption.** If a second clause is showing off, cut it.
 - **~6–12 words.** Shorter is usually better. Never a sentence you'd have to

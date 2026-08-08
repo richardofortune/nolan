@@ -476,6 +476,11 @@ it's in real use — expect rough edges.
   variable is the seed of the personal-at-scale version.
 
 **Rough edges:**
+- **Nothing checks the narration against the screen.** `lint` reads the writing and
+  `verify` reads the targets; neither reads what the app rendered, so a caption can
+  be clean, resolve perfectly, and still state a number the app never produced.
+  [`expect`](docs/superpowers/specs/2026-08-08-expect-design.md) is the fix; until
+  then, read the film back against its captions.
 - **No schema validation** — a malformed screenplay fails at the beat, not at load.
 - **The `js` escape hatch is arbitrary code.** Treat agent-generated `js` beats
   with the same scrutiny as any generated code; don't accept screenplays from
