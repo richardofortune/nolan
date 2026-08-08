@@ -1,6 +1,6 @@
 {
   "name": "@richfort/nolan",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Screenplay-driven demo films for web apps — direct your real app, get a GIF or MP4 that regenerates on every release.",
   "type": "module",
   "repository": {
