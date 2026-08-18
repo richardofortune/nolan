@@ -256,6 +256,34 @@ time — and because captions are *authored*, the word timing is derived from
 length, with no speech recognition. Old `bg` / `ink` / font-shorthand style
 files keep working; they're migrated on load.
 
+#### Letting a caption land before the sweep
+
+A word-animated caption puts the **whole line** on screen at once and then walks
+a highlight across it, so the reader can run ahead of the sweep. Two fields tune
+how much they get to:
+
+```jsonc
+"caption": {
+  "preset": "karaoke",
+  "dimOpacity": 55,   // 0-100, how visible a word is before the sweep reaches it
+  "sweepDelay": 0.6   // seconds the finished line rests before the sweep starts
+}
+```
+
+`dimOpacity` defaults to `28`, which reads as a shape more than a sentence.
+Raise it when the caption carries detail the viewer needs to take in, and the
+highlight becomes a pacing cue rather than the only way to read the line.
+
+`sweepDelay` is the pause between the line appearing and the highlight moving.
+Reach for it when the caption lands at the same moment as a new scene and both
+want attention. It is **additive**: the settle lengthens the caption instead of
+compressing the sweep, so words never go by faster because you asked for a
+pause, and reading time stays derived from the text. Both fields work per
+variant, so one line can settle while the rest of the film does not.
+
+Both default to the previous behaviour, so existing style files render
+identically.
+
 **Cuts:** tag any scene or beat with `cuts: ["full"]`. One screenplay, a tight
 README hero and a long pitch cut, from a single recording pass.
 

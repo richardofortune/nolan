@@ -218,14 +218,18 @@ export function rigScript(style, { captions = true, steps = null } = {}) {
     const pill = P.highlightStyle === 'pill';
     const tr = P.wordTransition;
     setHTML(el, t.split(/(\\s+)/).map((w, i) => /^\\s+$/.test(w) || w === '' ? esc(w) :
-      '<span data-w style="opacity:.28;border-radius:.32em;padding:0 .16em;margin:0 -.16em;' +
+      '<span data-w style="opacity:' + P.dimOpacity + ';border-radius:.32em;padding:0 .16em;margin:0 -.16em;' +
       'transition:opacity ' + tr + 's,color ' + tr + 's,background-color ' + tr + 's">' + esc(w) + '</span>').join(''));
     const words = [].slice.call(el.querySelectorAll('[data-w]'));
     if (!words.length) { done(); return; }
     const total = t.length * speed;
     const chars = words.reduce((n, s) => n + s.textContent.length, 0) || 1;
     let i = 0;
-    (function step(){
+    // The whole line is already on screen, dim. sweepDelay lets it sit there
+    // before the highlight starts moving, so the eye can take in the scene and
+    // the sentence before being led through it. (No backticks in here: this
+    // whole function is inside a template literal.)
+    const sweep = function step(){
       const prev = words[i-1];
       if (prev) { prev.style.color = P.color; prev.style.background = 'transparent'; }
       if (i >= words.length) { done(); return; }
@@ -235,7 +239,8 @@ export function rigScript(style, { captions = true, steps = null } = {}) {
       else s.style.color = P.highlightColor;
       i++;
       setTimeout(step, Math.max(90, (s.textContent.length / chars) * total));
-    })();
+    };
+    setTimeout(sweep, (P.sweepDelay || 0) * 1000);
   });
   if (S.cursor.show && !document.getElementById('film-cursor')) {
     const cur = document.createElement('div');
@@ -376,6 +381,9 @@ export class Director {
     this.page = page;
     this.sp = screenplay;
     this.style = style;
+    // The same palette the rig paints with, so timing can ask a variant how
+    // long it settles for before its highlight moves.
+    this.paints = paintPalette(style).paints;
     this.cut = cut;
     this.pace = (cut.pace ?? 1) * (style.pace ?? 1);
     this.vars = { ...(screenplay.vars || {}), ...(cut.vars || {}) };
@@ -410,10 +418,21 @@ export class Director {
     });
   }
 
+  /** Settle a variant asks for before its highlight starts moving, in ms. */
+  sweepDelayMs(as) {
+    const P = this.paints[as || ""] || this.paints[""];
+    return P?.activeWordHighlight ? (P.sweepDelay ?? 0) * 1000 : 0;
+  }
+
+  /** How long the caption takes to finish revealing itself, in ms. */
+  revealMs(text, as) {
+    return text.length * this.style.timing.readingSpeed + this.sweepDelayMs(as);
+  }
+
   /** Duration a caption needs. DERIVED — swap to audio length for voiceover. */
-  captionMs(text) {
+  captionMs(text, as) {
     const t = this.style.timing;
-    return Math.max(t.minCaption, text.length * t.readingSpeed);
+    return Math.max(t.minCaption, text.length * t.readingSpeed) + this.sweepDelayMs(as);
   }
 
   async rig() {
@@ -595,10 +614,10 @@ export class Director {
           // No bar to type into — just hold the app for the same reveal time the
           // typewriter would take, so the clean video has an equal gap for the
           // composited caption to fill. (readingSpeed is unpaced, matching __cap.)
-          await new Promise((r) => setTimeout(r, b.text.length * t.readingSpeed));
+          await new Promise((r) => setTimeout(r, this.revealMs(b.text, b.as)));
         }
         // DERIVED duration: text length now, audio length under voiceover.
-        await this.sleep(b.hold ?? Math.max(t.beatOut, this.captionMs(b.text) - b.text.length * t.readingSpeed));
+        await this.sleep(b.hold ?? Math.max(t.beatOut, this.captionMs(b.text, b.as) - this.revealMs(b.text, b.as)));
         // Record the segment in the video's own timeline — measured, not
         // recomputed, so it stays exact under any pace or reveal mode.
         this.segments.push({
