@@ -48,6 +48,15 @@ export const CAPTION_DEFAULTS = {
   highlightColor: "#FFD400",
   highlightStyle: "color",
   wordTransitionDuration: 0.25,
+  // How visible a word is before the highlight reaches it, 0-100. The whole
+  // line is on screen from the first frame either way; this decides whether a
+  // viewer can read ahead of the sweep or only sense the shape of the sentence.
+  dimOpacity: 28,
+  // Seconds the finished line rests, unlit, before the highlight starts moving.
+  // Gives the eye time to take in the scene and the sentence before being led
+  // through it. Additive: it lengthens the caption rather than compressing the
+  // sweep, so reading time stays derived from the text.
+  sweepDelay: 0,
 };
 
 export const POSITIONS = ["bottom-center", "top-center"];
@@ -161,13 +170,15 @@ export function normalizeCaption(input = {}, where = "caption") {
   oneOf("position", POSITIONS);
   oneOf("highlightStyle", HIGHLIGHT_STYLES);
 
-  for (const key of ["height", "size", "lineHeight", "fontWeight", "fadeDuration", "wordTransitionDuration", "backgroundOpacity"]) {
+  for (const key of ["height", "size", "lineHeight", "fontWeight", "fadeDuration", "wordTransitionDuration", "backgroundOpacity", "dimOpacity", "sweepDelay"]) {
     if (!isNum(c[key])) {
       warnings.push(`${where}.${key}: expected a number, got ${JSON.stringify(c[key])} — using ${CAPTION_DEFAULTS[key]}`);
       c[key] = CAPTION_DEFAULTS[key];
     }
   }
   c.backgroundOpacity = Math.min(100, Math.max(0, c.backgroundOpacity));
+  c.dimOpacity = Math.min(100, Math.max(0, c.dimOpacity));
+  c.sweepDelay = Math.max(0, c.sweepDelay);
 
   for (const key of ["uppercase", "italic", "outline", "showChip", "activeWordHighlight"]) {
     c[key] = Boolean(c[key]);
@@ -268,6 +279,9 @@ export function paintCaption(c) {
     highlightColor: c.highlightColor,
     highlightStyle: c.highlightStyle,
     wordTransition: c.wordTransitionDuration,
+    // 0-100 in the style file, a CSS fraction by the time a painter sees it
+    dimOpacity: c.dimOpacity / 100,
+    sweepDelay: c.sweepDelay,
   };
 }
 

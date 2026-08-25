@@ -32,19 +32,23 @@ import { paintPalette } from "./caption.mjs";
 
 /**
  * The sequence of highlight states for one word-animated caption, tiling
- * [segStart, segEnd]. Each state names the active word index; the final state
- * (active === wordCount) is the resting frame with every word lit. Pure — the
- * timing is unit-testable without a browser. Mirrors the burn-mode reveal: total
- * sweep = text.length * readingSpeed, split across words by their length.
+ * [segStart, segEnd]. Each state names the active word index: -1 is the settle
+ * frame with nothing lit yet, and the final state is the resting frame with
+ * every word lit. Pure — the timing is unit-testable without a browser. Mirrors
+ * the burn-mode reveal: total sweep = text.length * readingSpeed, split across
+ * words by their length, after an optional `sweepDelay` seconds of settle.
  */
-export function wordSchedule(text, readingSpeed, segStart, segEnd) {
+export function wordSchedule(text, readingSpeed, segStart, segEnd, sweepDelay = 0) {
   const words = text.split(/\s+/).filter(Boolean);
   const n = words.length;
   if (!n) return [{ active: 0, start: segStart, end: segEnd }];
   const totalWordChars = words.reduce((a, w) => a + w.length, 0) || 1;
   const totalMs = text.length * readingSpeed;
   const states = [];
-  let cum = 0;
+  // The settle sits in front of the sweep rather than eating into it, so a
+  // delay never makes the words go by faster.
+  let cum = Math.max(0, sweepDelay) * 1000;
+  if (cum > 0) states.push({ active: -1, start: segStart, end: segStart + cum / 1000 });
   for (let i = 0; i < n; i++) {
     const start = segStart + cum / 1000;
     cum += Math.max(90, (words[i].length / totalWordChars) * totalMs);
@@ -119,7 +123,7 @@ async function shoot(page, paint, text, actor, active, vh, file) {
           if (/^\s+$/.test(w) || !w) return esc(w);
           wi++;
           const on = wi === active, past = wi < active;
-          let s = "border-radius:.32em;padding:0 .16em;margin:0 -.16em;opacity:" + (past || on ? 1 : 0.28) + ";";
+          let s = "border-radius:.32em;padding:0 .16em;margin:0 -.16em;opacity:" + (past || on ? 1 : paint.dimOpacity) + ";";
           if (on) s += pill ? "background:" + paint.highlightColor + ";color:" + paint.color + ";" : "color:" + paint.highlightColor + ";";
           else if (past) s += "color:" + paint.color + ";";
           return '<span style="' + s + '">' + esc(w) + "</span>";
@@ -164,11 +168,10 @@ export async function renderCaptionClips(page, style, segments, dir) {
   for (const seg of segments) {
     const P = paints[seg.as || ""] || paints[""];
     if (P.activeWordHighlight) {
-      const states = wordSchedule(seg.text, readingSpeed, seg.start, seg.end);
-      const wordCount = states.length - 1;
+      const states = wordSchedule(seg.text, readingSpeed, seg.start, seg.end, P.sweepDelay);
       for (const st of states) {
         const file = join(dir, `${seg.id}-${idx}.png`);
-        // active === wordCount is the resting frame (every word lit)
+        // active -1 is the settle frame, the last state is the resting frame
         const y = await shoot(page, P, seg.text, seg.actor, st.active, vh, file);
         clips.push({ file, y, start: st.start, end: st.end });
         idx++;
