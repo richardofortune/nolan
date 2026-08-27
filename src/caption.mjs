@@ -255,6 +255,12 @@ export function paintCaption(c) {
       c.position === "top-center" ? "top:0" : "bottom:0",
       "left:0", "right:0",
       "z-index:2147483646",
+      // The bar is a full-width strip at the very top of the stack, and nothing
+      // in it is interactive — so it must never take a click. Without this it
+      // swallows every click landing in its strip, which is where apps put the
+      // controls a walkthrough most wants to press: chat launchers, cookie
+      // banners, floating action buttons.
+      "pointer-events:none",
       `background:${bg}`,
       `color:${c.color}`,
       `font:${c.italic ? "italic " : ""}${c.fontWeight} ${c.size}px/${c.lineHeight} ${c.font}`,
