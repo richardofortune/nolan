@@ -157,7 +157,9 @@ film → watch → note what's off → encode the fix
                                    └─ taste?      → a rule in this guide
 ```
 
-This document is the taste layer. `nolan lint` (planned) is the mechanical floor
-that enforces the rules marked *(the floor)* above. The engine holds the defaults
-that make good output automatic. Add to whichever fits — the craft only ratchets
-up.
+This document is the taste layer. `nolan lint` is the mechanical floor: it
+enforces the checkable subset of the rules marked *(the floor)* above — em-dashes,
+clichés, AI words, hedging, caption length, forced triads, unbroken caption runs,
+back-to-back cuts, and cut-title consistency. The rest of the floor is still on
+you. The engine holds the defaults that make good output automatic. Add to
+whichever fits — the craft only ratchets up.
