@@ -26,6 +26,7 @@
  *   step      {n}                     advance the how-to progress rail to step n
  *   move      {to}                    glide the cursor
  *   click     {to, settle?}           glide + click
+ *   drag      {from, to, settle?}     glide to `from`, press, glide to `to`, release
  *   type      {text, delay?}          keyboard input
  *   scrollTo  {to}                    scroll a target to viewport centre
  *   call      {fn, args[]}            invoke a page API (film surfaces)
@@ -654,6 +655,18 @@ export class Director {
         await this.glide(p.x, p.y, b.ms ?? t.glideDefault);
         await this.sleep(b.pause ?? 200);
         await this.page.mouse.down();
+        await this.page.mouse.up();
+        await this.sleep(b.settle ?? t.settle);
+        break;
+      }
+
+      case "drag": {
+        const from = await this.point(b.from);
+        const to = await this.point(b.to);
+        await this.glide(from.x, from.y, b.ms ?? t.glideDefault);
+        await this.sleep(b.pause ?? 200);
+        await this.page.mouse.down();
+        await this.glide(to.x, to.y, b.dragMs ?? b.ms ?? t.glideDefault);
         await this.page.mouse.up();
         await this.sleep(b.settle ?? t.settle);
         break;

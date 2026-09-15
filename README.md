@@ -207,6 +207,7 @@ Three consequences worth knowing before you write:
 | `hold` | `ms` | explicit pause (scales with pace) |
 | `step` | `n` | advance the how-to rail (needs `steps.show`) |
 | `move` / `click` | `to` | glide the cursor, optionally click |
+| `drag` | `from`, `to` | glide to `from`, press, glide to `to`, release |
 | `type` | `text`, `delay` | keyboard input |
 | `scrollTo` | `to` | centre a target |
 | `call` | `fn`, `args[]` | invoke a function on the page |

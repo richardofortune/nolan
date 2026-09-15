@@ -82,9 +82,10 @@ export async function verify(screenplayPath, { cut, style } = {}) {
             problems.push({ scene: scene.id, beat: beat.do, error: e.message }));
           continue;
         }
-        if (beat.to) {
+        for (const target of [beat.from, beat.to]) {
+          if (!target) continue;
           try {
-            await d.point(beat.to);
+            await d.point(target);
           } catch (e) {
             problems.push({ scene: scene.id, beat: beat.do, error: e.message });
           }
