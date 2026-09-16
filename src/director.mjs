@@ -377,6 +377,41 @@ export function rigScript(style, { captions = true, steps = null } = {}) {
 
 /* ------------------------------ the engine ------------------------------- */
 
+/**
+ * Paints the curtain for a `cut` before the new document's first frame.
+ * Registered with `page.addInitScript(CURTAIN_INIT, spec)` right before the
+ * navigation. Init scripts can't be unregistered, so each carries the time it
+ * was armed and only fires on the navigation that follows it; on later ones
+ * it's stale and does nothing.
+ */
+export const CURTAIN_INIT = (spec) => {
+  if (Date.now() - spec.at > 5000) return;
+  const paint = () => {
+    if (document.getElementById("film-curtain")) return;
+    const c = document.createElement("div");
+    c.id = "film-curtain";
+    c.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:" + spec.col +
+      ";display:flex;align-items:center;justify-content:center;color:" + spec.ink +
+      ";font:" + spec.font + ";transition:opacity " + spec.fade + "ms;opacity:1";
+    c.textContent = spec.title || "";
+    (document.body || document.documentElement).appendChild(c);
+  };
+  // Init scripts run before <html> exists. Paint the instant it does, not at
+  // DOMContentLoaded, which on a module-script page waits for the whole graph.
+  if (document.documentElement) {
+    paint();
+  } else {
+    const mo = new MutationObserver(() => {
+      if (document.documentElement) {
+        mo.disconnect();
+        paint();
+      }
+    });
+    mo.observe(document, { childList: true });
+    document.addEventListener("DOMContentLoaded", paint);
+  }
+};
+
 export class Director {
   constructor(page, screenplay, style, cut) {
     this.page = page;
@@ -555,10 +590,17 @@ export class Director {
         await this.page.evaluate(curtain, args(0, 1)).catch(() => {});
         await this.sleep(T.fadeMs + 60);
         await this.sleep(b.ms ?? 900);
-        // Navigate, then RE-COVER the bare new page immediately so it never
-        // flashes, rig it (cursor + presenter) while hidden, and only then fade
-        // to reveal a fully-dressed page — no bare frame, no presenter pop-in.
+        // The old page dies the moment navigation commits, taking the curtain
+        // with it, and the new page's first paint can be hundreds of
+        // milliseconds later (a dev server, a cold load) — a bare white flash
+        // in between. So arm an init script that paints the curtain into the
+        // NEXT document before its first frame.
+        await this.page.addInitScript(CURTAIN_INIT, {
+          col: T.curtain, title: b.title, font: T.titleFont, ink: T.titleInk, fade: T.fadeMs, at: Date.now(),
+        });
         await this.page.goto(b.url, { waitUntil: "domcontentloaded" });
+        // Re-cover (a no-op when the init script already painted it), and rig
+        // (cursor + presenter) while hidden, so the reveal shows a dressed page.
         await this.page.evaluate(curtain, args(1, 1)).catch(() => {});
         await this.sleep(b.settle ?? 300);
         await this.rig();
