@@ -7,11 +7,13 @@
  *   nolan demo.screenplay.json --out=docs       where the files land
  *   nolan demo.screenplay.json --style=mine.json
  *   nolan verify demo.screenplay.json           resolve every target, film nothing
+ *   nolan flashcheck out/demo-full.gif          find frames that show and snap back
  */
 import { readFileSync } from "node:fs";
 import { basename } from "node:path";
 import { render, verify, restyle, DEFAULT_STYLE } from "../src/render.mjs";
 import { lint } from "../src/lint.mjs";
+import { flashcheck } from "../src/flash.mjs";
 import { buildFeedbackUrl, openUrl, redactPaths } from "../src/feedback.mjs";
 
 const VERSION = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).version;
@@ -30,6 +32,7 @@ const USAGE = `nolan — screenplay-driven demo films for web apps
   nolan <screenplay.json> [options]        film it
   nolan verify <screenplay.json> [opts]    check every target still resolves
   nolan lint <screenplay.json> [--strict]  check the writing craft (no browser)
+  nolan flashcheck <film> [--frames=<dir>] find frames that show and snap back
   nolan restyle <segments.json> [opts]     re-caption a saved master (no re-film)
   nolan feedback "<what happened>"         file it as a GitHub issue, prefilled
 
@@ -49,6 +52,7 @@ Options
                    'fail' (default, exit non-zero — the CI gate),
                    'warn'  (report it, exit 0 — a heads-up you don't own), or
                    'refresh' (report it, and re-render if the demo still resolves)
+  --frames=<dir>   flashcheck only: write before/flash/after stills for each hit
   --quiet          only print errors
 
 Surfaces — five beats put words on screen, and they are not interchangeable
@@ -87,7 +91,7 @@ async function main(argv) {
     quiet: args.includes("--quiet"),
   };
 
-  const command = ["verify", "restyle", "lint", "feedback"].includes(args[0]) ? args[0] : null;
+  const command = ["verify", "restyle", "lint", "flashcheck", "feedback"].includes(args[0]) ? args[0] : null;
   const positional = args.filter((a) => !a.startsWith("--") && a !== command);
 
   // Ahead of the file guard: feedback's positional is a sentence, not a path,
@@ -128,7 +132,7 @@ async function main(argv) {
 
   const file = positional[0];
   if (!file) {
-    console.error(`nolan: no ${command === "restyle" ? "segments file" : "screenplay"} given\n`);
+    console.error(`nolan: no ${command === "restyle" ? "segments file" : command === "flashcheck" ? "film" : "screenplay"} given\n`);
     console.log(USAGE);
     return 1;
   }
@@ -136,6 +140,25 @@ async function main(argv) {
   if (command === "restyle") {
     await restyle(file, opts);
     return 0;
+  }
+
+  if (command === "flashcheck") {
+    // Reads the pixels, which lint and verify never do. A hit is a picture
+    // that showed and snapped back — so far always a background state leaking
+    // between two overlays.
+    const hits = flashcheck(file, { framesDir: flag("frames") });
+    if (!hits.length) {
+      console.log("✓ no flashes — nothing shows and snaps back");
+      return 0;
+    }
+    console.error(`✗ ${hits.length} flash(es):\n`);
+    for (const h of hits) console.error(`  ${h.at.toFixed(2)}s  ${h.run} frame(s) / ${h.ms}ms`);
+    console.error(
+      "\nSomething showed and snapped back. Usually a bare page or the app between two overlays." +
+        (flag("frames") ? ` Stills in ${flag("frames")}.` : " Re-run with --frames=<dir> to see it."),
+    );
+    inviteFeedback(`flashcheck: flagged ${basename(file)} and I think it's wrong`, opts.quiet);
+    return 1;
   }
 
   if (command === "lint") {

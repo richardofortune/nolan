@@ -11,6 +11,7 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 import { Director, bringUpSet, resolveCam } from "./director.mjs";
+import { flashcheck } from "./flash.mjs";
 import { resolveCaptionStyle } from "./caption.mjs";
 import { paintCaptionsOnto } from "./composite.mjs";
 import { SUBTITLE_FORMATS } from "./subtitles.mjs";
@@ -212,7 +213,13 @@ export async function render(screenplayPath, { cut, style, out, quiet, overlay =
   const seconds = (manifest.at(-1)?.at ?? 0) / 1000;
   say(`✓ ${manifest.length} beats · ${seconds.toFixed(1)}s`);
   if (master) say(`· master kept → ${master} (restyle with: nolan restyle ${segmentsPath})`);
-  return { outputs: written, subtitles, manifest, segments, seconds, master, segmentsPath };
+
+  // Read the pixels back. A frame that shows and snaps back is a background
+  // state leaking between overlays, and nothing upstream of the encode can
+  // see it. Reported, not fatal: the film is written either way.
+  const flashes = written.flatMap((f) => flashcheck(f).map((h) => ({ ...h, file: f })));
+  for (const h of flashes) say(`⚠ flash at ${h.at.toFixed(2)}s (${h.ms}ms) in ${h.file} — nolan flashcheck ${h.file} --frames=<dir> to see it`);
+  return { outputs: written, subtitles, manifest, segments, seconds, master, segmentsPath, flashes };
 }
 
 /**

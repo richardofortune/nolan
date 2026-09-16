@@ -402,6 +402,26 @@ costs more than one in a caption that flashes past. Errors fail; warnings report
 `--strict` fails on warnings too. The *taste* (warmth, specificity, whether the
 arc builds) stays with the author; lint just holds the floor, consistently.
 
+## Check the pixels
+
+`lint` reads the writing and `verify` reads the targets. Neither reads what the
+film actually shows. `flashcheck` does:
+
+```bash
+nolan flashcheck out/demo-full.gif
+nolan flashcheck out/demo-full.gif --frames=out/flashes   # stills for each hit
+```
+
+It decodes the film and looks for a picture that shows and snaps back: a short
+run of frames that differs from the frame before it, while the frame after the
+run matches that earlier frame. A real scene change never comes back, so cuts
+don't trip it. Every hit we've met was a background state leaking between two
+overlays — the bare page between two curtains, the app between two title cards —
+which is invisible in the screenplay and easy to miss in a 60-second GIF.
+
+Every render runs it over each output and prints a `⚠ flash at …` line per hit,
+without failing the render. Run it standalone for a non-zero exit in CI.
+
 ## Tell us when it's wrong
 
 When nolan does the wrong thing — or won't do the thing you need — say so from
